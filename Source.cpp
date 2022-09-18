@@ -1,18 +1,17 @@
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include <iostream>
-#include <vector>
-#include <stack>
-
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <dinput.h>
+#include <iostream>
+#include <stack>
+#include <vector>
+#include <Windows.h>
 
 #include "AudioManager.h"
-#include "UIManager.h"
-#include "GameLevel.h"
 #include "FrameTimer.h"
+#include "GameLevel.h"
 #include "MainMenu.cpp"
+#include "UIManager.h"
 #include "Utils.cpp";
 
 #pragma comment(lib, "d3d9.lib")

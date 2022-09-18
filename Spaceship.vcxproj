@@ -22,7 +22,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{de6aa35e-a936-42a1-835c-f3e9cce0bb90}</ProjectGuid>
-    <RootNamespace>PinballMachine</RootNamespace>
+    <RootNamespace>Spaceship</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>Spaceship</ProjectName>
   </PropertyGroup>
@@ -85,7 +85,7 @@
     <Link>
       <SubSystem>NotSet</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3dx9.lib;d3d9.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -134,25 +134,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AudioManager.cpp" />
-    <ClCompile Include="DrawShape.cpp" />
     <ClCompile Include="FrameTimer.cpp" />
-    <ClCompile Include="GameLevel.cpp" />
-    <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Mass.cpp" />
+    <ClCompile Include="prac.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Spaceship.cpp" />
     <ClCompile Include="UIButton.cpp" />
-    <ClCompile Include="UICanvas.cpp" />
-    <ClCompile Include="UIFrame.cpp" />
     <ClCompile Include="UILabel.cpp" />
-    <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIObject.cpp" />
-    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioManager.h" />
-    <ClInclude Include="DrawShape.h" />
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="GameLevel.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Mass.h" />
     <ClInclude Include="NotificationManager.h" />
     <ClInclude Include="Spaceship.h" />
     <ClInclude Include="UIButton.h" />
