@@ -11,7 +11,7 @@ GameObject::~GameObject()
 
 void GameObject::Init(char GameObjectType, int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int displayRectLeft, int displayRectTop, int positionX, int positionY, float mass)
 {
-    this->GameObjectType = GameObjectType;
+    this->gameObjectType = GameObjectType;
     this->textureWidth = textureWidth;
     this->textureHeight = textureHeight;
     this->spriteWidth = spriteWidth;
@@ -106,6 +106,10 @@ void GameObject::SetMass(float mass)
 }
 
 // Getters
+char GameObject::GetGameObjectType()
+{
+    return gameObjectType;
+}
 
 int GameObject::GetTextureWidth()
 {
@@ -165,6 +169,11 @@ D3DXVECTOR2 GameObject::GetPosition()
 D3DXVECTOR2 *GameObject::GetPositionAddress()
 {
     return &position;
+}
+
+D3DXMATRIX* GameObject::GetMatrixAddress()
+{
+    return &matrix;
 }
 
 float GameObject::GetMass()

@@ -4,11 +4,12 @@
 class GameObject
 {
 private:
-    char GameObjectType;
+    char gameObjectType;
     int textureWidth;
     int textureHeight;
     int spriteWidth;
     int spriteHeight;
+    D3DXMATRIX matrix;
     D3DXVECTOR2 spriteCenter;
     D3DXVECTOR2 scaling;
     RECT displayRect;
@@ -25,7 +26,6 @@ public:
     virtual void Init(char GameObjectType, int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int displayRectLeft, int displayRectTop, int positionX, int positionY, float mass);
 
     // Setters
-    virtual void SetGameObjectType(char GameObjectType);
     virtual void SetTextureWidth(int textureWidth);
     virtual void SetTextureHeight(int textureHeight);
     virtual void SetSpriteWidth(int spriteWidth);
@@ -55,6 +55,7 @@ public:
     virtual RECT *GetDisplayRectAddress();
     virtual D3DXVECTOR2 GetPosition();
     virtual D3DXVECTOR2 *GetPositionAddress();
+    virtual D3DXMATRIX *GetMatrixAddress();
     virtual float GetMass();
 
     // GameLoop Methods

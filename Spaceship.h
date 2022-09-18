@@ -94,7 +94,7 @@ public:
 	void Move(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction);
 	void SpaceshipPlaySound(AudioManager* audioManager);
 
-    // Game Loop Methods
-    void Update();
-    void Draw();
+	// Game Loop Methods
+	void Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction, Spaceship* anotherSpaceship, Mass* massArray[], int arraySize, int windowWidth, int windowHeight);
+	void Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture);
 };

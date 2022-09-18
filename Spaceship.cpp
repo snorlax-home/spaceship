@@ -455,11 +455,28 @@ void Spaceship::SpaceshipPlaySound(AudioManager *audioManager)
 	}
 }
 
-void Spaceship::Update()
+void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction, Spaceship* anotherSpaceship, Mass* massArray[], int arraySize, int windowWidth, int windowHeight)
 {
+	Move(turnLeft, turnRight, goForward, goBackward, friction);
+	CollisionSpaceship(anotherSpaceship);
+	for (int i = 0; i < arraySize; i++)
+	{
+		CollisionMass(massArray[i]);
+	}
+	WindowBounce(windowWidth, windowHeight);
+
+	// NextFrame();
 }
 
-void Spaceship::Draw()
+void Spaceship::Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture)
 {
-}
+	D3DXVECTOR3 tempPosition = D3DXVECTOR3(this->GetPosition().x, this->GetPosition().y, 0);
+	D3DXMatrixTransformation2D(this->GetMatrixAddress(), NULL, 0.0f, this->GetScalingAddress(), this->GetSpriteCenterAddress(), this->GetDirection(), this->GetPositionAddress());
+	spriteBrush->SetTransform(this->GetMatrixAddress());
 
+	HRESULT hr = spriteBrush->Draw(texture, this->GetDisplayRectAddress(), NULL, &tempPosition, D3DCOLOR_XRGB(255, 255, 255));
+	if (FAILED(hr))
+	{
+		std::cout << "Draw Failed." << endl;
+	}
+}

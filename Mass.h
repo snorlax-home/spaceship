@@ -43,5 +43,5 @@ public:
 
     // Game Loop Methods
     void Update();
-    void Draw();
+    void Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture);
 };
