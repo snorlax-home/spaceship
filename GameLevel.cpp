@@ -13,6 +13,11 @@ void GameLevel::InitLevel()
 {
 }
 
+void GameLevel::GetD3DDevice()
+{
+	return d3DDevice;
+}
+
 void GameLevel::GetInput(BYTE, DIMOUSESTATE)
 {
 }

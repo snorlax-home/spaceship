@@ -395,8 +395,6 @@ void Spaceship::CollisionMass(Mass *anotherMass)
 
 void Spaceship::NextFrame(int playerNumber)
 {
-	// TODO: implement spriteFPS to make sure it does not flash too much
-
 	frameCounter++;
 
 	if (frameCounter > maxFrame)
