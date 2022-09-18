@@ -8,13 +8,13 @@
 class GameLevel {
 protected:
 
-	// Managers 
+	// Managers
+	LPDIRECT3DDEVICE9 d3DDevice;
 	AudioManager* audioManager;
 
 public:
-	GameLevel(AudioManager*);
+	GameLevel(AudioManager* audioManager,LPDIRECT3DDEVICE9 d3DDevice);
 	~GameLevel();
-
 	virtual void InitLevel();
 	virtual void GetInput(BYTE, DIMOUSESTATE);
 	virtual void Update(BYTE diKeys, DIMOUSESTATE mouseState);
