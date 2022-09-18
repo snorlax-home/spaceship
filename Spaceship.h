@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Mass.h"
-#include "AudioManager.h"
+#include "SpaceshipAudioManager.h"
 
 class Spaceship : public GameObject
 {
@@ -19,11 +19,12 @@ private:
 	bool spaceshipCollided;
 	bool massCollided;
 	bool wallCollided;
+	SpaceshipAudioManager *spaceshipAudioManager;
 
 public:
 	void Init(int textureWidth, int textureHeight, int textureRow, int textureColumn, int spriteFPS, int maxFrame,
-		int animationRectLeft, int animationRectTop, float positionX, float positionY,
-		float engineForce, float direction, float mass, float rotationSpeed);
+			  int animationRectLeft, int animationRectTop, float positionX, float positionY,
+			  float engineForce, float direction, float mass, float rotationSpeed);
 
 	// Setters
 	void SetTextureWidth(int textureWidth);
@@ -65,16 +66,16 @@ public:
 	int GetSpriteWidth();
 	int GetSpriteHeight();
 	D3DXVECTOR2 GetSpriteCenter();
-	D3DXVECTOR2* GetSpriteCenterAddress();
+	D3DXVECTOR2 *GetSpriteCenterAddress();
 	D3DXVECTOR2 GetScaling();
-	D3DXVECTOR2* GetScalingAddress();
+	D3DXVECTOR2 *GetScalingAddress();
 	int GetSpriteFPS();
 	int GetFrameCounter();
 	int GetMaxFrame();
 	RECT GetDisplayRect();
-	RECT* GetDisplayRectAddress();
+	RECT *GetDisplayRectAddress();
 	D3DXVECTOR2 GetPosition();
-	D3DXVECTOR2* GetPositionAddress();
+	D3DXVECTOR2 *GetPositionAddress();
 	D3DXVECTOR2 GetVelocity();
 	D3DXVECTOR2 GetAcceleration();
 	float GetEngineForce();
@@ -87,14 +88,14 @@ public:
 
 	// Other methods
 	bool CircleCollisionDetection(int radiusB, D3DXVECTOR2 positionB);
-	void CollisionSpaceship(Spaceship* anotherSpaceship);
-	void CollisionMass(Mass* anotherMass);
+	void CollisionSpaceship(Spaceship *anotherSpaceship);
+	void CollisionMass(Mass *anotherMass);
 	void NextFrame(int playerNumber);
 	void WindowBounce(int windowWidth, int windowHeight);
 	void Move(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction);
-	void SpaceshipPlaySound(AudioManager* audioManager);
 
 	// Game Loop Methods
-	void Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction, Spaceship* anotherSpaceship, Mass* massArray[], int arraySize, int windowWidth, int windowHeight);
+	void Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction, Spaceship *anotherSpaceship, Mass *massArray[], int arraySize, int windowWidth, int windowHeight);
 	void Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture);
+	void SpaceshipPlaySound();
 };
