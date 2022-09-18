@@ -12,6 +12,7 @@ protected:
 	DIMOUSESTATE mouseState;
 	RECT collisionRect;
 public:
+	// Some changes
 	// Constructor
 	UIObject();
 
