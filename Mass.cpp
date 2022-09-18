@@ -5,162 +5,162 @@ using namespace std;
 
 void Mass::Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int displayRectLeft, int displayRectTop, int windowWidth, int windowHeight, float mass, int hp)
 {
-    int positionX = rand() % (windowWidth - spriteWidth);
-    int positionY = rand() % (windowHeight - spriteWidth);
+	int positionX = rand() % (windowWidth - spriteWidth);
+	int positionY = rand() % (windowHeight - spriteWidth);
 
-    GameObject::Init('M', textureWidth, textureHeight, spriteWidth, spriteHeight, displayRectLeft, displayRectTop, positionX, positionY, mass);
-    this->hp = hp;
+	GameObject::Init('M', textureWidth, textureHeight, spriteWidth, spriteHeight, displayRectLeft, displayRectTop, positionX, positionY, mass);
+	this->hp = hp;
 }
 
 // Setters
 void Mass::SetTextureWidth(int spriteWidth)
 {
-    GameObject::SetTextureWidth(spriteWidth);
+	GameObject::SetTextureWidth(spriteWidth);
 }
 
 void Mass::SetTextureHeight(int spriteHeight)
 {
-    GameObject::SetTextureHeight(spriteHeight);
+	GameObject::SetTextureHeight(spriteHeight);
 }
 
 void Mass::SetSpriteWidth(int spriteWidth)
 {
-    GameObject::SetSpriteWidth(spriteWidth);
+	GameObject::SetSpriteWidth(spriteWidth);
 }
 
 void Mass::SetSpriteHeight(int spriteHeight)
 {
-    GameObject::SetSpriteHeight(spriteHeight);
+	GameObject::SetSpriteHeight(spriteHeight);
 }
 
 void Mass::SetScaling(float scalingX, float scalingY)
 {
-    GameObject::SetScaling(scalingX, scalingY);
+	GameObject::SetScaling(scalingX, scalingY);
 }
 
 void Mass::SetDisplayRect(int left, int top)
 {
-    GameObject::SetDisplayRect(left, top);
+	GameObject::SetDisplayRect(left, top);
 }
 
 void Mass::SetDisplayRectLeft(int left)
 {
-    GameObject::SetDisplayRectLeft(left);
+	GameObject::SetDisplayRectLeft(left);
 }
 
 void Mass::SetDisplayRectTop(int top)
 {
-    GameObject::SetDisplayRectTop(top);
+	GameObject::SetDisplayRectTop(top);
 }
 
 void Mass::SetPosition(D3DXVECTOR2 position)
 {
-    GameObject::SetPosition(position);
+	GameObject::SetPosition(position);
 }
 
 void Mass::SetPosition(float x, float y)
 {
-    GameObject::SetPosition(x, y);
+	GameObject::SetPosition(x, y);
 }
 
 void Mass::SetPositionX(float x)
 {
-    GameObject::SetPositionX(x);
+	GameObject::SetPositionX(x);
 }
 
 void Mass::SetPositionY(float y)
 {
-    GameObject::SetPositionY(y);
+	GameObject::SetPositionY(y);
 }
 
 void Mass::SetMass(float mass)
 {
-    GameObject::SetMass(mass);
+	GameObject::SetMass(mass);
 }
 
 void Mass::SetHp(int hp)
 {
-    this->hp = hp;
+	this->hp = hp;
 }
 
 // Getters
 
 int Mass::GetTextureWidth()
 {
-    return GameObject::GetTextureWidth();
+	return GameObject::GetTextureWidth();
 }
 
 int Mass::GetTextureHeight()
 {
-    return GameObject::GetTextureHeight();
+	return GameObject::GetTextureHeight();
 }
 
 int Mass::GetSpriteWidth()
 {
-    return GameObject::GetSpriteWidth();
+	return GameObject::GetSpriteWidth();
 }
 
 int Mass::GetSpriteHeight()
 {
-    return GameObject::GetSpriteHeight();
+	return GameObject::GetSpriteHeight();
 }
 
 D3DXVECTOR2 Mass::GetSpriteCenter()
 {
-    return GameObject::GetSpriteCenter();
+	return GameObject::GetSpriteCenter();
 }
 
-D3DXVECTOR2 *Mass::GetSpriteCenterAddress()
+D3DXVECTOR2* Mass::GetSpriteCenterAddress()
 {
-    return GameObject::GetSpriteCenterAddress();
+	return GameObject::GetSpriteCenterAddress();
 }
 
 D3DXVECTOR2 Mass::GetScaling()
 {
-    return GameObject::GetScaling();
+	return GameObject::GetScaling();
 }
 
-D3DXVECTOR2 *Mass::GetScalingAddress()
+D3DXVECTOR2* Mass::GetScalingAddress()
 {
-    return GameObject::GetScalingAddress();
+	return GameObject::GetScalingAddress();
 }
 
 RECT Mass::GetDisplayRect()
 {
-    return GameObject::GetDisplayRect();
+	return GameObject::GetDisplayRect();
 }
 
-RECT *Mass::GetDisplayRectAddress()
+RECT* Mass::GetDisplayRectAddress()
 {
-    return GameObject::GetDisplayRectAddress();
+	return GameObject::GetDisplayRectAddress();
 }
 
 D3DXVECTOR2 Mass::GetPosition()
 {
-    return GameObject::GetPosition();
+	return GameObject::GetPosition();
 }
 
-D3DXVECTOR2 *Mass::GetPositionAddress()
+D3DXVECTOR2* Mass::GetPositionAddress()
 {
-    return GameObject::GetPositionAddress();
+	return GameObject::GetPositionAddress();
 }
 
 float Mass::GetMass()
 {
-    return GameObject::GetMass();
+	return GameObject::GetMass();
 }
 
 int Mass::GetHp()
 {
-    return hp;
+	return hp;
 }
 
 // Other methods
 void Mass::Consumed()
 {
-    hp--;
-    GameObject::SetPosition(-1, -1);
-    cout << "Mass consumed" << endl;
+	hp--;
+	GameObject::SetPosition(-1, -1);
+	cout << "Mass consumed" << endl;
 }
 
 // Game Loop Methods
@@ -168,6 +168,15 @@ void Mass::Update()
 {
 }
 
-void Mass::Render()
+void Mass::Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture)
 {
+    D3DXVECTOR3 tempPosition = D3DXVECTOR3(this->GetPosition().x, this->GetPosition().y, 0);
+    D3DXMatrixTransformation2D(this->GetMatrixAddress(), NULL, 0.0f, this->GetScalingAddress(), this->GetSpriteCenterAddress(), 0.0f, this->GetPositionAddress());
+    spriteBrush->SetTransform(this->GetMatrixAddress());
+
+    HRESULT hr = spriteBrush->Draw(texture, this->GetDisplayRectAddress(), NULL, &tempPosition, D3DCOLOR_XRGB(255, 255, 255));
+    if (FAILED(hr))
+    {
+        std::cout << "Draw Failed." << endl;
+    }
 }
