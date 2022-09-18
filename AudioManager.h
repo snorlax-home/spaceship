@@ -4,17 +4,20 @@
 class AudioManager
 {
 private:
-	FMOD::System* audioSystem;
-	FMOD::Channel* channel = 0;
+	FMOD::System *audioSystem;
+	FMOD::Channel *channel = 0;
 	FMOD_RESULT result;
-	void* extraDriverData = 0;
+	void *extraDriverData = 0;
 
 public:
-	void InitializeAudio();
-	FMOD_RESULT CreateSounds(const char, FMOD::Sound*);
-	FMOD_RESULT UpdateSounds();
-	FMOD_RESULT PlaySound(FMOD::Sound* soundSource);
+	virtual void InitializeAudio();
+	virtual void ResultCheck(FMOD_RESULT result, const char *message);
+	virtual void LoadSounds();
+	virtual FMOD::System *GetAudioSystem();
+	virtual FMOD::Channel *GetChannel();
+	virtual FMOD::Channel **GetChannelAddress();
+	virtual FMOD_RESULT GetResult();
+	virtual void UpdateSound();
 	AudioManager();
 	~AudioManager();
-
 };

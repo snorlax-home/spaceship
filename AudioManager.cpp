@@ -1,23 +1,50 @@
 #include "AudioManager.h"
+#include <iostream>
+
+using namespace std;
 
 void AudioManager::InitializeAudio()
 {
-	result = FMOD::System_Create(&audioSystem);
-	result = audioSystem->init(32, FMOD_INIT_NORMAL, extraDriverData);
+	ResultCheck(FMOD::System_Create(&audioSystem), "FMOD::System_Create Failed");
+	ResultCheck(audioSystem->init(32, FMOD_INIT_NORMAL, extraDriverData), "audioSystem->init Failed");
 }
 
-FMOD_RESULT AudioManager::CreateSounds(const char filePath, FMOD::Sound* sound) {
-	return audioSystem->createSound(&filePath, FMOD_DEFAULT, 0, &sound);
-};
-
-FMOD_RESULT AudioManager::UpdateSounds() {
-	return audioSystem->update();
-}
-FMOD_RESULT AudioManager::PlaySound(FMOD::Sound* soundSource)
+void AudioManager::ResultCheck(FMOD_RESULT result, const char *message)
 {
-	return audioSystem->playSound(soundSource, 0, false, &channel);
+	if (result != FMOD_OK)
+	{
+		cout << message << endl;
+	}
 }
-;
+
+void AudioManager::LoadSounds()
+{
+}
+
+FMOD::System *AudioManager::GetAudioSystem()
+{
+	return audioSystem;
+}
+
+FMOD::Channel *AudioManager::GetChannel()
+{
+	return channel;
+}
+
+FMOD::Channel **AudioManager::GetChannelAddress()
+{
+	return &channel;
+}
+
+FMOD_RESULT AudioManager::GetResult()
+{
+	return result;
+}
+
+void AudioManager::UpdateSound()
+{
+	ResultCheck(GetAudioSystem()->update(), "Error updating sounds");
+}
 
 AudioManager::AudioManager()
 {
@@ -26,4 +53,3 @@ AudioManager::AudioManager()
 AudioManager::~AudioManager()
 {
 }
-
