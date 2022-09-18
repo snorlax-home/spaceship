@@ -6,10 +6,9 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
-    delete this;
 }
 
-void GameObject::Init(char GameObjectType, int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int displayRectLeft, int displayRectTop, int positionX, int positionY, float mass)
+void GameObject::Init(char GameObjectType, int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int positionX, int positionY, float mass)
 {
     this->gameObjectType = GameObjectType;
     this->textureWidth = textureWidth;
@@ -18,11 +17,6 @@ void GameObject::Init(char GameObjectType, int textureWidth, int textureHeight, 
     this->spriteHeight = spriteHeight;
     this->spriteCenter = D3DXVECTOR2(spriteWidth / 2, spriteHeight / 2);
     this->scaling = D3DXVECTOR2(1.0f, 1.0f);
-
-    this->displayRect.left = displayRectLeft;
-    this->displayRect.top = displayRectTop;
-    this->displayRect.right = displayRectLeft + spriteWidth;
-    this->displayRect.bottom = displayRectTop + spriteHeight;
 
     this->position = D3DXVECTOR2(positionX, positionY);
     this->mass = mass;
@@ -60,23 +54,11 @@ void GameObject::SetDisplayRect(RECT displayRect)
     this->displayRect = displayRect;
 }
 
-void GameObject::SetDisplayRect(int displayRectLeft, int displayRectTop)
-{
-    this->displayRect.left = displayRectLeft;
-    this->displayRect.top = displayRectTop;
-    this->displayRect.right = displayRectLeft + spriteWidth;
-    this->displayRect.bottom = displayRectTop + spriteHeight;
-}
-
-void GameObject::SetDisplayRectLeft(int displayRectLeft)
-{
-    this->displayRect.left = displayRectLeft;
-    this->displayRect.right = displayRectLeft + spriteWidth;
-}
-
-void GameObject::SetDisplayRectTop(int displayRectTop)
+void GameObject::SetDisplayRect(int displayRectTop, int displayRectLeft, int displayRectRight, int displayRectBottom)
 {
     this->displayRect.top = displayRectTop;
+    this->displayRect.left = displayRectLeft;
+    this->displayRect.right = displayRectLeft + spriteWidth;
     this->displayRect.bottom = displayRectTop + spriteHeight;
 }
 

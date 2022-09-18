@@ -3,13 +3,15 @@
 
 using namespace std;
 
-void Mass::Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int displayRectLeft, int displayRectTop, int windowWidth, int windowHeight, float mass, int hp)
+void Mass::Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int windowWidth, int windowHeight, float mass, int hp)
 {
-	int positionX = rand() % (windowWidth - spriteWidth);
-	int positionY = rand() % (windowHeight - spriteWidth);
+	int positionX = rand() % (300 - spriteWidth);
+	int positionY = rand() % (300 - spriteHeight);
 
-	GameObject::Init('M', textureWidth, textureHeight, spriteWidth, spriteHeight, displayRectLeft, displayRectTop, positionX, positionY, mass);
+	GameObject::Init('M', textureWidth, textureHeight, spriteWidth, spriteHeight, positionX, positionY, mass);
 	this->hp = hp;
+
+	InitDisplayRect();
 }
 
 // Setters
@@ -36,21 +38,6 @@ void Mass::SetSpriteHeight(int spriteHeight)
 void Mass::SetScaling(float scalingX, float scalingY)
 {
 	GameObject::SetScaling(scalingX, scalingY);
-}
-
-void Mass::SetDisplayRect(int left, int top)
-{
-	GameObject::SetDisplayRect(left, top);
-}
-
-void Mass::SetDisplayRectLeft(int left)
-{
-	GameObject::SetDisplayRectLeft(left);
-}
-
-void Mass::SetDisplayRectTop(int top)
-{
-	GameObject::SetDisplayRectTop(top);
 }
 
 void Mass::SetPosition(D3DXVECTOR2 position)
@@ -155,6 +142,16 @@ int Mass::GetHp()
 	return hp;
 }
 
+void Mass::InitDisplayRect()
+{
+	int rectTop = 0;
+	int rectLeft = 0;
+	int rectRight = rectLeft + GameObject::GetSpriteWidth();
+	int rectBottom = rectTop + GameObject::GetSpriteHeight();
+
+	GameObject::SetDisplayRect(rectTop, rectLeft, rectRight, rectBottom);
+}
+
 // Other methods
 void Mass::Consumed()
 {
@@ -170,13 +167,14 @@ void Mass::Update()
 
 void Mass::Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture)
 {
-    D3DXVECTOR3 tempPosition = D3DXVECTOR3(this->GetPosition().x, this->GetPosition().y, 0);
     D3DXMatrixTransformation2D(this->GetMatrixAddress(), NULL, 0.0f, this->GetScalingAddress(), this->GetSpriteCenterAddress(), 0.0f, this->GetPositionAddress());
     spriteBrush->SetTransform(this->GetMatrixAddress());
-
-    HRESULT hr = spriteBrush->Draw(texture, this->GetDisplayRectAddress(), NULL, &tempPosition, D3DCOLOR_XRGB(255, 255, 255));
-    if (FAILED(hr))
-    {
-        std::cout << "Draw Failed." << endl;
-    }
+	cout << this->GetHp() << endl;
+	if (this->GetHp() > 0) {
+		HRESULT hr = spriteBrush->Draw(texture, GetDisplayRectAddress(), NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
+		if (FAILED(hr))
+		{
+			std::cout << "Draw Failed." << endl;
+		}
+	}
 }
