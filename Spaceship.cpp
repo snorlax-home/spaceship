@@ -3,18 +3,20 @@
 
 using namespace std;
 
-void Spaceship::Init(int textureWidth, int textureHeight, int textureRow, int textureColumn, int spriteFPS, int maxFrame,
-					 int displayRectLeft, int displayRectTop, float positionX, float positionY,
-					 float engineForce, float direction, float mass, float rotationSpeed)
+void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int textureRow, int textureColumn, int spriteFPS, int maxFrame,
+					 float positionX, float positionY, float engineForce, float direction, float mass, float rotationSpeed)
 {
-	GameObject::Init('S', textureWidth, textureHeight, textureWidth / textureColumn, textureHeight / textureRow, displayRectLeft, displayRectTop, positionX, positionY, mass);
+	GameObject::Init('S', textureWidth, textureHeight, textureWidth / textureColumn, textureHeight / textureRow, positionX, positionY, mass);
 
+	this->playerNum = playerNum;
 	this->textureColumn = textureColumn;
 	this->textureRow = textureRow;
 
 	this->spriteFPS = spriteFPS;
 	frameCounter = 0;
 	this->maxFrame = maxFrame;
+
+	InitDisplayRect();
 
 	velocity = D3DXVECTOR2(0, 0);
 	acceleration = D3DXVECTOR2(0, 0);
@@ -40,7 +42,6 @@ void Spaceship::SetTextureWidth(int textureWidth)
 
 	// Update the sprite width and display display rect
 	GameObject::SetSpriteWidth(GameObject::GetTextureWidth() / textureColumn);
-	GameObject::SetDisplayRect(GameObject::GetDisplayRect());
 }
 
 void Spaceship::SetTextureHeight(int textureHeight)
@@ -49,7 +50,6 @@ void Spaceship::SetTextureHeight(int textureHeight)
 
 	// Update sprite height and display rect
 	GameObject::SetSpriteHeight(GameObject::GetTextureHeight() / textureRow);
-	GameObject::SetDisplayRect(GameObject::GetDisplayRect());
 }
 
 void Spaceship::SetTextureRow(int textureRow)
@@ -84,21 +84,6 @@ void Spaceship::SetFrameCounter(int frameCounter)
 void Spaceship::SetMaxFrame(int maxFrame)
 {
 	this->maxFrame = maxFrame;
-}
-
-void Spaceship::SetDisplayRect(int left, int top)
-{
-	GameObject::SetDisplayRect(left, top);
-}
-
-void Spaceship::SetDisplayRectLeft(int left)
-{
-	GameObject::SetDisplayRectLeft(left);
-}
-
-void Spaceship::SetDisplayRectTop(int top)
-{
-	GameObject::SetDisplayRectTop(top);
 }
 
 void Spaceship::SetPosition(D3DXVECTOR2 position)
@@ -199,6 +184,11 @@ void Spaceship::SetWallCollided(bool wallCollided)
 }
 
 // Getters
+int Spaceship::GetPlayerNum()
+{
+	return playerNum;
+}
+
 int Spaceship::GetTextureWidth()
 {
 	return GameObject::GetTextureWidth();
@@ -329,6 +319,16 @@ bool Spaceship::GetWallCollided()
 	return wallCollided;
 }
 
+void Spaceship::InitDisplayRect()
+{
+	int rectTop = 0;
+	int rectLeft = (playerNum - 1) * GameObject::GetSpriteWidth();
+	int rectRight = rectLeft + GameObject::GetSpriteWidth();
+	int rectBottom = rectTop + GameObject::GetSpriteHeight();
+
+	GameObject::SetDisplayRect(rectTop, rectLeft, rectRight, rectBottom);
+}
+
 // Game methods
 // Method to check for collision between two objects
 bool Spaceship::CircleCollisionDetection(int radiusB, D3DXVECTOR2 positionB)
@@ -404,8 +404,12 @@ void Spaceship::NextFrame(int playerNumber)
 		frameCounter = 0;
 	}
 
-	GameObject::SetDisplayRectLeft((playerNumber - 1) * GameObject::GetSpriteWidth());
-	GameObject::SetDisplayRectTop(frameCounter * GameObject::GetSpriteHeight());
+	int leftRect = (playerNum - 1) * GameObject::GetSpriteWidth();
+	int topRect = frameCounter * GameObject::GetSpriteHeight();
+	int rightRect = leftRect + GameObject::GetSpriteWidth();
+	int bottomRect = topRect + GameObject::GetSpriteHeight();
+
+	GameObject::SetDisplayRect(leftRect, topRect, rightRect, bottomRect);
 }
 
 void Spaceship::WindowBounce(int windowWidth, int windowHeight)
@@ -487,11 +491,10 @@ void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBac
 
 void Spaceship::Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture)
 {
-	D3DXVECTOR3 tempPosition = D3DXVECTOR3(this->GetPosition().x, this->GetPosition().y, 0);
-	D3DXMatrixTransformation2D(this->GetMatrixAddress(), NULL, 0.0f, this->GetScalingAddress(), this->GetSpriteCenterAddress(), this->GetDirection(), this->GetPositionAddress());
+	D3DXMatrixTransformation2D(this->GetMatrixAddress(), NULL, 0.5f, this->GetScalingAddress(), this->GetSpriteCenterAddress(), this->GetDirection(), this->GetPositionAddress());
 	spriteBrush->SetTransform(this->GetMatrixAddress());
 
-	HRESULT hr = spriteBrush->Draw(texture, this->GetDisplayRectAddress(), NULL, &tempPosition, D3DCOLOR_XRGB(255, 255, 255));
+	HRESULT hr = spriteBrush->Draw(texture, GetDisplayRectAddress(), NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
 	if (FAILED(hr))
 	{
 		std::cout << "Draw Failed." << endl;

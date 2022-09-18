@@ -7,16 +7,13 @@ private:
     int hp;
 
 public:
-    void Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int displayRectLeft, int displayRectTop, int WindowWidth, int windowHeight, float mass, int hp);
+    void Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int WindowWidth, int windowHeight, float mass, int hp);
     // Setters
     void SetTextureWidth(int textureWidth);
     void SetTextureHeight(int textureHeight);
     void SetSpriteWidth(int spriteWidth);
     void SetSpriteHeight(int spriteHeight);
     void SetScaling(float scalingX, float scalingY);
-    void SetDisplayRect(int left, int top);
-    void SetDisplayRectLeft(int left);
-    void SetDisplayRectTop(int top);
     void SetPosition(D3DXVECTOR2 position);
     void SetPosition(float x, float y);
     void SetPositionX(float x);
@@ -40,6 +37,7 @@ public:
     int GetHp();
     // Other methods
     void Consumed();
+    void InitDisplayRect();
 
     // Game Loop Methods
     void Update();

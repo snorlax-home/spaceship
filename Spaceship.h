@@ -6,6 +6,7 @@
 class Spaceship : public GameObject
 {
 private:
+	int playerNum;
 	int textureRow;
 	int textureColumn;
 	int spriteFPS;
@@ -22,9 +23,8 @@ private:
 	SpaceshipAudioManager *spaceshipAudioManager;
 
 public:
-	void Init(int textureWidth, int textureHeight, int textureRow, int textureColumn, int spriteFPS, int maxFrame,
-			  int animationRectLeft, int animationRectTop, float positionX, float positionY,
-			  float engineForce, float direction, float mass, float rotationSpeed);
+	void Init(int playerNum, int textureWidth, int textureHeight, int textureRow, int textureColumn, int spriteFPS, int maxFrame, float positionX, float positionY,
+		float engineForce, float direction, float mass, float rotationSpeed);
 
 	// Setters
 	void SetTextureWidth(int textureWidth);
@@ -35,9 +35,6 @@ public:
 	void SetSpriteFPS(int spriteFPS);
 	void SetFrameCounter(int frameCounter);
 	void SetMaxFrame(int maxFrame);
-	void SetDisplayRect(int left, int top);
-	void SetDisplayRectLeft(int left);
-	void SetDisplayRectTop(int top);
 	void SetPosition(D3DXVECTOR2 position);
 	void SetPosition(float x, float y);
 	void SetPositionX(float x);
@@ -59,6 +56,7 @@ public:
 	void SetWallCollided(bool wallCollided);
 
 	// Getters
+	int GetPlayerNum();
 	int GetTextureWidth();
 	int GetTextureHeight();
 	int GetTextureRow();
@@ -87,6 +85,7 @@ public:
 	bool GetWallCollided();
 
 	// Other methods
+	void InitDisplayRect();
 	bool CircleCollisionDetection(int radiusB, D3DXVECTOR2 positionB);
 	void CollisionSpaceship(Spaceship *anotherSpaceship);
 	void CollisionMass(Mass *anotherMass);
