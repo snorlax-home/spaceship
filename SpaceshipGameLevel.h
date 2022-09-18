@@ -1,5 +1,6 @@
 #pragma once
 #include "GameLevel.h"
+#include "Label.h"
 #include "Spaceship.h"
 #include "Mass.h"
 #include "SpaceshipLevelAudioManager.h"
@@ -7,6 +8,8 @@
 class SpaceshipGameLevel : public GameLevel
 {
 private:
+    Label* label1;
+    Label* label2;
     Spaceship* player1;
     Spaceship* player2;
     Mass* mass1;
@@ -17,6 +20,7 @@ private:
     int player2Points;
     float friction;
     LPD3DXSPRITE spriteBrush;
+    LPD3DXSPRITE textBrush;
     HRESULT hr;
     int point;
     Mass* massArray[3];
