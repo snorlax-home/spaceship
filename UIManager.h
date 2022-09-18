@@ -1,25 +1,22 @@
 #pragma once
-#include "UIFrame.h"
-#include <vector>
+
+#include <d3d9.h>
+#include <d3dx9.h>
+
+enum TextAlign { left, centered, right };
+
+struct vertex
+{
+    FLOAT x, y, z, rhw;
+    DWORD color;
+};
 
 class UIManager
 {
-private:
-	std::vector<UIFrame> frameArr;
-	int frameIndex;
-	LPD3DXLINE line;
-	
-public:
-	UIManager();
-	~UIManager();
-	void SortArray();
-	void AddFrame(UIFrame newFrame);
-	void DropFrame(UIFrame* frameRef);
-	void SwitchFrame(int index);
-	void NextFrame();
-	void Update(DIMOUSESTATE mouseState);
-	void Render(LPD3DXSPRITE spriteBrush);
-	void CleanUp();
-	void CleanUpFrame();
-};
+    ID3DXFont* pFont;
 
+    void Line(D3DXVECTOR2 startPoint, D3DXVECTOR2 endPoint, float width, float height, DWORD color);
+    
+
+    void Init();
+};

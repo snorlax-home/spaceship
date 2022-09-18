@@ -280,7 +280,7 @@ void InitializeLevel()
     // mass2
     mass2->Init(32, 32, 9, 9, 0, 0, WindowWidth, WindowHeight, 1, 1);
 
-    audioManager->PlaySoundtrack();
+    //audioManager->PlaySoundtrack();
 }
 
 void GetInput()
@@ -492,7 +492,7 @@ void Render()
 }
 
 void PlaySound() {
-	audioManager->UpdateSound();
+	//audioManager->UpdateSound();
 	player1->SpaceshipPlaySound(audioManager);
 	player2->SpaceshipPlaySound(audioManager);
 }
@@ -568,10 +568,10 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 
     audioManager = new AudioManager();
 
-    audioManager->InitalizeAudio();
-    audioManager->LoadSounds();
-    audioManager->PlaySound1();
-    audioManager->PlaySoundtrack();
+    //audioManager->InitalizeAudio();
+    //audioManager->LoadSounds();
+    //audioManager->PlaySound1();
+    //audioManager->PlaySoundtrack();
 
     timer->Init(60);
 

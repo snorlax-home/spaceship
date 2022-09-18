@@ -12,14 +12,14 @@ void DrawShape::Reset()
 	Screen.y_center = Screen.Height / 2;
 }
 
-void DrawShape::Line(float x1, float y1, float x2, float y2, float width, bool antialias, DWORD color)
+void DrawShape::Line(float x1, float y1, float x2, float y2, float width, bool antiAlias, DWORD color)
 {
 	ID3DXLine* m_Line;
 
 	D3DXCreateLine(pDevice, &m_Line);
 	D3DXVECTOR2 line[] = { D3DXVECTOR2(x1, y1), D3DXVECTOR2(x2, y2) };
 	m_Line->SetWidth(width);
-	if (antialias) m_Line->SetAntialias(1);
+	if (antiAlias) m_Line->SetAntialias(1);
 	m_Line->Begin();
 	m_Line->Draw(line, 2, color);
 	m_Line->End();
@@ -131,9 +131,9 @@ void DrawShape::CircleFilled(float x, float y, float rad, float rotate, int type
 	if (g_pVB != NULL) g_pVB->Release();
 }
 
-void DrawShape::Box(float x, float y, float w, float h, float linewidth, DWORD color)
+void DrawShape::Box(float x, float y, float w, float h, float lineWidth, DWORD color)
 {
-	if (linewidth == 0 || linewidth == 1)
+	if (lineWidth == 0 || lineWidth == 1)
 	{
 		BoxFilled(x, y, w, 1, color);             // Top
 		BoxFilled(x, y + h - 1, w, 1, color);         // Bottom
@@ -142,10 +142,10 @@ void DrawShape::Box(float x, float y, float w, float h, float linewidth, DWORD c
 	}
 	else
 	{
-		BoxFilled(x, y, w, linewidth, color);                                     // Top
-		BoxFilled(x, y + h - linewidth, w, linewidth, color);                         // Bottom
-		BoxFilled(x, y + linewidth, linewidth, h - 2 * linewidth, color);               // Left
-		BoxFilled(x + w - linewidth, y + linewidth, linewidth, h - 2 * linewidth, color);   // Right
+		BoxFilled(x, y, w, lineWidth, color);                                     // Top
+		BoxFilled(x, y + h - lineWidth, w, lineWidth, color);                         // Bottom
+		BoxFilled(x, y + lineWidth, lineWidth, h - 2 * lineWidth, color);               // Left
+		BoxFilled(x + w - lineWidth, y + lineWidth, lineWidth, h - 2 * lineWidth, color);   // Right
 	}
 }
 
@@ -204,7 +204,7 @@ void DrawShape::BoxFilled(float x, float y, float w, float h, DWORD color)
 	g_pIB->Release();
 }
 
-void DrawShape::BoxRounded(float x, float y, float w, float h, float radius, bool smoothing, DWORD color, DWORD bcolor)
+void DrawShape::BoxRounded(float x, float y, float w, float h, float radius, bool smoothing, DWORD color, DWORD bgColor)
 {
 	BoxFilled(x + radius, y + radius, w - 2 * radius - 1, h - 2 * radius - 1, color);   // Center rect.
 	BoxFilled(x + radius, y + 1, w - 2 * radius - 1, radius - 1, color);            // Top rect.
@@ -220,15 +220,15 @@ void DrawShape::BoxRounded(float x, float y, float w, float h, float radius, boo
 		CircleFilled(x + w - radius - 1, y + h - radius - 1, radius - 1, 180, quarter, 16, color);   // Bottom-right corner
 		CircleFilled(x + radius, y + h - radius - 1, radius - 1, 270, quarter, 16, color);       // Bottom-left corner
 
-		Circle(x + radius + 1, y + radius + 1, radius, 0, quarter, true, 16, bcolor);          // Top-left corner
-		Circle(x + w - radius - 2, y + radius + 1, radius, 90, quarter, true, 16, bcolor);       // Top-right corner
-		Circle(x + w - radius - 2, y + h - radius - 2, radius, 180, quarter, true, 16, bcolor);    // Bottom-right corner
-		Circle(x + radius + 1, y + h - radius - 2, radius, 270, quarter, true, 16, bcolor);      // Bottom-left corner
+		Circle(x + radius + 1, y + radius + 1, radius, 0, quarter, true, 16, bgColor);          // Top-left corner
+		Circle(x + w - radius - 2, y + radius + 1, radius, 90, quarter, true, 16, bgColor);       // Top-right corner
+		Circle(x + w - radius - 2, y + h - radius - 2, radius, 180, quarter, true, 16, bgColor);    // Bottom-right corner
+		Circle(x + radius + 1, y + h - radius - 2, radius, 270, quarter, true, 16, bgColor);      // Bottom-left corner
 
-		Line(x + radius, y + 1, x + w - radius - 1, y + 1, 1, false, bcolor);       // Top line
-		Line(x + radius, y + h - 2, x + w - radius - 1, y + h - 2, 1, false, bcolor);   // Bottom line
-		Line(x + 1, y + radius, x + 1, y + h - radius - 1, 1, false, bcolor);       // Left line
-		Line(x + w - 2, y + radius, x + w - 2, y + h - radius - 1, 1, false, bcolor);   // Right line
+		Line(x + radius, y + 1, x + w - radius - 1, y + 1, 1, false, bgColor);       // Top line
+		Line(x + radius, y + h - 2, x + w - radius - 1, y + h - 2, 1, false, bgColor);   // Bottom line
+		Line(x + 1, y + radius, x + 1, y + h - radius - 1, 1, false, bgColor);       // Left line
+		Line(x + w - 2, y + radius, x + w - 2, y + h - radius - 1, 1, false, bgColor);   // Right line
 	}
 	else
 	{
@@ -239,7 +239,7 @@ void DrawShape::BoxRounded(float x, float y, float w, float h, float radius, boo
 	}
 }
 
-void DrawShape::Text(char* text, float x, float y, int orientation, int font, bool bordered, DWORD color, DWORD bcolor)
+void DrawShape::Text(char* text, float x, float y, int orientation, int font, bool bordered, DWORD color, DWORD bgColor)
 {
 	RECT rect;
 
@@ -249,13 +249,13 @@ void DrawShape::Text(char* text, float x, float y, int orientation, int font, bo
 		if (bordered)
 		{
 			SetRect(&rect, x - 1, y, x - 1, y);
-			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_LEFT | DT_NOCLIP, bcolor);
+			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_LEFT | DT_NOCLIP, bgColor);
 			SetRect(&rect, x + 1, y, x + 1, y);
-			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_LEFT | DT_NOCLIP, bcolor);
+			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_LEFT | DT_NOCLIP, bgColor);
 			SetRect(&rect, x, y - 1, x, y - 1);
-			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_LEFT | DT_NOCLIP, bcolor);
+			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_LEFT | DT_NOCLIP, bgColor);
 			SetRect(&rect, x, y + 1, x, y + 1);
-			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_LEFT | DT_NOCLIP, bcolor);
+			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_LEFT | DT_NOCLIP, bgColor);
 		}
 		SetRect(&rect, x, y, x, y);
 		pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_LEFT | DT_NOCLIP, color);
@@ -264,13 +264,13 @@ void DrawShape::Text(char* text, float x, float y, int orientation, int font, bo
 		if (bordered)
 		{
 			SetRect(&rect, x - 1, y, x - 1, y);
-			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_CENTER | DT_NOCLIP, bcolor);
+			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_CENTER | DT_NOCLIP, bgColor);
 			SetRect(&rect, x + 1, y, x + 1, y);
-			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_CENTER | DT_NOCLIP, bcolor);
+			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_CENTER | DT_NOCLIP, bgColor);
 			SetRect(&rect, x, y - 1, x, y - 1);
-			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_CENTER | DT_NOCLIP, bcolor);
+			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_CENTER | DT_NOCLIP, bgColor);
 			SetRect(&rect, x, y + 1, x, y + 1);
-			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_CENTER | DT_NOCLIP, bcolor);
+			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_CENTER | DT_NOCLIP, bgColor);
 		}
 		SetRect(&rect, x, y, x, y);
 		pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_CENTER | DT_NOCLIP, color);
@@ -279,13 +279,13 @@ void DrawShape::Text(char* text, float x, float y, int orientation, int font, bo
 		if (bordered)
 		{
 			SetRect(&rect, x - 1, y, x - 1, y);
-			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_RIGHT | DT_NOCLIP, bcolor);
+			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_RIGHT | DT_NOCLIP, bgColor);
 			SetRect(&rect, x + 1, y, x + 1, y);
-			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_RIGHT | DT_NOCLIP, bcolor);
+			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_RIGHT | DT_NOCLIP, bgColor);
 			SetRect(&rect, x, y - 1, x, y - 1);
-			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_RIGHT | DT_NOCLIP, bcolor);
+			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_RIGHT | DT_NOCLIP, bgColor);
 			SetRect(&rect, x, y + 1, x, y + 1);
-			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_RIGHT | DT_NOCLIP, bcolor);
+			pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_RIGHT | DT_NOCLIP, bgColor);
 		}
 		SetRect(&rect, x, y, x, y);
 		pFont[font]->DrawTextA(NULL, text, -1, &rect, DT_RIGHT | DT_NOCLIP, color);

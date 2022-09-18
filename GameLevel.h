@@ -4,21 +4,23 @@
 #include <dinput.h>
 
 #include "AudioManager.h"
+#include "GameLevelManager.h"
 
-class GameLevel {
+class GameLevel
+{
 protected:
-
-	// Managers
-	LPDIRECT3DDEVICE9 d3DDevice;
-	AudioManager* audioManager;
+    // Managers
+    LPDIRECT3DDEVICE9 d3DDevice;
+    AudioManager* audioManager;
+    GameLevelManager* gameLevelManager;
 
 public:
-	GameLevel(AudioManager* audioManager,LPDIRECT3DDEVICE9 d3DDevice);
-	~GameLevel();
-	virtual void InitLevel();
-	virtual void GetInput(BYTE, DIMOUSESTATE);
-	virtual void Update(BYTE diKeys, DIMOUSESTATE mouseState);
-	virtual void Render(LPD3DXSPRITE);
-	virtual void RenderLine();
-	virtual void CleanUp();
+    GameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, GameLevelManager* gameLevelManager);
+    ~GameLevel();
+    virtual void InitLevel();
+    virtual void GetInput(BYTE, DIMOUSESTATE);
+    virtual void Update(BYTE diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY);
+    virtual void Render(LPD3DXSPRITE);
+    virtual void RenderLine();
+    virtual void CleanUp();
 };

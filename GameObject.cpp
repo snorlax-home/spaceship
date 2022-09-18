@@ -28,6 +28,11 @@ void GameObject::Init(char GameObjectType, int textureWidth, int textureHeight, 
     this->mass = mass;
 }
 
+void GameObject::SetGameObjectType(char GameObjectType)
+{
+    this->gameObjectType = GameObjectType;
+}
+
 void GameObject::SetTextureWidth(int textureWidth)
 {
     this->textureWidth = textureWidth;
@@ -104,6 +109,7 @@ void GameObject::SetMass(float mass)
 {
     this->mass = mass;
 }
+
 
 // Getters
 char GameObject::GetGameObjectType()

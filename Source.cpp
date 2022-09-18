@@ -9,7 +9,16 @@
 #include "AudioManager.h"
 #include "FrameTimer.h"
 #include "GameLevel.h"
+// #include "MainMenu.cpp"
+//#include "UIManager.h"
+#include "Button.h"
+#include "Label.h";
 #include "Utils.cpp";
+#include "colors.h"
+#include "GameLevelManager.h"
+#include "GameOver.h"
+#include "Line.h"
+#include "MainMenu.h"
 
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
@@ -30,6 +39,7 @@ LPDIRECTINPUTDEVICE8 dInputKeyboardDevice;
 LPDIRECTINPUTDEVICE8 dInputMouseDevice;
 BYTE diKeys[256];
 DIMOUSESTATE mouseState;
+LONG mouseX, mouseY;
 
 //DX Globals
 IDirect3DDevice9* d3dDevice = NULL;
@@ -37,9 +47,22 @@ LPD3DXSPRITE spriteBrush = NULL;
 
 // Global managers
 AudioManager* audioManager;
-//UIManager* uiManager;
+FrameTimer* timer;
+
+// Game Levels
 std::vector<GameLevel*> gameLevels;
-int currentLevel = 0;
+GameLevelManager* gameLevelManager;
+
+// Mouse cursor
+LONG currentXpos = 0;
+LONG currentYpos = 0;
+LPDIRECT3DTEXTURE9 cursorTexture = NULL;
+D3DXVECTOR2 cursorScaling;
+D3DXVECTOR2 cursorSpriteCentre;
+float cursorRotation;
+RECT cursorSpriteRect;
+RECT mouseColRect;
+D3DXVECTOR2 cursorPosition;
 
 void HRManager(std::string errorMessage)
 {
@@ -88,7 +111,7 @@ void CreateGameWindow()
 
     RegisterClass(&wndClass);
 
-    g_hWnd = CreateWindowEx(0, wndClass.lpszClassName, "Spaceship", WS_OVERLAPPEDWINDOW, 0, 100, WindowWidth,
+    g_hWnd = CreateWindowEx(0, wndClass.lpszClassName, "Pinball Machine", WS_OVERLAPPEDWINDOW, 0, 100, WindowWidth,
                             WindowHeight, NULL, NULL, GetModuleHandle(NULL), NULL);
     ShowWindow(g_hWnd, 1);
     ShowCursor(1);
@@ -121,7 +144,6 @@ void CreateDirectX()
     spriteBrush = nullptr;
     hr = D3DXCreateSprite(d3dDevice, &spriteBrush);
     HRManager("Create sprite brush.");
-
 }
 
 void CreateDirectInput()
@@ -193,23 +215,67 @@ void CleanUpGameWindow()
     UnregisterClass(wndClass.lpszClassName, GetModuleHandle(NULL));
 }
 
+void Init()
+{
+    timer = new FrameTimer();
+    timer->Init(60);
+    audioManager = new AudioManager();
+    audioManager->InitializeAudio();
+    gameLevelManager = new GameLevelManager();
+
+    MainMenu* mainMenu = new MainMenu(
+        audioManager, d3dDevice, gameLevelManager
+    );
+    GameOver* gameOver = new GameOver(
+        audioManager, d3dDevice, gameLevelManager);
+    GameLevel* test = new GameLevel(audioManager, d3dDevice, gameLevelManager);
+    gameLevels.push_back(mainMenu);
+    gameLevels.push_back(gameOver);
+
+    D3DXCreateTextureFromFile(d3dDevice, "Assets/cursor.png", &cursorTexture);
+
+    cursorSpriteRect.left = 0;
+    cursorSpriteRect.top = 0;
+    cursorSpriteRect.right = 64;
+    cursorSpriteRect.bottom = 64;
+
+    cursorPosition.x = WindowHeight / 2;
+    cursorPosition.y = WindowWidth / 2;
+
+    cursorScaling = D3DXVECTOR2(1.0f, 1.0f);
+    cursorSpriteCentre = D3DXVECTOR2(32, 32);
+    cursorRotation = 0.0f;
+}
 
 void Update(int framesToUpdate)
 {
+    GetInput();
+    cursorPosition.x += mouseState.lX;
+    cursorPosition.y += mouseState.lY;
+    mouseX = cursorPosition.x;
+    mouseY = cursorPosition.y;
     for (int i = 0; i < framesToUpdate; i++)
     {
-        // gameLevels[currentLevel]->Update();
+        gameLevels[gameLevelManager->GetCurrentLevel()]->Update(*diKeys, mouseState, mouseX, mouseY);
     }
 }
 
 void Render()
 {
     d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
+    D3DXMATRIX mat;
     d3dDevice->BeginScene();
     spriteBrush->Begin(D3DXSPRITE_ALPHABLEND);
-    // Render sprites
+    gameLevels[gameLevelManager->GetCurrentLevel()]->Render(spriteBrush);
+
+    // D3DXMatrixTransformation2D(&mat, NULL, 0.0, &cursorScaling, &cursorSpriteCentre, cursorRotation, &cursorPosition);
+    // spriteBrush->SetTransform(&mat);
+    spriteBrush->Draw(cursorTexture, &cursorSpriteRect, NULL, new D3DXVECTOR3(cursorPosition.x, cursorPosition.y, 0),
+                      D3DCOLOR_XRGB(255, 255, 255));
+    spriteBrush->SetTransform(nullptr);
+
     spriteBrush->End();
-    // Render lines
+    gameLevels[gameLevelManager->GetCurrentLevel()]->RenderLine();
     d3dDevice->EndScene();
     d3dDevice->Present(NULL, NULL, NULL, NULL);
 }
@@ -220,27 +286,27 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
     CreateDirectX();
     CreateDirectInput();
 
-    // Initialize Managers
-    FrameTimer* timer = new FrameTimer();
-    timer->Init(60);
-
-    audioManager = new AudioManager();
-    audioManager->InitializeAudio();
+    Init();
+    for (int i = 0; i < gameLevels.size(); i++)
+    {
+        gameLevels[i]->InitLevel();
+    }
     if (FAILED(hr))
     {
         cout << "Failed to create sprite brush." << endl;
     }
+
+
     PrintLine("Game Window Created");
     while (WindowIsRunning())
     {
+        if (gameLevels.empty() || gameLevelManager->GetCurrentLevel() >= gameLevels.size())
+        {
+            break;
+        }
+
         Update(timer->FramesToUpdate());
         Render();
-        // if (gameLevels.empty())
-        // {
-        //     break;
-        // }
-        // gameLevels[currentLevel]->Update(*diKeys, mouseState);
-        // gameLevels[currentLevel]->Render(spriteBrush);
     }
     PrintLine("Game Window Ended");
     while (!gameLevels.empty())

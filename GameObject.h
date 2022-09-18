@@ -26,6 +26,7 @@ public:
     virtual void Init(char GameObjectType, int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int displayRectLeft, int displayRectTop, int positionX, int positionY, float mass);
 
     // Setters
+    void SetGameObjectType(char GameObjectType);
     virtual void SetTextureWidth(int textureWidth);
     virtual void SetTextureHeight(int textureHeight);
     virtual void SetSpriteWidth(int spriteWidth);

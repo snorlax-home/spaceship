@@ -138,12 +138,17 @@
     <ClCompile Include="DrawShape.cpp" />
     <ClCompile Include="FrameTimer.cpp" />
     <ClCompile Include="GameLevel.cpp" />
+    <ClCompile Include="GameLevelManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="Line.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Mass.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Spaceship.cpp" />
+    <ClCompile Include="SpaceshipAudioManager.cpp" />
+    <ClCompile Include="SpaceshipLevelAudioManager.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
@@ -154,12 +159,17 @@
     <ClInclude Include="DrawShape.h" />
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="GameLevel.h" />
+    <ClInclude Include="GameLevelManager.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="Label.h" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Mass.h" />
     <ClInclude Include="NotificationManager.h" />
     <ClInclude Include="Spaceship.h" />
+    <ClInclude Include="SpaceshipAudioManager.h" />
+    <ClInclude Include="SpaceshipLevelAudioManager.h" />
     <ClInclude Include="UIManager.h" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +178,16 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\test.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Audio\bounce.mp3" />
+    <Content Include="Assets\Audio\point-get.ogg" />
+    <Content Include="Assets\Audio\space-theme.wav" />
+    <Content Include="Assets\gameover.jpg" />
+    <Content Include="Assets\main.jpg" />
+    <Content Include="Assets\mass.png" />
+    <Content Include="Assets\practical9.png" />
+    <Content Include="Assets\cursor.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

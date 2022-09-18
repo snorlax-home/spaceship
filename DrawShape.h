@@ -3,6 +3,7 @@
 
 #include <d3d9.h>
 #include <d3dx9.h>
+#include "colors.h"
 
 enum CircleType { full, half, quarter };
 enum TextAlign { left, centered, right };
@@ -18,8 +19,8 @@ class DrawShape
 {
 public:
 	DrawShape() {
-		g_pVB = NULL;
-		g_pIB = NULL;
+		g_pVB = nullptr;
+		g_pIB = nullptr;
 		int FontNr = 0;
 	}
 	struct sScreen
@@ -35,17 +36,17 @@ public:
 	void Sprite(LPDIRECT3DTEXTURE9 tex, float x, float y, float resolution, float scale, float rotation);
 
 	//=============================================================================================
-	void Line(float x1, float y1, float x2, float y2, float width, bool antialias, DWORD color);
+	void Line(float x1, float y1, float x2, float y2, float width, bool antiAlias, DWORD color);
 
-	void Box(float x, float y, float w, float h, float linewidth, DWORD color);
+	void Box(float x, float y, float w, float h, float lineWidth, DWORD color);
 	void BoxFilled(float x, float y, float w, float h, DWORD color);
 	void BoxBordered(float x, float y, float w, float h, float border_width, DWORD color, DWORD color_border);
-	void BoxRounded(float x, float y, float w, float h, float radius, bool smoothing, DWORD color, DWORD bcolor);
+	void BoxRounded(float x, float y, float w, float h, float radius, bool smoothing, DWORD color, DWORD bgColor);
 
 	void Circle(float x, float y, float radius, int rotate, int type, bool smoothing, int resolution, DWORD color);
 	void CircleFilled(float x, float y, float rad, float rotate, int type, int resolution, DWORD color);
 
-	void Text(char* text, float x, float y, int orientation, int font, bool bordered, DWORD color, DWORD bcolor);
+	void Text(char* text, float x, float y, int orientation, int font, bool bordered, DWORD color, DWORD bgColor);
 	void Message(char* text, float x, float y, int font, int orientation);
 	//=============================================================================================
 
@@ -65,4 +66,4 @@ private:
 
 	int FontNr;
 	LPD3DXSPRITE sSprite;
-}
+};
