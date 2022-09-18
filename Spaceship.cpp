@@ -27,6 +27,10 @@ void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int tex
 	bool spaceshipCollided = false;
 	bool massCollided = false;
 	bool wallCollided = false;
+
+	spaceshipAudioManager = new SpaceshipAudioManager();
+	spaceshipAudioManager->InitializeAudio();
+	spaceshipAudioManager->LoadSounds();
 }
 
 // Setters
@@ -437,29 +441,7 @@ void Spaceship::Move(bool turnLeft, bool turnRight, bool goForward, bool goBackw
 	acceleration.y = 0;
 }
 
-void Spaceship::SpaceshipPlaySound(AudioManager *audioManager)
-{
-	if (spaceshipCollided)
-	{
-		// TODO: use audio manager to add this things
-		// audioManager->PlaySound1();
-		spaceshipCollided = false;
-	}
-
-	if (massCollided)
-	{
-		// audioManager->PlayPointSound();
-		massCollided = false;
-	}
-
-	if (wallCollided)
-	{
-		// audioManager->PlaySound1();
-		wallCollided = false;
-	}
-}
-
-void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction, Spaceship* anotherSpaceship, Mass* massArray[], int arraySize, int windowWidth, int windowHeight)
+void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction, Spaceship *anotherSpaceship, Mass *massArray[], int arraySize, int windowWidth, int windowHeight)
 {
 	Move(turnLeft, turnRight, goForward, goBackward, friction);
 	CollisionSpaceship(anotherSpaceship);
@@ -481,5 +463,28 @@ void Spaceship::Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture)
 	if (FAILED(hr))
 	{
 		std::cout << "Draw Failed." << endl;
+	}
+}
+
+void Spaceship::SpaceshipPlaySound()
+{
+	spaceshipAudioManager->UpdateSound();
+
+	if (spaceshipCollided)
+	{
+		spaceshipAudioManager->playBounceSound();
+		spaceshipCollided = false;
+	}
+
+	if (massCollided)
+	{
+		spaceshipAudioManager->playPointSound();
+		massCollided = false;
+	}
+
+	if (wallCollided)
+	{
+		spaceshipAudioManager->playBounceSound();
+		wallCollided = false;
 	}
 }
