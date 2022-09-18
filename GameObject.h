@@ -23,7 +23,7 @@ public:
     // Destructor
     ~GameObject();
 
-    virtual void Init(char GameObjectType, int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int displayRectLeft, int displayRectTop, int positionX, int positionY, float mass);
+    virtual void Init(char GameObjectType, int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int positionX, int positionY, float mass);
 
     // Setters
     void SetGameObjectType(char GameObjectType);
@@ -33,9 +33,7 @@ public:
     virtual void SetSpriteHeight(int spriteHeight);
     virtual void SetScaling(float scalingX, float scalingY);
     virtual void SetDisplayRect(RECT displayRect);
-    virtual void SetDisplayRect(int displayRectLeft, int displayRectTop);
-    virtual void SetDisplayRectLeft(int displayRectLeft);
-    virtual void SetDisplayRectTop(int displayRectTop);
+    virtual void SetDisplayRect(int displayRectTop, int displayRectLeft, int displayRectRight, int displayRectBottom);
     virtual void SetPosition(D3DXVECTOR2 position);
     virtual void SetPosition(float x, float y);
     virtual void SetPositionX(float x);

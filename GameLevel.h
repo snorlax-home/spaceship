@@ -23,4 +23,6 @@ public:
     virtual void Render(LPD3DXSPRITE);
     virtual void RenderLine();
     virtual void CleanUp();
+    virtual LPDIRECT3DDEVICE9 GetD3DDevice();
+    virtual void playSound();
 };
