@@ -24,10 +24,12 @@ void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int tex
 	this->direction = direction;
 	this->rotationSpeed = rotationSpeed;
 
+	// 	Set all collide flags to false
 	bool spaceshipCollided = false;
 	bool massCollided = false;
 	bool wallCollided = false;
 
+	// Initialize and load spaceship AudioManager
 	spaceshipAudioManager = new SpaceshipAudioManager();
 	spaceshipAudioManager->InitializeAudio();
 	spaceshipAudioManager->LoadSounds();
@@ -37,12 +39,16 @@ void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int tex
 void Spaceship::SetTextureWidth(int textureWidth)
 {
 	GameObject::SetTextureWidth(textureWidth);
+
+	// Update the sprite width and display display rect
 	GameObject::SetSpriteWidth(GameObject::GetTextureWidth() / textureColumn);
 }
 
 void Spaceship::SetTextureHeight(int textureHeight)
 {
 	GameObject::SetTextureHeight(textureHeight);
+
+	// Update sprite height and display rect
 	GameObject::SetSpriteHeight(GameObject::GetTextureHeight() / textureRow);
 }
 
@@ -324,12 +330,21 @@ void Spaceship::InitDisplayRect()
 }
 
 // Game methods
+// Method to check for collision between two objects
 bool Spaceship::CircleCollisionDetection(int radiusB, D3DXVECTOR2 positionB)
 {
+	// Get the radius of the spaceship by dividing the width of the sprite by 2
 	int radiusA = GameObject::GetSpriteWidth() / 2;
-	// D3DXVECTOR2 distance = (position + spriteCenter) - positionB;
-	D3DXVECTOR2 distance = GameObject::GetPosition() + GetSpriteCenter() - positionB;
 
+	// Get the distance between midpoint of the spaceship and the other object
+	// add SpriteCenter to get midpoint of spaceship
+	D3DXVECTOR2 distance = GameObject::GetPosition() + GameObject::GetSpriteCenter() - positionB;
+
+	/*
+	 * Check if the distance between the two objects is less than the sum of the radius of the two objects
+	 * If it is, then the two objects are colliding
+	 * If it is not, then the two objects are not colliding
+	 */
 	if (radiusA + radiusB < D3DXVec2Length(&distance))
 	{
 		return false;
@@ -343,8 +358,14 @@ bool Spaceship::CircleCollisionDetection(int radiusB, D3DXVECTOR2 positionB)
 
 void Spaceship::CollisionSpaceship(Spaceship *anotherSpaceship)
 {
+	/*
+	 * Check if the spaceship is colliding with another spaceship
+	 * If yes, then set velocity of both spaceship to be 1.2 and opposite direction
+	 * then, set the spaceshipCollided to true
+	 */
 	if (CircleCollisionDetection(anotherSpaceship->GetSpriteWidth() / 2, anotherSpaceship->GetPosition() + anotherSpaceship->GetSpriteCenter()))
 	{
+
 		velocity.x *= -1.2;
 		velocity.y *= -1.2;
 
@@ -357,9 +378,13 @@ void Spaceship::CollisionSpaceship(Spaceship *anotherSpaceship)
 
 void Spaceship::CollisionMass(Mass *anotherMass)
 {
+	/*
+	 * Check if the spaceship is colliding with a mass
+	 * If yes, increase mass of the spaceship by using the mass of the mass object
+	 * then, trigger mass object Consumed() method and set massCollided to true
+	 */
 	if (CircleCollisionDetection(anotherMass->GetSpriteWidth() / 2, anotherMass->GetPosition() + anotherMass->GetSpriteCenter()))
 	{
-		// mass += anotherMass->GetMass();
 		GameObject::SetMass(GameObject::GetMass() + anotherMass->GetMass());
 
 		anotherMass->Consumed();
@@ -370,8 +395,6 @@ void Spaceship::CollisionMass(Mass *anotherMass)
 
 void Spaceship::NextFrame(int playerNumber)
 {
-	// TODO: implement spriteFPS to make sure it does not flash too much
-
 	frameCounter++;
 
 	if (frameCounter > maxFrame)
@@ -389,6 +412,11 @@ void Spaceship::NextFrame(int playerNumber)
 
 void Spaceship::WindowBounce(int windowWidth, int windowHeight)
 {
+	/*
+	 * Check if the spaceship is colliding with the window
+	 * If yes, then set velocity of the spaceship to be 1.2 and opposite direction
+	 * then, set the wallCollided to true
+	 */
 	if (GameObject::GetPosition().x < 0 || GameObject::GetPosition().x > windowWidth - GameObject::GetSpriteWidth())
 	{
 		velocity.x *= -1.2;
@@ -403,25 +431,31 @@ void Spaceship::WindowBounce(int windowWidth, int windowHeight)
 
 void Spaceship::Move(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction)
 {
+	// turnLeft is true, then rotate the spaceship to the left
 	if (turnLeft)
 	{
 		direction -= rotationSpeed;
 	}
 
-	// Rotate player to the right
+	// turnRight is true, then rotate the spaceship to the right
 	if (turnRight)
 	{
 		direction += rotationSpeed;
 	}
 
+	// goForward is true, then accelerate the spaceship
 	if (goForward)
 	{
+		// Calculate the acceleration of the spaceship
+		// a = F / m
 		acceleration.x = sin(direction) * engineForce / GameObject::GetMass();
 		acceleration.y = -cos(direction) * engineForce / GameObject::GetMass();
 	}
 
 	if (goBackward)
 	{
+		// calculate the acceleration of the spaceship
+		// a = F / m
 		acceleration.x = -sin(direction) * engineForce / GameObject::GetMass();
 		acceleration.y = cos(direction) * engineForce / GameObject::GetMass();
 	}
@@ -433,7 +467,6 @@ void Spaceship::Move(bool turnLeft, bool turnRight, bool goForward, bool goBackw
 	velocity *= (1 - friction);
 
 	// Update position
-	// position += velocity;
 	GameObject::SetPosition(GameObject::GetPosition() + velocity);
 
 	// Reset acceleration
@@ -466,9 +499,15 @@ void Spaceship::Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture)
 	}
 }
 
+// Method to play the sound for the spaceship
 void Spaceship::SpaceshipPlaySound()
 {
+	// Update sound system
 	spaceshipAudioManager->UpdateSound();
+
+	/*
+	 * If the spaceship is colliding with another spaceship, then play the bounce sound
+	 */
 
 	if (spaceshipCollided)
 	{
@@ -476,12 +515,18 @@ void Spaceship::SpaceshipPlaySound()
 		spaceshipCollided = false;
 	}
 
+	/*
+	 * If the spaceship is colliding with a mass, then play the point get sound
+	 */
 	if (massCollided)
 	{
 		spaceshipAudioManager->playPointSound();
 		massCollided = false;
 	}
 
+	/*
+	 * If the spaceship is colliding with the wall, then play the bounce sound
+	 */
 	if (wallCollided)
 	{
 		spaceshipAudioManager->playBounceSound();
