@@ -19,5 +19,6 @@ public:
 	virtual void GetInput(BYTE, DIMOUSESTATE);
 	virtual void Update(BYTE diKeys, DIMOUSESTATE mouseState);
 	virtual void Render(LPD3DXSPRITE);
+	virtual void RenderLine();
 	virtual void CleanUp();
 };
