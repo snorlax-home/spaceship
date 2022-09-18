@@ -4,24 +4,15 @@
 #include <dinput.h>
 
 #include "AudioManager.h"
-#include "UIManager.h"
 
 class GameLevel {
 protected:
 
-	// Interface
-	IDirect3DDevice9* d3dDevice;
-
 	// Managers 
 	AudioManager* audioManager;
-	UIManager* uiManager;
-
-	// Input
-	BYTE diKeys[256];
-	DIMOUSESTATE mouseState;
 
 public:
-	GameLevel(AudioManager*, UIManager*, IDirect3DDevice9*);
+	GameLevel(AudioManager*);
 	~GameLevel();
 
 	virtual void InitLevel();
