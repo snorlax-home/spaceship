@@ -19,6 +19,7 @@
 #include "GameOver.h"
 #include "Line.h"
 #include "MainMenu.h"
+#include "SpaceshipGameLevel.h"
 
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
@@ -110,11 +111,10 @@ void CreateGameWindow()
     wndClass.style = CS_HREDRAW | CS_VREDRAW;
 
     RegisterClass(&wndClass);
-
     g_hWnd = CreateWindowEx(0, wndClass.lpszClassName, "Pinball Machine", WS_OVERLAPPEDWINDOW, 0, 100, WindowWidth,
                             WindowHeight, NULL, NULL, GetModuleHandle(NULL), NULL);
     ShowWindow(g_hWnd, 1);
-    ShowCursor(1);
+    ShowCursor(0);
 }
 
 void CreateDirectX()
@@ -226,10 +226,13 @@ void Init()
     MainMenu* mainMenu = new MainMenu(
         audioManager, d3dDevice, gameLevelManager
     );
+    SpaceshipGameLevel* spaceshipGameLevel = new SpaceshipGameLevel(
+        audioManager, d3dDevice, gameLevelManager, WindowWidth, WindowHeight
+    );
     GameOver* gameOver = new GameOver(
         audioManager, d3dDevice, gameLevelManager);
-    GameLevel* test = new GameLevel(audioManager, d3dDevice, gameLevelManager);
     gameLevels.push_back(mainMenu);
+    gameLevels.push_back(spaceshipGameLevel);
     gameLevels.push_back(gameOver);
 
     D3DXCreateTextureFromFile(d3dDevice, "Assets/cursor.png", &cursorTexture);
@@ -254,10 +257,8 @@ void Update(int framesToUpdate)
     cursorPosition.y += mouseState.lY;
     mouseX = cursorPosition.x;
     mouseY = cursorPosition.y;
-    for (int i = 0; i < framesToUpdate; i++)
-    {
-        gameLevels[gameLevelManager->GetCurrentLevel()]->Update(*diKeys, mouseState, mouseX, mouseY);
-    }
+    gameLevels[gameLevelManager->GetCurrentLevel()]->GetInput(diKeys, mouseState);
+    gameLevels[gameLevelManager->GetCurrentLevel()]->Update(diKeys, mouseState, mouseX, mouseY, framesToUpdate);
 }
 
 void Render()

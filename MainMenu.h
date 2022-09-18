@@ -14,8 +14,8 @@ private:
 public:
     MainMenu(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice,GameLevelManager* gameLevelManager);
     void InitLevel() override;
-    void GetInput(BYTE, DIMOUSESTATE) override;
-    void Update(BYTE diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY) override;
+    void GetInput(BYTE*, DIMOUSESTATE) override;
+    void Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate) override;
     void Render(LPD3DXSPRITE) override;
     void RenderLine() override;
     void CleanUp() override;

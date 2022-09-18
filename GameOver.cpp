@@ -35,16 +35,19 @@ void GameOver::InitLevel()
                             this->gameLevelManager));
 }
 
-void GameOver::GetInput(BYTE byte, DIMOUSESTATE dimousestate)
+void GameOver::GetInput(BYTE* byte, DIMOUSESTATE dimousestate)
 {
     GameLevel::GetInput(byte, dimousestate);
 }
 
-void GameOver::Update(BYTE diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY)
+void GameOver::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate)
 {
-    for (Button b : button)
+    for (int i = 0; i < frameToUpdate; i++)
     {
-        b.Update(mouseX, mouseY, mouseState);
+        for (Button b : button)
+        {
+            b.Update(mouseX, mouseY, mouseState);
+        }
     }
 }
 

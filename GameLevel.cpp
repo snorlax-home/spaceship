@@ -2,9 +2,9 @@
 
 GameLevel::GameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, GameLevelManager* gameLevelManager)
 {
-	this->audioManager = audioManager;
-	this->d3DDevice = d3DDevice;
-	this->gameLevelManager = gameLevelManager;
+    this->audioManager = audioManager;
+    this->d3DDevice = d3DDevice;
+    this->gameLevelManager = gameLevelManager;
 }
 
 GameLevel::~GameLevel()
@@ -15,18 +15,22 @@ void GameLevel::InitLevel()
 {
 }
 
-void GameLevel::GetD3DDevice()
+LPDIRECT3DDEVICE9 GameLevel::GetD3DDevice()
 {
-	return d3DDevice;
+    return d3DDevice;
 }
 
-void GameLevel::GetInput(BYTE, DIMOUSESTATE)
+void GameLevel::playSound()
 {
 }
 
-void GameLevel::Update(BYTE diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY)
+void GameLevel::GetInput(BYTE*, DIMOUSESTATE)
 {
-	GetInput(diKeys, mouseState);
+}
+
+void GameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate)
+{
+    GetInput(diKeys, mouseState);
 }
 
 void GameLevel::Render(LPD3DXSPRITE spriteBrush)

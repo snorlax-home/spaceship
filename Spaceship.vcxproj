@@ -148,6 +148,7 @@
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Spaceship.cpp" />
     <ClCompile Include="SpaceshipAudioManager.cpp" />
+    <ClCompile Include="SpaceshipGameLevel.cpp" />
     <ClCompile Include="SpaceshipLevelAudioManager.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="NotificationManager.h" />
     <ClInclude Include="Spaceship.h" />
     <ClInclude Include="SpaceshipAudioManager.h" />
+    <ClInclude Include="SpaceshipGameLevel.h" />
     <ClInclude Include="SpaceshipLevelAudioManager.h" />
     <ClInclude Include="UIManager.h" />
   </ItemGroup>
