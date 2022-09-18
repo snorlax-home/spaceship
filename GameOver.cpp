@@ -27,10 +27,10 @@ void GameOver::InitLevel()
 {
     texture = nullptr;
     D3DXCreateTextureFromFile(d3DDevice, "Assets/gameover.jpg", &texture);
-    button.push_back(Button(&ctnGame, "Continue?", D3DXVECTOR2(100, 400), D3DXVECTOR2(200, 50), WHITE(255),
-                            WHITE(255), RED(255), RED(200), GREEN(255), GREEN(205), this->d3DDevice,
-                            this->gameLevelManager));
-    button.push_back(Button(&exitGame, "Quit Game", D3DXVECTOR2(450, 400), D3DXVECTOR2(200, 50), WHITE(255),
+    // button.push_back(Button(&ctnGame, "Continue?", D3DXVECTOR2(100, 400), D3DXVECTOR2(200, 50), WHITE(255),
+    //                         WHITE(255), RED(255), RED(200), GREEN(255), GREEN(205), this->d3DDevice,
+    //                         this->gameLevelManager));
+    button.push_back(Button(&exitGame, "Quit Game", D3DXVECTOR2(275, 400), D3DXVECTOR2(200, 50), WHITE(255),
                             WHITE(255), RED(255), RED(255), GREEN(255), GREEN(255), this->d3DDevice,
                             this->gameLevelManager));
 }
