@@ -1,7 +1,11 @@
 #pragma once
+#include <vector>
+
 #include "GameObject.h"
 #include "Mass.h"
-#include "SpaceshipAudioManager.h"
+//#include "SpaceshipAudioManager.h"
+#include "AudioManager.h"
+#include "GameSound.h"
 
 class Spaceship : public GameObject
 {
@@ -9,7 +13,7 @@ private:
 	int playerNum;
 	int textureRow;
 	int textureColumn;
-	int spriteFPS;
+	int spriteFPS; //Is this needed?
 	int frameCounter;
 	int maxFrame;
 	D3DXVECTOR2 velocity;
@@ -20,65 +24,71 @@ private:
 	bool spaceshipCollided;
 	bool massCollided;
 	bool wallCollided;
-	SpaceshipAudioManager *spaceshipAudioManager;
+	//SpaceshipAudioManager *spaceshipAudioManager;
+	// std::vector<GameSound*> gameSounds; not sure if this is needed
+	GameSound* bounceSound;
+	GameSound* collectSound;
 
 public:
-	void Init(int playerNum, int textureWidth, int textureHeight, int textureRow, int textureColumn, int spriteFPS, int maxFrame, float positionX, float positionY,
-		float engineForce, float direction, float mass, float rotationSpeed);
+	Spaceship();
+	~Spaceship();
+	
+	void Init(int playerNum, int textureWidth, int textureHeight, int textureRow, int textureColumn, int spriteFPS, int maxFrame, int positionX, int positionY,
+		float engineForce, float direction, float mass, float rotationSpeed, AudioManager* audioManager);
 
 	// Setters
-	void SetTextureWidth(int textureWidth);
-	void SetTextureHeight(int textureHeight);
-	void SetTextureRow(int textureRow);
-	void SetTextureColumn(int textureColumn);
-	void SetScaling(float scalingX, float scalingY);
-	void SetSpriteFPS(int spriteFPS);
-	void SetFrameCounter(int frameCounter);
-	void SetMaxFrame(int maxFrame);
-	void SetPosition(D3DXVECTOR2 position);
-	void SetPosition(float x, float y);
-	void SetPositionX(float x);
-	void SetPositionY(float y);
-	void SetVelocity(D3DXVECTOR2 velocity);
+	void SetTextureWidth(int textureWidth) override;
+	void SetTextureHeight(int textureHeight) override;
+	void SetTextureRow(int texture_row);
+	void SetTextureColumn(int texture_column);
+	void SetScaling(float scalingX, float scalingY) override;
+	void SetSpriteFPS(int sprite_fps);
+	void SetFrameCounter(int frame_counter);
+	void SetMaxFrame(int max_frame);
+	void SetPosition(D3DXVECTOR2 position) override;
+	void SetPosition(float x, float y) override;
+	void SetPositionX(float x) override;
+	void SetPositionY(float y) override;
+	void SetVelocity(D3DXVECTOR2 spaceShipVelocity);
 	void SetVelocity(float x, float y);
 	void SetVelocityX(float x);
 	void SetVelocityY(float y);
-	void SetAcceleration(D3DXVECTOR2 acceleration);
+	void SetAcceleration(D3DXVECTOR2 spaceshipAcceleration);
 	void SetAcceleration(float x, float y);
 	void SetAccelerationX(float x);
 	void SetAccelerationY(float y);
-	void SetEngineForce(float engineForce);
-	void SetDirection(float direction);
-	void SetMass(float mass);
-	void SetRotationSpeed(float rotationSpeed);
-	void SetSpaceshipCollided(bool spaceshipCollided);
-	void SetMassCollided(bool massCollided);
-	void SetWallCollided(bool wallCollided);
+	void SetEngineForce(float engine_Force);
+	void SetDirection(float spaceship_Direction);
+	void SetMass(float mass) override;
+	void SetRotationSpeed(float rotation_speed);
+	void SetSpaceshipCollided(bool spaceship_Collided);
+	void SetMassCollided(bool mass_Collided);
+	void SetWallCollided(bool wall_collided);
 
 	// Getters
 	int GetPlayerNum();
-	int GetTextureWidth();
-	int GetTextureHeight();
+	int GetTextureWidth() override;
+	int GetTextureHeight() override;
 	int GetTextureRow();
 	int GetTextureColumn();
-	int GetSpriteWidth();
-	int GetSpriteHeight();
-	D3DXVECTOR2 GetSpriteCenter();
-	D3DXVECTOR2 *GetSpriteCenterAddress();
-	D3DXVECTOR2 GetScaling();
-	D3DXVECTOR2 *GetScalingAddress();
+	int GetSpriteWidth() override;
+	int GetSpriteHeight() override;
+	D3DXVECTOR2 GetSpriteCenter() override;
+	D3DXVECTOR2 *GetSpriteCenterAddress() override;
+	D3DXVECTOR2 GetScaling() override;
+	D3DXVECTOR2 *GetScalingAddress() override;
 	int GetSpriteFPS();
 	int GetFrameCounter();
 	int GetMaxFrame();
-	RECT GetDisplayRect();
-	RECT *GetDisplayRectAddress();
-	D3DXVECTOR2 GetPosition();
-	D3DXVECTOR2 *GetPositionAddress();
+	RECT GetDisplayRect() override;
+	RECT *GetDisplayRectAddress() override;
+	D3DXVECTOR2 GetPosition() override;
+	D3DXVECTOR2 *GetPositionAddress() override;
 	D3DXVECTOR2 GetVelocity();
 	D3DXVECTOR2 GetAcceleration();
 	float GetEngineForce();
 	float GetDirection();
-	float GetMass();
+	float GetMass() override;
 	float GetRotationSpeed();
 	bool GetSpaceshipCollided();
 	bool GetMassCollided();
@@ -96,5 +106,5 @@ public:
 	// Game Loop Methods
 	void Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction, Spaceship *anotherSpaceship, Mass *massArray[], int arraySize, int windowWidth, int windowHeight);
 	void Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture);
-	void SpaceshipPlaySound();
+	void PlaySound(AudioManager *audioManager);
 };

@@ -220,14 +220,14 @@ void SpaceshipGameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mous
     if (player1->GetMassCollided() == true)
     {
         player1Points++;
-        player1->SpaceshipPlaySound();
+        player1->PlaySound();
         player1->SetMassCollided(false);
     }
 
     if (player2->GetMassCollided() == true)
     {
         player2Points++;
-        player2->SpaceshipPlaySound();
+        player2->PlaySound();
         player2->SetMassCollided(false);
     }
 

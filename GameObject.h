@@ -60,4 +60,5 @@ public:
     // GameLoop Methods
     virtual void Update();
     virtual void Draw();
+    virtual void PlaySound();
 };

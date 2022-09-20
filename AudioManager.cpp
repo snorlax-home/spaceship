@@ -30,6 +30,15 @@ void AudioManager::ResultCheck(FMOD_RESULT result, const char *message)
 	}
 }
 
+void AudioManager::PlaySounds(FMOD::Sound* sound, float volume, float pitch, float pan)
+{
+	ResultCheck(audioSystem->playSound(sound, 0, false, &channel), "audioSystem->playSound Failed");
+	channel->setVolume(volume);
+	channel->setPitch(pitch);
+	channel->setPan(pan);
+}
+
+
 // Abstract method to load sounds
 void AudioManager::LoadSounds()
 {
@@ -56,8 +65,21 @@ FMOD_RESULT AudioManager::GetResult()
 	return result;
 }
 
+void AudioManager::CreateSounds(FMOD::Sound* sound, const char* soundFilePath, bool loop)
+{
+	ResultCheck(audioSystem->createSound(soundFilePath, FMOD_DEFAULT, 0, &sound), "audioSystem->createSound Failed");
+	if (loop)
+	{
+		ResultCheck(sound->setMode(FMOD_LOOP_NORMAL), "sound->setMode Failed");
+	}
+	else if (!loop)
+	{
+		ResultCheck(sound->setMode(FMOD_LOOP_OFF), "sound->setMode Failed");
+	}
+}
+
 // Method to update the audio system
 void AudioManager::UpdateSound()
 {
-	ResultCheck(GetAudioSystem()->update(), "Error updating sounds");
+	ResultCheck(audioSystem->update(), "Error updating sounds");
 }

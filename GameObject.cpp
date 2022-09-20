@@ -177,3 +177,9 @@ void GameObject::Update()
 void GameObject::Draw()
 {
 }
+
+void GameObject::PlaySound()
+{
+}
+
+

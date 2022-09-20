@@ -14,14 +14,16 @@ public:
 	AudioManager();
 	~AudioManager();
 	// 	Init and Load
-	virtual void InitializeAudio();
-	virtual void LoadSounds();
+	void InitializeAudio();
+	void LoadSounds();
 	// Getters
-	virtual FMOD::System *GetAudioSystem();
-	virtual FMOD::Channel *GetChannel();
-	virtual FMOD::Channel **GetChannelAddress();
-	virtual FMOD_RESULT GetResult();
+	FMOD::System *GetAudioSystem();
+	FMOD::Channel *GetChannel();
+	FMOD::Channel **GetChannelAddress();
+	FMOD_RESULT GetResult();
 	// Other Methods
-	virtual void UpdateSound();
-	virtual void ResultCheck(FMOD_RESULT result, const char *message);
+	void CreateSounds(FMOD::Sound* sound, const char* soundFilePath, bool loop);
+	void UpdateSound();
+	void ResultCheck(FMOD_RESULT result, const char *message);
+	void PlaySounds(FMOD::Sound* sound, float volume, float pitch, float pan);
 };
