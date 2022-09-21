@@ -2,19 +2,19 @@
 #include <string>
 using namespace std;
 
-static void PrintLine(string message) {
-	cout << message << endl;
+static void PrintLine(string message)
+{
+    cout << message << endl;
 };
 
-//
-// static void HRManager(HRESULT hr, std::string errorMessage)
-// {
-// 	if (FAILED(hr))
-// 	{
-// 		std::cout << "FAILED : " << errorMessage << std::endl;
-// 	}
-// 	else if (hr == S_OK)
-// 	{
-// 		std::cout << "SUCCESS: " << errorMessage << std::endl;
-// 	}
-// }
+// static void HRHandler(HRESULT hr, const char* currentProcess)
+ // {
+     // if (FAILED(hr))
+     // {
+     //     std::cout << "Failed : " << currentProcess << std::endl;
+     // }
+     // else
+     // {
+     //     std::cout << "Success : " << currentProcess << std::endl;
+     // }
+ // }

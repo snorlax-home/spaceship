@@ -29,7 +29,7 @@ private:
     bool leftKeyPressed;
     bool rightKeyPressed;
     bool wKeyPressed;
-    bool sKeyPressed;
+    bool sKeyPressed; 
     bool aKeyPressed;
     bool dKeyPressed;
     int windowWidth;
