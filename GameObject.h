@@ -33,7 +33,7 @@ public:
     virtual void SetSpriteHeight(int spriteHeight);
     virtual void SetScaling(float scalingX, float scalingY);
     virtual void SetDisplayRect(RECT displayRect);
-    virtual void SetDisplayRect(int displayRectTop, int displayRectLeft, int displayRectRight, int displayRectBottom);
+    virtual void SetDisplayRect(int displayRectLeft, int displayRectTop, int displayRectRight, int displayRectBottom);
     virtual void SetPosition(D3DXVECTOR2 position);
     virtual void SetPosition(float x, float y);
     virtual void SetPositionX(float x);

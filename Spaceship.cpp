@@ -411,6 +411,13 @@ void Spaceship::NextFrame(int playerNumber)
     int rightRect = leftRect + GameObject::GetSpriteWidth();
     int bottomRect = topRect + GameObject::GetSpriteHeight();
 
+    if (this->playerNum == 1) {
+        //cout << leftRect << endl;
+        //cout << topRect << endl;
+        //cout << rightRect << endl;
+        cout << bottomRect << endl;
+    }
+
     GameObject::SetDisplayRect(leftRect, topRect, rightRect, bottomRect);
 }
 
@@ -489,7 +496,7 @@ void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBac
     }
     WindowBounce(windowWidth, windowHeight);
 
-    // NextFrame(this->playerNum);
+    NextFrame(this->playerNum);
 }
 
 void Spaceship::Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture)
