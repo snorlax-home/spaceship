@@ -100,117 +100,61 @@ void SpaceshipGameLevel::InitLevel()
 void SpaceshipGameLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
 {
     // player1 movement
-// W key
+    // W key
     if (diKeys[DIK_W] & 0x80)
     {
-        if (player1->GetPosition().y == 0)
-        {
-            wKeyPressed = false;
-        }
-        else
-        {
-            wKeyPressed = true;
-            PrintLine("W Pressed!");
-        }
+        wKeyPressed = true;
+        PrintLine("W Pressed!");
     }
 
     // 	S key
     if (diKeys[DIK_S] & 0x80)
     {
-        if (player1->GetPosition().y > this->windowHeight - player1->GetSpriteHeight())
-        {
-            sKeyPressed = false;
-        }
-        else
-        {
-            sKeyPressed = true;
-            PrintLine("S Pressed!");
-        }
+        sKeyPressed = true;
+        PrintLine("S Pressed!");
     }
 
     // 	A key
     if (diKeys[DIK_A] & 0x80)
     {
-        if (player1->GetPosition().x == 0)
-        {
-            aKeyPressed = false;
-        }
-        else
-        {
-            aKeyPressed = true;
-            PrintLine("A Pressed!");
-        }
+        aKeyPressed = true;
+        PrintLine("A Pressed!");
     }
 
     // 	D key
     if (diKeys[DIK_D] & 0x80)
     {
-        if (player1->GetPosition().x > this->windowWidth - player1->GetSpriteWidth())
-        {
-            dKeyPressed = false;
-        }
-        else
-        {
-            dKeyPressed = true;
-            PrintLine("D Pressed!");
-        }
+        dKeyPressed = true;
+        PrintLine("D Pressed!");
     }
 
     // player2 movement
     // Up key
     if (diKeys[DIK_UP] & 0x80)
     {
-        if (player2->GetPosition().y == 0)
-        {
-            upKeyPressed = false;
-        }
-        else
-        {
-            upKeyPressed = true;
-            PrintLine("Up Pressed!");
-        }
+        upKeyPressed = true;
+        PrintLine("Up Pressed!");
     }
 
     // down key
     if (diKeys[DIK_DOWN] & 0x80)
     {
-        if (player2->GetPosition().y > this->windowHeight - player2->GetSpriteHeight())
-        {
-            downKeyPressed = false;
-        }
-        else
-        {
-            downKeyPressed = true;
-            PrintLine("Down Pressed!");
-        }
+        downKeyPressed = true;
+        PrintLine("Down Pressed!");
     }
 
     // left key
     if (diKeys[DIK_LEFT] & 0x80)
     {
-        if (player2->GetPosition().x == 0)
-        {
-            leftKeyPressed = false;
-        }
-        else
-        {
-            leftKeyPressed = true;
-            PrintLine("Left Pressed!");
-        }
+        leftKeyPressed = true;
+        PrintLine("Left Pressed!");
     }
 
     // 	right key
     if (diKeys[DIK_RIGHT] & 0x80)
     {
-        if (player2->GetPosition().x > this->windowWidth - player2->GetSpriteWidth())
-        {
-            rightKeyPressed = false;
-        }
-        else
-        {
-            rightKeyPressed = true;
-            PrintLine("Right Pressed!");
-        }
+        rightKeyPressed = true;
+        PrintLine("Right Pressed!");
     }
 }
 
@@ -246,6 +190,7 @@ void SpaceshipGameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mous
     rightKeyPressed = false;
     upKeyPressed = false;
     downKeyPressed = false;
+    
     if (player1Points != 0)
     {
         if (player1Points == 1)
