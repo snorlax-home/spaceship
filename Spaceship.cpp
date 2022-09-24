@@ -25,7 +25,7 @@ Spaceship::~Spaceship()
 }
 
 void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int textureRow, int textureColumn,
-                     int spriteFPS, int maxFrame,
+                     int maxFrame,
                      int positionX, int positionY, float engineForce, float direction, float mass,
                      float rotationSpeed, AudioManager* audioManager)
 {
@@ -356,15 +356,59 @@ void Spaceship::CollisionSpaceship(Spaceship* anotherSpaceship)
     if (CircleCollisionDetection(anotherSpaceship->GetSpriteWidth() / 2,
                                  anotherSpaceship->GetPosition() + anotherSpaceship->GetSpriteCenter()))
     {
-        // 
+        //https://youtu.be/LPzyNOHY3A4
+        // Push spaceship out of each other
         D3DXVECTOR2 distance = (GameObject::GetPosition() + GameObject::GetSpriteCenter()) - (anotherSpaceship->GetPosition() + anotherSpaceship->GetSpriteCenter());
         
-        // TODO: how to change this to be more realistic?
-        velocity.x *= -1.2;
-        velocity.y *= -1.2;
+        float overlap = 0.5f * (D3DXVec2Length(&distance) - (GameObject::GetSpriteWidth() / 2) - (anotherSpaceship->GetSpriteWidth() / 2));
+        
+        int positionX = GetPosition().x - (overlap * distance.x / D3DXVec2Length(&distance));
+        int positionY = GetPosition().y - (overlap * distance.y / D3DXVec2Length(&distance));
 
-        anotherSpaceship->SetVelocityX(-velocity.x);
-        anotherSpaceship->SetVelocityY(-velocity.y);
+        SetPosition(positionX, positionY);
+
+        int anotherSpaceshipPositionX = anotherSpaceship->GetPosition().x + (overlap * distance.x / D3DXVec2Length(&distance));
+        int anotherSpaceshipPositionY = anotherSpaceship->GetPosition().y + (overlap * distance.y / D3DXVec2Length(&distance));
+
+        anotherSpaceship->SetPosition(anotherSpaceshipPositionX, anotherSpaceshipPositionY);
+        
+        // TODO: how to change this to be more realistic?
+        // velocity.x *= -1.2;
+        // velocity.y *= -1.2;
+
+        // anotherSpaceship->SetVelocityX(-velocity.x);
+        // anotherSpaceship->SetVelocityY(-velocity.y);
+
+        // Normal
+        float normalX = (anotherSpaceship->GetPosition().x - GetPosition().x) / D3DXVec2Length(&distance);
+        float normalY = (anotherSpaceship->GetPosition().y - GetPosition().y) / D3DXVec2Length(&distance);
+
+        // Tangent
+        float tangentX = -normalY;
+        float tangentY = normalX;
+
+        // Dot Product Tangent
+        float dpTangent1 = GetVelocity().x * tangentX + GetVelocity().y * tangentY;
+        float dpTangent2 = anotherSpaceship->GetVelocity().x * tangentX + anotherSpaceship->GetVelocity().y * tangentY;
+
+        // Dot Product Normal
+        float dpNormal1 = GetVelocity().x * normalX + GetVelocity().y * normalY;
+        float dpNormal2 = anotherSpaceship->GetVelocity().x * normalX + anotherSpaceship->GetVelocity().y * normalY;
+
+        // Conservation of momentum: Elastic Collision
+        float m1 = (dpNormal1 * (GetMass() - anotherSpaceship->GetMass()) + 2.0f * anotherSpaceship->GetMass() * dpNormal2) / (GetMass() + anotherSpaceship->GetMass());
+        float m2 = (dpNormal2 * (anotherSpaceship->GetMass() - GetMass()) + 2.0f * GetMass() * dpNormal1) / (GetMass() + anotherSpaceship->GetMass()); 
+
+
+        float velocityX = tangentX * dpTangent1 + normalX * m1;
+        float velocityY = tangentY * dpTangent1 + normalY * m1;
+        
+        float anotherSpaceshipVelocityX = tangentX * dpTangent2 + normalX * m2;
+        float anotherSpaceshipVelocityY = tangentY * dpTangent2 + normalY * m2;
+
+        SetVelocity(velocityX,velocityY);
+        anotherSpaceship->SetVelocity(anotherSpaceshipVelocityX, anotherSpaceshipVelocityY);
+        
         cout << "Collision detected between spaceships" << endl;
         
         bounceSound->SetPlaySoundFlag(true);
