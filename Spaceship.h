@@ -28,7 +28,7 @@ public:
 	Spaceship();
 	~Spaceship();
 	
-	void Init(int playerNum, int textureWidth, int textureHeight, int textureRow, int textureColumn, int spriteFPS, int maxFrame, int positionX, int positionY,
+	void Init(int playerNum, int textureWidth, int textureHeight, int textureRow, int textureColumn, int maxFrame, int positionX, int positionY,
 		float engineForce, float direction, float mass, float rotationSpeed, AudioManager* audioManager);
 
 	// Setters
@@ -37,7 +37,6 @@ public:
 	void SetTextureRow(int texture_row);
 	void SetTextureColumn(int texture_column);
 	void SetScaling(float scalingX, float scalingY) override;
-	void SetSpriteFPS(int sprite_fps);
 	void SetFrameCounter(int frame_counter);
 	void SetMaxFrame(int max_frame);
 	void SetPosition(D3DXVECTOR2 position) override;
