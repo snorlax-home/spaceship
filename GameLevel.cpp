@@ -20,7 +20,14 @@ LPDIRECT3DDEVICE9 GameLevel::GetD3DDevice()
     return d3DDevice;
 }
 
+AudioManager* GameLevel::GetAudioManager()
+{
+    return audioManager;
+}
 
+void GameLevel::PlaySounds()
+{
+}
 
 
 

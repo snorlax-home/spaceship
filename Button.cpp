@@ -84,7 +84,6 @@ void Button::Render(LPD3DXSPRITE spriteBrush)
     label->Render(spriteBrush);
 }
 
-
 void Button::RenderLine()
 {
     line->Render();

@@ -1,5 +1,7 @@
 ﻿#include "GameSound.h"
 
+#include <iostream>
+
 GameSound::GameSound()
 {
     sound = nullptr;
@@ -23,6 +25,11 @@ void GameSound::Init(const char* filePath, float soundVolume,float soundPitch, f
     this->pitch = soundPitch;
     this->pan = soundPan;
     this->loop = soundLoop;
+}
+
+void GameSound::SetSound(FMOD::Sound* newSound)
+{
+    sound = newSound;
 }
 
 // Setters
@@ -72,6 +79,26 @@ void GameSound::SetPlaySoundFlag(bool playSound)
 FMOD::Sound* GameSound::GetSound()
 {
     return sound;
+}
+
+// FMOD::Sound* GameSound::GetSoundAddress()
+// {
+//     return &sound;
+// }
+
+void GameSound::GetSoundName()
+{
+    char* soundName = nullptr;
+    FMOD_RESULT result = sound->getName(soundName, 256);
+    if (result == FMOD_OK)
+    {
+        std::cout << "Sound name: " << soundName << std::endl;
+    }
+    else
+    {
+        std::cout << "Error getting sound name" << std::endl;
+    }
+    // std::cout << soundName << std::endl;
 }
 
 // Get the file path for the sound file

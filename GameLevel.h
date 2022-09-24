@@ -25,5 +25,6 @@ public:
     virtual void RenderLine();
     virtual void CleanUp();
     virtual LPDIRECT3DDEVICE9 GetD3DDevice();
-
+    virtual AudioManager* GetAudioManager();
+    virtual void PlaySounds();
 };

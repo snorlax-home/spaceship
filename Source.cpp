@@ -13,7 +13,6 @@
 #include "SpaceshipGameLevel.h"
 #include "WindowsManager.h"
 
-
 #define WindowWidth 800
 #define WindowHeight 600
 
@@ -86,7 +85,6 @@ void PlaySounds()
 {
     audioManager->UpdateSound();
     gameLevels[gameLevelManager->GetCurrentLevel()]->PlaySounds();
-
 }
 
 int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)

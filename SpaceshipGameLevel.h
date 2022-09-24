@@ -49,6 +49,5 @@ public:
     void Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate);
     void Render(LPD3DXSPRITE spriteBrush);
     void PlaySounds();
-    void playSound();
     void CleanUp();
 };

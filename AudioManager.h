@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 #include "fmod.hpp"
 
 class AudioManager
@@ -29,6 +31,7 @@ public:
 	// 	Initialize the audio system
 	void InitializeAudio();
 	// Getters
+	//std::vector<FMOD::Sound*> GetSounds();
 	FMOD::System *GetAudioSystem();
 	FMOD::Channel *GetSoundEffectChannel();
 	FMOD::Channel *GetMusicChannel();

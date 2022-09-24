@@ -21,13 +21,14 @@ private:
 	float engineForce;
 	float direction;
 	float rotationSpeed;
-	bool spaceshipCollided;
+	// bool spaceshipCollided;
 	bool massCollided;
-	bool wallCollided;
-	//SpaceshipAudioManager *spaceshipAudioManager;
+	// bool wallCollided;
 	// std::vector<GameSound*> gameSounds; not sure if this is needed
 	GameSound* bounceSound;
 	GameSound* collectSound;
+
+	
 
 public:
 	Spaceship();
@@ -61,9 +62,9 @@ public:
 	void SetDirection(float spaceship_Direction);
 	void SetMass(float mass) override;
 	void SetRotationSpeed(float rotation_speed);
-	void SetSpaceshipCollided(bool spaceship_Collided);
+	// void SetSpaceshipCollided(bool spaceship_Collided);
 	void SetMassCollided(bool mass_Collided);
-	void SetWallCollided(bool wall_collided);
+	// void SetWallCollided(bool wall_collided);
 
 	// Getters
 	int GetPlayerNum();
@@ -90,9 +91,9 @@ public:
 	float GetDirection();
 	float GetMass() override;
 	float GetRotationSpeed();
-	bool GetSpaceshipCollided();
+	// bool GetSpaceshipCollided();
 	bool GetMassCollided();
-	bool GetWallCollided();
+	// bool GetWallCollided();
 
 	// Other methods
 	void InitDisplayRect();
