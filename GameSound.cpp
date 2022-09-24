@@ -27,11 +27,6 @@ void GameSound::Init(const char* filePath, float soundVolume,float soundPitch, f
     this->loop = soundLoop;
 }
 
-void GameSound::SetSound(FMOD::Sound* newSound)
-{
-    sound = newSound;
-}
-
 // Setters
 void GameSound::SetSound(FMOD::Sound* newSound)
 {
@@ -81,10 +76,6 @@ FMOD::Sound* GameSound::GetSound()
     return sound;
 }
 
-// FMOD::Sound* GameSound::GetSoundAddress()
-// {
-//     return &sound;
-// }
 
 void GameSound::GetSoundName()
 {

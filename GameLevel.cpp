@@ -44,9 +44,7 @@ void GameLevel::Render(LPD3DXSPRITE spriteBrush)
 {
 }
 
-void GameLevel::PlaySounds()
-{
-}
+
 
 void GameLevel::RenderLine()
 {

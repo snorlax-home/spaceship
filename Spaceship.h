@@ -21,9 +21,7 @@ private:
 	float engineForce;
 	float direction;
 	float rotationSpeed;
-	// bool spaceshipCollided;
 	bool massCollided;
-	// bool wallCollided;
 	// std::vector<GameSound*> gameSounds; not sure if this is needed
 	GameSound* bounceSound;
 	GameSound* collectSound;
