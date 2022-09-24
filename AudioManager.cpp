@@ -30,19 +30,13 @@ void AudioManager::ResultCheck(FMOD_RESULT result, const char *message)
 	}
 }
 
-void AudioManager::PlaySounds(FMOD::Sound* sound, float volume, float pitch, float pan)
-{
-	ResultCheck(audioSystem->playSound(sound, 0, false, &channel), "audioSystem->playSound Failed");
-	channel->setVolume(volume);
-	channel->setPitch(pitch);
-	channel->setPan(pan);
-}
 
 
-// Abstract method to load sounds
-void AudioManager::LoadSounds()
-{
-}
+//
+// // Abstract method to load sounds
+// void AudioManager::LoadSounds()
+// {
+// }
 
 // Getter
 FMOD::System *AudioManager::GetAudioSystem()
@@ -55,31 +49,56 @@ FMOD::Channel *AudioManager::GetChannel()
 	return channel;
 }
 
-FMOD::Channel **AudioManager::GetChannelAddress()
-{
-	return &channel;
-}
+// FMOD::Channel **AudioManager::GetChannelAddress()
+// {
+// 	return &channel;
+// }
 
 FMOD_RESULT AudioManager::GetResult()
 {
 	return result;
 }
 
-void AudioManager::CreateSounds(FMOD::Sound* sound, const char* soundFilePath, bool loop)
+FMOD::Sound* AudioManager::CreateSounds(const char* soundFilePath, bool loop)
 {
-	ResultCheck(audioSystem->createSound(soundFilePath, FMOD_DEFAULT, 0, &sound), "audioSystem->createSound Failed");
+	FMOD::Sound* newSound;
+	ResultCheck(audioSystem->createSound(soundFilePath, FMOD_DEFAULT, 0, &newSound), "audioSystem->createSound Failed");
 	if (loop)
 	{
-		ResultCheck(sound->setMode(FMOD_LOOP_NORMAL), "sound->setMode Failed");
+		ResultCheck(newSound->setMode(FMOD_LOOP_NORMAL), "sound->setMode Failed");
 	}
 	else if (!loop)
 	{
-		ResultCheck(sound->setMode(FMOD_LOOP_OFF), "sound->setMode Failed");
+		ResultCheck(newSound->setMode(FMOD_LOOP_OFF), "sound->setMode Failed");
 	}
+	return newSound;
+}
+
+FMOD::Sound* AudioManager::CreateStreams(const char* soundFilePath, bool loop)
+{
+	FMOD::Sound* newSound;
+	ResultCheck(audioSystem->createStream(soundFilePath, FMOD_DEFAULT, 0, &newSound), "audioSystem->createSound Failed");
+	if (loop)
+	{
+		ResultCheck(newSound->setMode(FMOD_LOOP_NORMAL), "sound->setMode Failed");
+	}
+	else if (!loop)
+	{
+		ResultCheck(newSound->setMode(FMOD_LOOP_OFF), "sound->setMode Failed");
+	}
+	return newSound;
 }
 
 // Method to update the audio system
 void AudioManager::UpdateSound()
 {
 	ResultCheck(audioSystem->update(), "Error updating sounds");
+}
+
+void AudioManager::PlaySounds(FMOD::Sound* sound, float volume, float pitch, float pan)
+{
+	ResultCheck(audioSystem->playSound(sound, 0, false, &channel), "audioSystem->playSound Failed");
+	ResultCheck(channel->setVolume(volume), "channel->setVolume Failed");
+	ResultCheck(channel->setPitch(pitch), "channel->setPitch Failed");
+	ResultCheck(channel->setPan(pan), "channel->setPan Failed");
 }

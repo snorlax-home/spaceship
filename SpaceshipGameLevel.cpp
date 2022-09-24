@@ -11,6 +11,17 @@ SpaceshipGameLevel::SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEV
 {
     this->windowWidth = windowWidth;
     this->windowHeight = windowHeight;
+
+    // Create the players
+    player1 = new Spaceship();
+    player2 = new Spaceship();
+
+    // Create the masses
+    mass1 = new Mass();
+    mass2 = new Mass();
+    mass3 = new Mass();
+
+    backgroundMusic = new GameSound();
 }
 
 void SpaceshipGameLevel::InitLevel()
@@ -28,17 +39,9 @@ void SpaceshipGameLevel::InitLevel()
     hr = D3DXCreateTextureFromFile(GetD3DDevice(), "Assets/mass.png", &massTexture);
     // HRManager("Failed to load mass texture.");
 
-    // Create the players
-    player1 = new Spaceship();
-    player2 = new Spaceship();
 
-    // Create the masses
-    mass1 = new Mass();
-    mass2 = new Mass();
-    mass3 = new Mass();
 
-    // Create the audio manager
-    spaceshipLevelAudioManager = new SpaceshipLevelAudioManager();
+    
     textBrush = nullptr;
     hr = D3DXCreateSprite(d3DDevice, &textBrush);
     if (FAILED(hr))
@@ -46,8 +49,8 @@ void SpaceshipGameLevel::InitLevel()
         PrintLine("Failed to create textBrush.");
     }
     // Initialize players
-    player1->Init(1, 64, 64, 2, 2, 10, 1, 600, 300, 1.0, 0, 1, 0.1);
-    player2->Init(2, 64, 64, 2, 2, 10, 1, 100, 300, 1.0, 0, 1, 0.1);
+    player1->Init(1, 64, 64, 2, 2, 10, 1, 600, 300, 1.0, 0, 1, 0.1, audioManager);
+    player2->Init(2, 64, 64, 2, 2, 10, 1, 100, 300, 1.0, 0, 1, 0.1, audioManager);
 
     // Initialize masses
     mass1->Init(32, 32, 9, 9, this->windowWidth, this->windowHeight, 1, 1);
@@ -76,18 +79,24 @@ void SpaceshipGameLevel::InitLevel()
     aKeyPressed = false;
     dKeyPressed = false;
 
-    // Initialize audio manager and load Sounds
-    spaceshipLevelAudioManager->InitializeAudio();
-    spaceshipLevelAudioManager->LoadSounds();
 
-    // Play the background music
-    spaceshipLevelAudioManager->PlayBackgroundMusic();
 
     // Set window width and height
     this->windowWidth = windowWidth;
     this->windowHeight = windowHeight;
 
     gameEnd = false;
+
+    // Initialize audio manager and load Sounds
+    //spaceshipLevelAudioManager->InitializeAudio();
+    //spaceshipLevelAudioManager->LoadSounds();
+
+    // Play the background music
+    //spaceshipLevelAudioManager->PlayBackgroundMusic();
+
+    backgroundMusic->Init("Assets/Audio/space-theme.wav",1.0,0.5,0.0, true);
+    backgroundMusic->SetSound(audioManager->CreateStreams(backgroundMusic->GetSoundFilePath(),backgroundMusic->GetLoop()));
+    audioManager->PlaySounds(backgroundMusic->GetSound(), backgroundMusic->GetVolume(), backgroundMusic->GetPitch(), backgroundMusic->GetPan());
 }
 
 void SpaceshipGameLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
@@ -220,14 +229,12 @@ void SpaceshipGameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mous
     if (player1->GetMassCollided() == true)
     {
         player1Points++;
-        player1->PlaySound();
         player1->SetMassCollided(false);
     }
 
     if (player2->GetMassCollided() == true)
     {
         player2Points++;
-        player2->PlaySound();
         player2->SetMassCollided(false);
     }
 
@@ -284,9 +291,12 @@ void SpaceshipGameLevel::Render(LPD3DXSPRITE spriteBrush)
     label2->Render(spriteBrush);
 }
 
-void SpaceshipGameLevel::playSound()
+void SpaceshipGameLevel::PlaySounds()
 {
-    spaceshipLevelAudioManager->UpdateSound(player1Points + player2Points);
+    player1->PlaySounds(audioManager);
+    player2->PlaySounds(audioManager);
+    
+    //spaceshipLevelAudioManager->UpdateSound(player1Points + player2Points);
 }
 
 void SpaceshipGameLevel::CleanUp()

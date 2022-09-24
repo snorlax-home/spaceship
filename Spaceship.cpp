@@ -64,8 +64,8 @@ void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int tex
     bounceSound->Init("Assets/Audio/bounce.mp3", 1.0, 1.0, 0.0, false);
     collectSound->Init("Assets/Audio/point-get.ogg", 1.0, 1.0, 0.0, false);
 
-    audioManager->CreateSounds(bounceSound->GetSound(),bounceSound->GetSoundFilePath(),bounceSound->GetLoop());
-    audioManager->CreateSounds(collectSound->GetSound(),collectSound->GetSoundFilePath(),collectSound->GetLoop());
+    bounceSound->SetSound(audioManager->CreateSounds(bounceSound->GetSoundFilePath(),bounceSound->GetLoop()));
+    collectSound->SetSound(audioManager->CreateSounds(collectSound->GetSoundFilePath(),collectSound->GetLoop()));
 }
 
 // Setters
@@ -407,6 +407,7 @@ void Spaceship::CollisionSpaceship(Spaceship* anotherSpaceship)
         anotherSpaceship->SetVelocityY(-velocity.y);
         cout << "Collision detected between spaceships" << endl;
         spaceshipCollided = true;
+        bounceSound->SetPlaySoundFlag(true);
     }
 }
 
@@ -425,6 +426,7 @@ void Spaceship::CollisionMass(Mass* anotherMass)
         anotherMass->Consumed();
         cout << "Collision detected between spaceship and mass" << endl;
         massCollided = true;
+        collectSound->SetPlaySoundFlag(true);
     }
 }
 
@@ -457,11 +459,15 @@ void Spaceship::WindowBounce(int windowWidth, int windowHeight)
         // TODO: nid to change this or not?
         velocity.x *= -1.2;
         wallCollided = true;
+        cout << "Collision detected between spaceship and window" << endl;
+        bounceSound->SetPlaySoundFlag(true);
     }
     if (GameObject::GetPosition().y < 0 || GameObject::GetPosition().y > windowHeight - GameObject::GetSpriteHeight())
     {
         velocity.y *= -1.2;
         wallCollided = true;
+        cout << "Collision detected between spaceship and window" << endl;
+        bounceSound->SetPlaySoundFlag(true);
     }
 }
 
@@ -538,33 +544,26 @@ void Spaceship::Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture)
     }
 }
 
+
 // Method to play the sound for the spaceship
-void Spaceship::PlaySound(AudioManager* audioManager)
+void Spaceship::PlaySounds(AudioManager* audioManager)
 {
     /*
      * If the spaceship is colliding with another spaceship, then play the bounce sound
      */
-    if (spaceshipCollided)
+    if (bounceSound->GetPlaySoundFlag() == true)
     {
         audioManager->PlaySounds(bounceSound->GetSound(),bounceSound->GetVolume(),bounceSound->GetPitch(), bounceSound->GetPan());
-        spaceshipCollided = false;
+        bounceSound->SetPlaySoundFlag(false);
     }
 
     /*
      * If the spaceship is colliding with a mass, then play the point get sound
      */
-    if (massCollided)
+    if (collectSound->GetPlaySoundFlag() == true)
     {
         audioManager->PlaySounds(collectSound->GetSound(),collectSound->GetVolume(),collectSound->GetPitch(), collectSound->GetPan());
-        massCollided = false;
+        collectSound->SetPlaySoundFlag(false);
     }
-
-    /*
-     * If the spaceship is colliding with the wall, then play the bounce sound
-     */
-    if (wallCollided)
-    {
-        audioManager->PlaySounds(bounceSound->GetSound(),bounceSound->GetVolume(),bounceSound->GetPitch(), bounceSound->GetPan());
-        wallCollided = false;
-    }
+    
 }

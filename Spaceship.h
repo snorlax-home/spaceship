@@ -106,5 +106,5 @@ public:
 	// Game Loop Methods
 	void Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction, Spaceship *anotherSpaceship, Mass *massArray[], int arraySize, int windowWidth, int windowHeight);
 	void Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture);
-	void PlaySound(AudioManager *audioManager);
+	void PlaySounds(AudioManager *audioManager);
 };

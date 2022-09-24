@@ -15,14 +15,15 @@ public:
 	~AudioManager();
 	// 	Init and Load
 	void InitializeAudio();
-	void LoadSounds();
+	//void LoadSounds();
 	// Getters
 	FMOD::System *GetAudioSystem();
 	FMOD::Channel *GetChannel();
-	FMOD::Channel **GetChannelAddress();
+	//FMOD::Channel **GetChannelAddress();
 	FMOD_RESULT GetResult();
 	// Other Methods
-	void CreateSounds(FMOD::Sound* sound, const char* soundFilePath, bool loop);
+	FMOD::Sound* CreateSounds(const char* soundFilePath, bool loop);
+	FMOD::Sound* CreateStreams(const char* soundFilePath, bool loop);
 	void UpdateSound();
 	void ResultCheck(FMOD_RESULT result, const char *message);
 	void PlaySounds(FMOD::Sound* sound, float volume, float pitch, float pan);

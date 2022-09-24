@@ -8,6 +8,7 @@ GameSound::GameSound()
     pitch = 0.0f;
     pan = 0.0f;
     loop = false;
+    playSoundFlag = false;
 }
 
 GameSound::~GameSound()
@@ -17,7 +18,7 @@ GameSound::~GameSound()
 
 void GameSound::Init(const char* filePath, float soundVolume,float soundPitch, float soundPan, bool soundLoop)
 {
-    this->soundFilePath = filePath;
+    this->soundFilePath = filePath; //Do we really need this?
     this->volume = soundVolume;
     this->pitch = soundPitch;
     this->pan = soundPan;
@@ -25,6 +26,12 @@ void GameSound::Init(const char* filePath, float soundVolume,float soundPitch, f
 }
 
 // Setters
+void GameSound::SetSound(FMOD::Sound* newSound)
+{
+	this->sound = newSound;
+}
+
+
 // Set the file path for the sound file
 void GameSound::SetSoundFilePath(const char* filePath)
 {
@@ -53,6 +60,11 @@ void GameSound::SetPan(float soundPan)
 void GameSound::SetLoop(bool soundLoop)
 {
     this->loop = soundLoop;
+}
+
+void GameSound::SetPlaySoundFlag(bool playSound)
+{
+    this->playSoundFlag = playSound;
 }
 
 // Getters
@@ -90,4 +102,9 @@ float GameSound::GetPan()
 bool GameSound::GetLoop()
 {
     return loop;
+}
+
+bool GameSound::GetPlaySoundFlag()
+{
+    return playSoundFlag;
 }

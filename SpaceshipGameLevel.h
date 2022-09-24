@@ -3,7 +3,8 @@
 #include "Label.h"
 #include "Spaceship.h"
 #include "Mass.h"
-#include "SpaceshipLevelAudioManager.h"
+//#include "SpaceshipLevelAudioManager.h"
+#include "GameSound.h"
 
 class SpaceshipGameLevel : public GameLevel
 {
@@ -15,7 +16,7 @@ private:
     Mass* mass1;
     Mass* mass2;
     Mass* mass3;
-    SpaceshipLevelAudioManager* spaceshipLevelAudioManager;
+    //SpaceshipLevelAudioManager* spaceshipLevelAudioManager;
     int player1Points;
     int player2Points;
     float friction;
@@ -37,6 +38,8 @@ private:
     bool gameEnd;
     LPDIRECT3DTEXTURE9 playertexture;
     LPDIRECT3DTEXTURE9 massTexture;
+    GameSound* backgroundMusic;
+    
 
 public:
     SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, GameLevelManager* gameLevelManager,
@@ -45,6 +48,7 @@ public:
     void GetInput(BYTE*, DIMOUSESTATE) override;
     void Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate);
     void Render(LPD3DXSPRITE spriteBrush);
+    void PlaySounds();
     void playSound();
     void CleanUp();
 };
