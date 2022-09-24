@@ -3,7 +3,6 @@
 
 #include "GameObject.h"
 #include "Mass.h"
-//#include "SpaceshipAudioManager.h"
 #include "AudioManager.h"
 #include "GameSound.h"
 
@@ -13,7 +12,6 @@ private:
 	int playerNum;
 	int textureRow;
 	int textureColumn;
-	int spriteFPS; //Is this needed?
 	int frameCounter;
 	int maxFrame;
 	D3DXVECTOR2 velocity;
@@ -22,11 +20,9 @@ private:
 	float direction;
 	float rotationSpeed;
 	bool massCollided;
-	// std::vector<GameSound*> gameSounds; not sure if this is needed
 	GameSound* bounceSound;
 	GameSound* collectSound;
 
-	
 
 public:
 	Spaceship();
@@ -60,9 +56,7 @@ public:
 	void SetDirection(float spaceship_Direction);
 	void SetMass(float mass) override;
 	void SetRotationSpeed(float rotation_speed);
-	// void SetSpaceshipCollided(bool spaceship_Collided);
 	void SetMassCollided(bool mass_Collided);
-	// void SetWallCollided(bool wall_collided);
 
 	// Getters
 	int GetPlayerNum();
@@ -76,7 +70,6 @@ public:
 	D3DXVECTOR2 *GetSpriteCenterAddress() override;
 	D3DXVECTOR2 GetScaling() override;
 	D3DXVECTOR2 *GetScalingAddress() override;
-	int GetSpriteFPS();
 	int GetFrameCounter();
 	int GetMaxFrame();
 	RECT GetDisplayRect() override;
@@ -89,9 +82,7 @@ public:
 	float GetDirection();
 	float GetMass() override;
 	float GetRotationSpeed();
-	// bool GetSpaceshipCollided();
 	bool GetMassCollided();
-	// bool GetWallCollided();
 
 	// Other methods
 	void InitDisplayRect();
@@ -104,8 +95,8 @@ public:
 	void AlterSoundPan();
 	
 	// Game Loop Methods
-	void Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction, Spaceship* anotherSpaceship, Mass*
-	            massArray[], int arraySize, int windowWidth, int windowHeight);
+	void Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction, Spaceship* anotherSpaceship, std::
+	            vector<Mass*>* masses, int windowWidth, int windowHeight);
 	void Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture);
 	void PlaySounds(AudioManager *audioManager);
 };

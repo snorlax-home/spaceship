@@ -7,7 +7,10 @@ private:
     int hp;
 
 public:
-    void Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int WindowWidth, int windowHeight, float mass, int hp);
+    Mass();
+    ~Mass();
+    
+    void Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int WindowWidth, int windowHeight, float mass, int massHp);
     // Setters
     void SetTextureWidth(int textureWidth);
     void SetTextureHeight(int textureHeight);

@@ -3,13 +3,18 @@
 
 using namespace std;
 
-void Mass::Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int windowWidth, int windowHeight, float mass, int hp)
+Mass::Mass()
 {
-	int positionX = rand() % (300 - spriteWidth);
-	int positionY = rand() % (300 - spriteHeight);
+	hp = 0;
+}
 
-	GameObject::Init('M', textureWidth, textureHeight, spriteWidth, spriteHeight, positionX, positionY, mass);
-	this->hp = hp;
+void Mass::Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int windowWidth, int windowHeight, float mass, int massHp)
+{
+	int positionX = rand() % (windowWidth - spriteHeight);
+	int positionY = rand() % (windowHeight - spriteHeight);
+
+	GameObject::Init(textureWidth, textureHeight, spriteWidth, spriteHeight, positionX, positionY, mass);
+	this->hp = massHp;
 
 	InitDisplayRect();
 }
@@ -152,17 +157,15 @@ void Mass::InitDisplayRect()
 	GameObject::SetDisplayRect(rectTop, rectLeft, rectRight, rectBottom);
 }
 
-// Other methods
-void Mass::Consumed()
-{
-	hp--;
-	GameObject::SetPosition(-10, -10);
-	cout << "Mass consumed" << endl;
-}
 
 // Game Loop Methods
 void Mass::Update()
 {
+	if (hp <= 0)
+	{
+		GameObject::SetPosition(-10, -10);
+		cout << "Mass consumed" << endl;
+	}
 }
 
 void Mass::Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture)

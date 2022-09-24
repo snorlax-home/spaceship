@@ -16,10 +16,10 @@ SpaceshipGameLevel::SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEV
     player1 = new Spaceship();
     player2 = new Spaceship();
 
-    // Create the masses
-    mass1 = new Mass();
-    mass2 = new Mass();
-    mass3 = new Mass();
+    // Create the masses and add them to the vector
+    masses.push_back(new Mass());
+    masses.push_back(new Mass());
+    masses.push_back(new Mass());
 
     backgroundMusic = new GameSound();
 }
@@ -38,9 +38,6 @@ void SpaceshipGameLevel::InitLevel()
     // load mass
     hr = D3DXCreateTextureFromFile(GetD3DDevice(), "Assets/mass.png", &massTexture);
     // HRManager("Failed to load mass texture.");
-
-
-
     
     textBrush = nullptr;
     hr = D3DXCreateSprite(d3DDevice, &textBrush);
@@ -53,14 +50,10 @@ void SpaceshipGameLevel::InitLevel()
     player2->Init(2, 64, 64, 2, 2, 10, 1, 600, 300, 1.0, 0, 1, 0.1, audioManager);
 
     // Initialize masses
-    mass1->Init(32, 32, 9, 9, this->windowWidth, this->windowHeight, 1, 1);
-    mass2->Init(32, 32, 9, 9, this->windowWidth, this->windowHeight, 1, 1);
-    mass3->Init(32, 32, 9, 9, this->windowWidth, this->windowHeight, 1, 1);
-
-    // Initialize the mass array
-    massArray[0] = mass1;
-    massArray[1] = mass2;
-    massArray[2] = mass3;
+    for (int i = 0; i < masses.size(); i++)
+    {
+        masses[i]->Init(32, 32, 9, 9, this->windowWidth, this->windowHeight, 1, 1);
+    }
 
     // Initialize player point
     player1Points = 0;
@@ -78,9 +71,7 @@ void SpaceshipGameLevel::InitLevel()
     sKeyPressed = false;
     aKeyPressed = false;
     dKeyPressed = false;
-
-
-
+    
     // Set window width and height
     this->windowWidth = windowWidth;
     this->windowHeight = windowHeight;
@@ -97,133 +88,8 @@ void SpaceshipGameLevel::InitLevel()
     audioManager->PlayMusic(backgroundMusic->GetSound(), backgroundMusic->GetVolume(), backgroundMusic->GetPitch(), backgroundMusic->GetPan());
 }
 
-void SpaceshipGameLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
+void SpaceshipGameLevel::PointUpdate()
 {
-    // player1 movement
-// W key
-    if (diKeys[DIK_W] & 0x80)
-    {
-        if (player1->GetPosition().y == 0)
-        {
-            wKeyPressed = false;
-        }
-        else
-        {
-            wKeyPressed = true;
-            PrintLine("W Pressed!");
-        }
-    }
-
-    // 	S key
-    if (diKeys[DIK_S] & 0x80)
-    {
-        if (player1->GetPosition().y > this->windowHeight - player1->GetSpriteHeight())
-        {
-            sKeyPressed = false;
-        }
-        else
-        {
-            sKeyPressed = true;
-            PrintLine("S Pressed!");
-        }
-    }
-
-    // 	A key
-    if (diKeys[DIK_A] & 0x80)
-    {
-        if (player1->GetPosition().x == 0)
-        {
-            aKeyPressed = false;
-        }
-        else
-        {
-            aKeyPressed = true;
-            PrintLine("A Pressed!");
-        }
-    }
-
-    // 	D key
-    if (diKeys[DIK_D] & 0x80)
-    {
-        if (player1->GetPosition().x > this->windowWidth - player1->GetSpriteWidth())
-        {
-            dKeyPressed = false;
-        }
-        else
-        {
-            dKeyPressed = true;
-            PrintLine("D Pressed!");
-        }
-    }
-
-    // player2 movement
-    // Up key
-    if (diKeys[DIK_UP] & 0x80)
-    {
-        if (player2->GetPosition().y == 0)
-        {
-            upKeyPressed = false;
-        }
-        else
-        {
-            upKeyPressed = true;
-            PrintLine("Up Pressed!");
-        }
-    }
-
-    // down key
-    if (diKeys[DIK_DOWN] & 0x80)
-    {
-        if (player2->GetPosition().y > this->windowHeight - player2->GetSpriteHeight())
-        {
-            downKeyPressed = false;
-        }
-        else
-        {
-            downKeyPressed = true;
-            PrintLine("Down Pressed!");
-        }
-    }
-
-    // left key
-    if (diKeys[DIK_LEFT] & 0x80)
-    {
-        if (player2->GetPosition().x == 0)
-        {
-            leftKeyPressed = false;
-        }
-        else
-        {
-            leftKeyPressed = true;
-            PrintLine("Left Pressed!");
-        }
-    }
-
-    // 	right key
-    if (diKeys[DIK_RIGHT] & 0x80)
-    {
-        if (player2->GetPosition().x > this->windowWidth - player2->GetSpriteWidth())
-        {
-            rightKeyPressed = false;
-        }
-        else
-        {
-            rightKeyPressed = true;
-            PrintLine("Right Pressed!");
-        }
-    }
-}
-
-void SpaceshipGameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate)
-{
-    for (int i = 0; i < frameToUpdate; i++)
-    {
-        // update player1 and player 2 for the number of frames to update
-        player1->Update(aKeyPressed, dKeyPressed, wKeyPressed, sKeyPressed, friction, player2, massArray, 3,
-                        windowWidth, windowHeight);
-        player2->Update(leftKeyPressed, rightKeyPressed, upKeyPressed, downKeyPressed, friction, player1, massArray, 3,
-                        windowWidth, windowHeight);
-    }
     if (player1->GetMassCollided())
     {
         player1Points++;
@@ -235,17 +101,10 @@ void SpaceshipGameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mous
         player2Points++;
         player2->SetMassCollided(false);
     }
-    
-    aKeyPressed = false;
-    dKeyPressed = false;
-    wKeyPressed = false;
-    sKeyPressed = false;
+}
 
-    // player2
-    leftKeyPressed = false;
-    rightKeyPressed = false;
-    upKeyPressed = false;
-    downKeyPressed = false;
+void SpaceshipGameLevel::PointCheck()
+{
     if (player1Points != 0)
     {
         if (player1Points == 1)
@@ -273,8 +132,101 @@ void SpaceshipGameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mous
         gameEnd = true;
         gameLevelManager->NextLevel();
     }
+}
+
+void SpaceshipGameLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
+{
+    // player1 movement
+    // W key
+    if (diKeys[DIK_W] & 0x80)
+    {
+        wKeyPressed = true;
+        PrintLine("W Pressed!");
+    }
+
+    // 	S key
+    if (diKeys[DIK_S] & 0x80)
+    {
+        sKeyPressed = true;
+        PrintLine("S Pressed!");
+    }
+
+    // 	A key
+    if (diKeys[DIK_A] & 0x80)
+    {
+        aKeyPressed = true;
+        PrintLine("A Pressed!");
+    }
+
+    // 	D key
+    if (diKeys[DIK_D] & 0x80)
+    {
+        dKeyPressed = true;
+        PrintLine("D Pressed!");
+    }
+
+    // player2 movement
+    // Up key
+    if (diKeys[DIK_UP] & 0x80)
+    {
+        upKeyPressed = true;
+        PrintLine("Up Pressed!");
+    }
+
+    // down key
+    if (diKeys[DIK_DOWN] & 0x80)
+    {
+        downKeyPressed = true;
+        PrintLine("Down Pressed!");
+    }
+
+    // left key
+    if (diKeys[DIK_LEFT] & 0x80)
+    {
+        leftKeyPressed = true;
+        PrintLine("Left Pressed!");
+    }
+
+    // 	right key
+    if (diKeys[DIK_RIGHT] & 0x80)
+    {
+        rightKeyPressed = true;
+        PrintLine("Right Pressed!");
+    }
+}
+
+void SpaceshipGameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate)
+{
+    for (int i = 0; i < frameToUpdate; i++)
+    {
+        // update player1 and player 2 for the number of frames to update
+        player1->Update(aKeyPressed, dKeyPressed, wKeyPressed, sKeyPressed, friction, player2, &masses, 
+                        windowWidth, windowHeight);
+        player2->Update(leftKeyPressed, rightKeyPressed, upKeyPressed, downKeyPressed, friction, player1, &masses,
+                        windowWidth, windowHeight);
+    }
+    
+    for (int i = 0; i < masses.size(); i++)
+    {
+        masses[i]->Update();
+    }
+
+    aKeyPressed = false;
+    dKeyPressed = false;
+    wKeyPressed = false;
+    sKeyPressed = false;
+
+    // player2
+    leftKeyPressed = false;
+    rightKeyPressed = false;
+    upKeyPressed = false;
+    downKeyPressed = false;
+
+    PointUpdate();
     
     audioManager->AlterMusicChannelPitch(0.5 + ((player1Points + player2Points) * 0.1));
+
+    PointCheck();
 }
 
 void SpaceshipGameLevel::Render(LPD3DXSPRITE spriteBrush)
@@ -282,9 +234,12 @@ void SpaceshipGameLevel::Render(LPD3DXSPRITE spriteBrush)
     textBrush->Begin(D3DXSPRITE_ALPHABLEND);
     player1->Draw(textBrush, playertexture);
     player2->Draw(textBrush, playertexture);
-    mass1->Draw(textBrush, massTexture);
-    mass2->Draw(textBrush, massTexture);
-    mass3->Draw(textBrush, massTexture);
+
+    for (int i = 0; i < masses.size(); i++)
+    {
+        masses[i]->Draw(textBrush, massTexture);
+    }
+    
     textBrush->End();
     label1->Render(spriteBrush);
     label2->Render(spriteBrush);
@@ -300,9 +255,10 @@ void SpaceshipGameLevel::CleanUp()
 {
     player1 = NULL;
     player2 = NULL;
-    mass1 = NULL;
-    mass2 = NULL;
-    mass3 = NULL;
+    for (int i = 0; i < masses.size(); i++)
+    {
+        masses[i] = NULL;
+    }
     playertexture = NULL;
     massTexture = NULL;
 }

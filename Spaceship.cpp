@@ -8,7 +8,6 @@ Spaceship::Spaceship()
     playerNum = -1;
     textureRow = 0;
     textureColumn = 0;
-    spriteFPS = 0;
     frameCounter = 0;
     maxFrame = 0;
     velocity = D3DXVECTOR2(0,0);
@@ -16,11 +15,9 @@ Spaceship::Spaceship()
     engineForce = 0.0f;
     direction = 0.0f;
     rotationSpeed = 0.0f;
-    // spaceshipCollided = false;
     massCollided = false;
-    // wallCollided = false;
-    bounceSound = nullptr;
-    collectSound = nullptr;
+    bounceSound = new GameSound();
+    collectSound = new GameSound();
 }
 
 Spaceship::~Spaceship()
@@ -32,14 +29,13 @@ void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int tex
                      int positionX, int positionY, float engineForce, float direction, float mass,
                      float rotationSpeed, AudioManager* audioManager)
 {
-    GameObject::Init('S', textureWidth, textureHeight, textureWidth / textureColumn, textureHeight / textureRow,
+    GameObject::Init(textureWidth, textureHeight, textureWidth / textureColumn, textureHeight / textureRow,
                      positionX, positionY, mass);
 
     this->playerNum = playerNum;
     this->textureColumn = textureColumn;
     this->textureRow = textureRow;
-
-    this->spriteFPS = spriteFPS;
+    
     frameCounter = 0;
     this->maxFrame = maxFrame;
 
@@ -50,22 +46,13 @@ void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int tex
     this->engineForce = engineForce;
     this->direction = direction;
     this->rotationSpeed = rotationSpeed;
-
-
-    // Initialize and load spaceship AudioManager
-    // spaceshipAudioManager = new SpaceshipAudioManager();
-    // spaceshipAudioManager->InitializeAudio();
-    // spaceshipAudioManager->LoadSounds();
-
+    
     // Initialize sounds
-    bounceSound = new GameSound();
-    collectSound = new GameSound();
-
     bounceSound->Init("Assets/Audio/bounce.mp3", 1.0, 1.0, 0.0, false);
     collectSound->Init("Assets/Audio/point-get.ogg", 1.0, 1.0, 0.0, false);
-
-    bounceSound->SetSound(audioManager->CreateSounds(bounceSound->GetSoundFilePath(),bounceSound->GetLoop()));
-    collectSound->SetSound(audioManager->CreateSounds(collectSound->GetSoundFilePath(),collectSound->GetLoop()));
+    
+    bounceSound->SetSound(audioManager->CreateSounds(bounceSound->GetSoundFilePath(), bounceSound->GetLoop()));
+    collectSound->SetSound(audioManager->CreateSounds(collectSound->GetSoundFilePath(), collectSound->GetLoop()));
 }
 
 // Setters
@@ -102,11 +89,6 @@ void Spaceship::SetTextureColumn(int texture_column)
 void Spaceship::SetScaling(float scalingX, float scalingY)
 {
     GameObject::SetScaling(scalingX, scalingY);
-}
-
-void Spaceship::SetSpriteFPS(int sprite_fps)
-{
-    this->spriteFPS = sprite_fps;
 }
 
 void Spaceship::SetFrameCounter(int frame_counter)
@@ -201,20 +183,10 @@ void Spaceship::SetRotationSpeed(float rotation_speed)
     this->rotationSpeed = rotation_speed;
 }
 
-// void Spaceship::SetSpaceshipCollided(bool spaceship_Collided)
-// {
-//     this->spaceshipCollided = spaceship_Collided;
-// }
-//
 void Spaceship::SetMassCollided(bool mass_Collided)
 {
     this->massCollided = mass_Collided;
 }
-//
-// void Spaceship::SetWallCollided(bool wall_collided)
-// {
-//     this->wallCollided = wall_collided;
-// }
 
 // Getters
 int Spaceship::GetPlayerNum()
@@ -270,11 +242,6 @@ D3DXVECTOR2 Spaceship::GetScaling()
 D3DXVECTOR2* Spaceship::GetScalingAddress()
 {
     return GameObject::GetScalingAddress();
-}
-
-int Spaceship::GetSpriteFPS()
-{
-    return spriteFPS;
 }
 
 int Spaceship::GetFrameCounter()
@@ -342,8 +309,6 @@ bool Spaceship::GetMassCollided()
     return massCollided;
 }
 
-
-
 void Spaceship::InitDisplayRect()
 {
     int rectTop = 0;
@@ -391,6 +356,9 @@ void Spaceship::CollisionSpaceship(Spaceship* anotherSpaceship)
     if (CircleCollisionDetection(anotherSpaceship->GetSpriteWidth() / 2,
                                  anotherSpaceship->GetPosition() + anotherSpaceship->GetSpriteCenter()))
     {
+        // 
+        D3DXVECTOR2 distance = (GameObject::GetPosition() + GameObject::GetSpriteCenter()) - (anotherSpaceship->GetPosition() + anotherSpaceship->GetSpriteCenter());
+        
         // TODO: how to change this to be more realistic?
         velocity.x *= -1.2;
         velocity.y *= -1.2;
@@ -414,8 +382,8 @@ void Spaceship::CollisionMass(Mass* anotherMass)
                                  anotherMass->GetPosition() + anotherMass->GetSpriteCenter()))
     {
         GameObject::SetMass(GameObject::GetMass() + anotherMass->GetMass());
-
-        anotherMass->Consumed();
+        
+        anotherMass->SetHp(anotherMass->GetHp() - 1);
         cout << "Collision detected between spaceship and mass" << endl;
         massCollided = true;
         collectSound->SetPlaySoundFlag(true);
@@ -517,14 +485,16 @@ void Spaceship::AlterSoundPan()
 
 
 void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction,
-                       Spaceship* anotherSpaceship, Mass* massArray[], int arraySize, int windowWidth, int windowHeight)
+                       Spaceship* anotherSpaceship, std::vector<Mass*>* masses, int windowWidth, int windowHeight)
 {
     Move(turnLeft, turnRight, goForward, goBackward, friction);
     CollisionSpaceship(anotherSpaceship);
-    for (int i = 0; i < arraySize; i++)
+
+    for (int i = 0; i < masses->size(); i++)
     {
-        CollisionMass(massArray[i]);
+        CollisionMass(masses->at(i));
     }
+    
     WindowBounce(windowWidth, windowHeight);
 
     // TODO: Make NextFrame work properly

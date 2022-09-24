@@ -11,20 +11,19 @@ class SpaceshipGameLevel : public GameLevel
 private:
     Label* label1;
     Label* label2;
+
     Spaceship* player1;
     Spaceship* player2;
-    Mass* mass1;
-    Mass* mass2;
-    Mass* mass3;
-    //SpaceshipLevelAudioManager* spaceshipLevelAudioManager;
+    
+    std::vector<Mass*> masses;
+    
     int player1Points;
     int player2Points;
     float friction;
     LPD3DXSPRITE spriteBrush;
     LPD3DXSPRITE textBrush;
-    HRESULT hr;
+    HRESULT hr; // Is this appropriate here?
     int point;
-    Mass* massArray[3];
     bool upKeyPressed;
     bool downKeyPressed;
     bool leftKeyPressed;
@@ -44,10 +43,15 @@ private:
 public:
     SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, GameLevelManager* gameLevelManager,
                        int windowWidth, int windowHeight);
-    void InitLevel();
+    void InitLevel() override;
+    void PointUpdate();
+    void PointCheck();
+
+    // Game loop methods
     void GetInput(BYTE*, DIMOUSESTATE) override;
-    void Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate);
-    void Render(LPD3DXSPRITE spriteBrush);
-    void PlaySounds();
-    void CleanUp();
+    void Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate) override;
+    void Render(LPD3DXSPRITE spriteBrush) override;
+    void PlaySounds() override;
+
+    void CleanUp() override;
 };
