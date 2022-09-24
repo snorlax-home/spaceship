@@ -516,6 +516,13 @@ void Spaceship::Move(bool turnLeft, bool turnRight, bool goForward, bool goBackw
     acceleration.y = 0;
 }
 
+void Spaceship::AlterSoundPan()
+{
+    bounceSound->SetPan((GetPosition().x - 400) / 400);
+    collectSound->SetPan((GetPosition().x - 400) / 400);
+}
+
+
 void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction,
                        Spaceship* anotherSpaceship, Mass* massArray[], int arraySize, int windowWidth, int windowHeight)
 {
@@ -529,6 +536,8 @@ void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBac
 
     // TODO: Make NextFrame work properly
     // NextFrame(this->playerNum);
+
+    AlterSoundPan();
 }
 
 void Spaceship::Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture)
@@ -553,7 +562,7 @@ void Spaceship::PlaySounds(AudioManager* audioManager)
      */
     if (bounceSound->GetPlaySoundFlag() == true)
     {
-        audioManager->PlaySounds(bounceSound->GetSound(),bounceSound->GetVolume(),bounceSound->GetPitch(), bounceSound->GetPan());
+        audioManager->PlaySoundEffect(bounceSound->GetSound(),bounceSound->GetVolume(),bounceSound->GetPitch(), bounceSound->GetPan());
         bounceSound->SetPlaySoundFlag(false);
     }
 
@@ -562,7 +571,7 @@ void Spaceship::PlaySounds(AudioManager* audioManager)
      */
     if (collectSound->GetPlaySoundFlag() == true)
     {
-        audioManager->PlaySounds(collectSound->GetSound(),collectSound->GetVolume(),collectSound->GetPitch(), collectSound->GetPan());
+        audioManager->PlaySoundEffect(collectSound->GetSound(),collectSound->GetVolume(),collectSound->GetPitch(), collectSound->GetPan());
         collectSound->SetPlaySoundFlag(false);
     }
     

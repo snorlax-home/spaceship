@@ -87,16 +87,14 @@ void SpaceshipGameLevel::InitLevel()
 
     gameEnd = false;
 
-    // Initialize audio manager and load Sounds
-    //spaceshipLevelAudioManager->InitializeAudio();
-    //spaceshipLevelAudioManager->LoadSounds();
-
-    // Play the background music
-    //spaceshipLevelAudioManager->PlayBackgroundMusic();
-
+    // Initialize background music
     backgroundMusic->Init("Assets/Audio/space-theme.wav",1.0,0.5,0.0, true);
+
+    // Create stream and set it into FMOD::Sound variable in backgroundMusic
     backgroundMusic->SetSound(audioManager->CreateStreams(backgroundMusic->GetSoundFilePath(),backgroundMusic->GetLoop()));
-    audioManager->PlaySounds(backgroundMusic->GetSound(), backgroundMusic->GetVolume(), backgroundMusic->GetPitch(), backgroundMusic->GetPan());
+    
+    // Play the background music
+    audioManager->PlayMusic(backgroundMusic->GetSound(), backgroundMusic->GetVolume(), backgroundMusic->GetPitch(), backgroundMusic->GetPan());
 }
 
 void SpaceshipGameLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
@@ -276,6 +274,8 @@ void SpaceshipGameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mous
         gameEnd = true;
         gameLevelManager->NextLevel();
     }
+    
+    audioManager->AlterMusicChannelPitch(0.5 + ((player1Points + player2Points) * 0.1));
 }
 
 void SpaceshipGameLevel::Render(LPD3DXSPRITE spriteBrush)
@@ -295,8 +295,6 @@ void SpaceshipGameLevel::PlaySounds()
 {
     player1->PlaySounds(audioManager);
     player2->PlaySounds(audioManager);
-    
-    //spaceshipLevelAudioManager->UpdateSound(player1Points + player2Points);
 }
 
 void SpaceshipGameLevel::CleanUp()

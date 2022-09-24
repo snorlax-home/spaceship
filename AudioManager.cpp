@@ -30,29 +30,21 @@ void AudioManager::ResultCheck(FMOD_RESULT result, const char *message)
 	}
 }
 
-
-
-//
-// // Abstract method to load sounds
-// void AudioManager::LoadSounds()
-// {
-// }
-
 // Getter
 FMOD::System *AudioManager::GetAudioSystem()
 {
 	return audioSystem;
 }
 
-FMOD::Channel *AudioManager::GetChannel()
+FMOD::Channel *AudioManager::GetSoundEffectChannel()
 {
-	return channel;
+	return soundEffectChannel;
 }
 
-// FMOD::Channel **AudioManager::GetChannelAddress()
-// {
-// 	return &channel;
-// }
+FMOD::Channel* AudioManager::GetMusicChannel()
+{
+	return musicChannel;
+}
 
 FMOD_RESULT AudioManager::GetResult()
 {
@@ -95,10 +87,38 @@ void AudioManager::UpdateSound()
 	ResultCheck(audioSystem->update(), "Error updating sounds");
 }
 
-void AudioManager::PlaySounds(FMOD::Sound* sound, float volume, float pitch, float pan)
+void AudioManager::PlaySoundEffect(FMOD::Sound* sound, float volume, float pitch, float pan)
 {
-	ResultCheck(audioSystem->playSound(sound, 0, false, &channel), "audioSystem->playSound Failed");
-	ResultCheck(channel->setVolume(volume), "channel->setVolume Failed");
-	ResultCheck(channel->setPitch(pitch), "channel->setPitch Failed");
-	ResultCheck(channel->setPan(pan), "channel->setPan Failed");
+	ResultCheck(audioSystem->playSound(sound, 0, false, &soundEffectChannel), "audioSystem->playSound Failed");
+	ResultCheck(soundEffectChannel->setVolume(volume), "soundEffectChannel->setVolume Failed");
+	ResultCheck(soundEffectChannel->setPitch(pitch), "soundEffectChannel->setPitch Failed");
+	ResultCheck(soundEffectChannel->setPan(pan), "soundEffectChannel->setPan Failed");
+
 }
+
+void AudioManager::PlayMusic(FMOD::Sound* sound, float volume, float pitch, float pan)
+{
+	ResultCheck(audioSystem->playSound(sound, 0, false, &musicChannel), "audioSystem->playSound Failed");
+	ResultCheck(musicChannel->setVolume(volume), "musicChannel->setVolume Failed");
+	ResultCheck(musicChannel->setPitch(pitch), "musicChannel->setPitch Failed");
+	ResultCheck(musicChannel->setPan(pan), "musicChannel->setPan Failed");
+}
+
+void AudioManager::AlterMusicChannelVolume(float volume)
+{
+	ResultCheck(musicChannel->setVolume(volume), "musicChannel->setVolume Failed");
+}
+
+void AudioManager::AlterMusicChannelPitch(float pitch)
+{
+	ResultCheck(musicChannel->setPitch(pitch), "musicChannel->setPitch Failed");
+}
+
+void AudioManager::AlterMusicChannelPan(float pan)
+{
+	ResultCheck(musicChannel->setPan(pan), "musicChannel->setPan Failed");
+}
+
+
+
+

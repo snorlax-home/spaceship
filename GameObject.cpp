@@ -178,7 +178,7 @@ void GameObject::Draw()
 {
 }
 
-void GameObject::PlaySound()
+void GameObject::PlaySounds()
 {
 }
 
