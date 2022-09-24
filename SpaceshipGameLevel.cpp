@@ -46,8 +46,8 @@ void SpaceshipGameLevel::InitLevel()
         PrintLine("Failed to create textBrush.");
     }
     // Initialize players
-    player1->Init(1, 64, 64, 2, 2, 10, 1, 100, 300, 1.0, 0, 1, 0.1, audioManager);
-    player2->Init(2, 64, 64, 2, 2, 10, 1, 600, 300, 1.0, 0, 1, 0.1, audioManager);
+    player1->Init(1, 64, 64, 2, 2, 1, 100, 300, 1.0, 0, 1, 0.1, audioManager);
+    player2->Init(2, 64, 64, 2, 2, 1, 600, 300, 1.0, 0, 1, 0.1, audioManager);
 
     // Initialize masses
     for (int i = 0; i < masses.size(); i++)
