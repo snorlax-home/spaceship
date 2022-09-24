@@ -49,8 +49,8 @@ void SpaceshipGameLevel::InitLevel()
         PrintLine("Failed to create textBrush.");
     }
     // Initialize players
-    player1->Init(1, 64, 64, 2, 2, 10, 1, 600, 300, 1.0, 0, 1, 0.1, audioManager);
-    player2->Init(2, 64, 64, 2, 2, 10, 1, 100, 300, 1.0, 0, 1, 0.1, audioManager);
+    player1->Init(1, 64, 64, 2, 2, 10, 1, 100, 300, 1.0, 0, 1, 0.1, audioManager);
+    player2->Init(2, 64, 64, 2, 2, 10, 1, 600, 300, 1.0, 0, 1, 0.1, audioManager);
 
     // Initialize masses
     mass1->Init(32, 32, 9, 9, this->windowWidth, this->windowHeight, 1, 1);
@@ -235,6 +235,8 @@ void SpaceshipGameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mous
         player2Points++;
         player2->SetMassCollided(false);
     }
+    
+    aKeyPressed = false;
     dKeyPressed = false;
     wKeyPressed = false;
     sKeyPressed = false;
