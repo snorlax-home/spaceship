@@ -13,7 +13,6 @@
 #include "SpaceshipGameLevel.h"
 #include "WindowsManager.h"
 
-
 #define WindowWidth 800
 #define WindowHeight 600
 
@@ -82,6 +81,12 @@ void Render()
     directXManager->PostRenderLine();
 }
 
+void PlaySounds()
+{
+    audioManager->UpdateSound();
+    gameLevels[gameLevelManager->GetCurrentLevel()]->PlaySounds();
+}
+
 int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
     windowManager = new WindowsManager("Spaceship Mania", false, WindowWidth, WindowHeight);
@@ -99,6 +104,7 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
         GetInput();
         Update(timer->FramesToUpdate());
         Render();
+        PlaySounds();
     }
     while (!gameLevels.empty())
     {
