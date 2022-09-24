@@ -309,8 +309,6 @@ bool Spaceship::GetMassCollided()
     return massCollided;
 }
 
-
-
 void Spaceship::InitDisplayRect()
 {
     int rectTop = 0;
@@ -381,8 +379,8 @@ void Spaceship::CollisionMass(Mass* anotherMass)
                                  anotherMass->GetPosition() + anotherMass->GetSpriteCenter()))
     {
         GameObject::SetMass(GameObject::GetMass() + anotherMass->GetMass());
-
-        anotherMass->Consumed();
+        
+        anotherMass->SetHp(anotherMass->GetHp() - 1);
         cout << "Collision detected between spaceship and mass" << endl;
         massCollided = true;
         collectSound->SetPlaySoundFlag(true);
@@ -484,14 +482,16 @@ void Spaceship::AlterSoundPan()
 
 
 void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction,
-                       Spaceship* anotherSpaceship, Mass* massArray[], int arraySize, int windowWidth, int windowHeight)
+                       Spaceship* anotherSpaceship, std::vector<Mass*>* masses, int windowWidth, int windowHeight)
 {
     Move(turnLeft, turnRight, goForward, goBackward, friction);
     CollisionSpaceship(anotherSpaceship);
-    for (int i = 0; i < arraySize; i++)
+
+    for (int i = 0; i < masses->size(); i++)
     {
-        CollisionMass(massArray[i]);
+        CollisionMass(masses->at(i));
     }
+    
     WindowBounce(windowWidth, windowHeight);
 
     // TODO: Make NextFrame work properly
