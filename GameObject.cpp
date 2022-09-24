@@ -59,7 +59,7 @@ void GameObject::SetDisplayRect(RECT displayRect)
     this->displayRect = displayRect;
 }
 
-void GameObject::SetDisplayRect(int displayRectTop, int displayRectLeft, int displayRectRight, int displayRectBottom)
+void GameObject::SetDisplayRect(int displayRectLeft, int displayRectTop, int displayRectRight, int displayRectBottom)
 {
     this->displayRect.top = displayRectTop;
     this->displayRect.left = displayRectLeft;

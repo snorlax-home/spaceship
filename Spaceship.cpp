@@ -447,6 +447,13 @@ void Spaceship::NextFrame(int playerNumber)
     int rightRect = leftRect + GameObject::GetSpriteWidth();
     int bottomRect = topRect + GameObject::GetSpriteHeight();
 
+    /*if (this->playerNum == 1) {
+        cout << leftRect << endl;
+        cout << topRect << endl;
+        cout << rightRect << endl;
+        cout << bottomRect << endl;
+    }*/
+
     GameObject::SetDisplayRect(leftRect, topRect, rightRect, bottomRect);
 }
 
@@ -548,7 +555,7 @@ void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBac
     WindowBounce(windowWidth, windowHeight);
 
     // TODO: Make NextFrame work properly
-    // NextFrame(this->playerNum);
+    NextFrame(this->playerNum);
 
     AlterSoundPan();
 }
@@ -577,21 +584,14 @@ void Spaceship::PlaySounds(AudioManager* audioManager)
 <<<<<<< Updated upstream
     if (bounceSound->GetPlaySoundFlag() == true)
     {
-        audioManager->PlaySoundEffect(bounceSound->GetSound(),bounceSound->GetVolume(),bounceSound->GetPitch(), bounceSound->GetPan());
-=======
-    if (bounceSound->GetPlaySoundFlag())
-    {
-        // TODO: sound not playing
-        audioManager->PlaySounds(bounceSound->GetSound(),bounceSound->GetVolume(),bounceSound->GetPitch(), bounceSound->GetPan());
->>>>>>> Stashed changes
-        bounceSound->SetPlaySoundFlag(false);
+        spaceshipAudioManager->playBounceSound();
+        spaceshipCollided = false;
     }
 
     /*
-<<<<<<< Updated upstream
      * If the spaceship is colliding with a mass, then play the point get sound
      */
-    if (collectSound->GetPlaySoundFlag() == true)
+    if (massCollided)
     {
         audioManager->PlaySoundEffect(collectSound->GetSound(),collectSound->GetVolume(),collectSound->GetPitch(), collectSound->GetPan());
 =======
@@ -603,5 +603,4 @@ void Spaceship::PlaySounds(AudioManager* audioManager)
 >>>>>>> Stashed changes
         collectSound->SetPlaySoundFlag(false);
     }
-    
 }
