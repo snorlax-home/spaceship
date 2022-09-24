@@ -4,7 +4,6 @@
 class GameObject
 {
 private:
-    char gameObjectType;
     int textureWidth;
     int textureHeight;
     int spriteWidth;
@@ -23,10 +22,9 @@ public:
     // Destructor
     ~GameObject();
 
-    virtual void Init(char GameObjectType, int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int positionX, int positionY, float mass);
+    virtual void Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int positionX, int positionY, float mass);
 
     // Setters
-    void SetGameObjectType(char GameObjectType);
     virtual void SetTextureWidth(int textureWidth);
     virtual void SetTextureHeight(int textureHeight);
     virtual void SetSpriteWidth(int spriteWidth);
@@ -41,7 +39,6 @@ public:
     virtual void SetMass(float mass);
 
     // Getters
-    virtual char GetGameObjectType();
     virtual int GetTextureWidth();
     virtual int GetTextureHeight();
     virtual int GetSpriteWidth();

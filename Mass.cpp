@@ -13,7 +13,7 @@ void Mass::Init(int textureWidth, int textureHeight, int spriteWidth, int sprite
 	int positionX = rand() % (windowWidth - spriteHeight);
 	int positionY = rand() % (windowHeight - spriteHeight);
 
-	GameObject::Init('M', textureWidth, textureHeight, spriteWidth, spriteHeight, positionX, positionY, mass);
+	GameObject::Init(textureWidth, textureHeight, spriteWidth, spriteHeight, positionX, positionY, mass);
 	this->hp = massHp;
 
 	InitDisplayRect();

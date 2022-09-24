@@ -29,7 +29,7 @@ void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int tex
                      int positionX, int positionY, float engineForce, float direction, float mass,
                      float rotationSpeed, AudioManager* audioManager)
 {
-    GameObject::Init('S', textureWidth, textureHeight, textureWidth / textureColumn, textureHeight / textureRow,
+    GameObject::Init(textureWidth, textureHeight, textureWidth / textureColumn, textureHeight / textureRow,
                      positionX, positionY, mass);
 
     this->playerNum = playerNum;
@@ -356,6 +356,9 @@ void Spaceship::CollisionSpaceship(Spaceship* anotherSpaceship)
     if (CircleCollisionDetection(anotherSpaceship->GetSpriteWidth() / 2,
                                  anotherSpaceship->GetPosition() + anotherSpaceship->GetSpriteCenter()))
     {
+        // 
+        D3DXVECTOR2 distance = (GameObject::GetPosition() + GameObject::GetSpriteCenter()) - (anotherSpaceship->GetPosition() + anotherSpaceship->GetSpriteCenter());
+        
         // TODO: how to change this to be more realistic?
         velocity.x *= -1.2;
         velocity.y *= -1.2;
