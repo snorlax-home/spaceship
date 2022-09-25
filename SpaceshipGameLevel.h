@@ -14,9 +14,9 @@ private:
 
     Spaceship* player1;
     Spaceship* player2;
-    
+
     std::vector<Mass*> masses;
-    
+
     int player1Points;
     int player2Points;
     float friction;
@@ -29,29 +29,28 @@ private:
     bool leftKeyPressed;
     bool rightKeyPressed;
     bool wKeyPressed;
-    bool sKeyPressed; 
+    bool sKeyPressed;
     bool aKeyPressed;
     bool dKeyPressed;
-    int windowWidth;
-    int windowHeight;
     bool gameEnd;
     LPDIRECT3DTEXTURE9 playertexture;
     LPDIRECT3DTEXTURE9 massTexture;
     GameSound* backgroundMusic;
-    
+
 
 public:
-    SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, GameLevelManager* gameLevelManager,
+    SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, StateMachine* stateMachine,
+                       CursorManager* cursorManager,
                        int windowWidth, int windowHeight);
-    void InitLevel() override;
+    ~SpaceshipGameLevel() override;
+    void InitLevel();
     void PointUpdate();
     void PointCheck();
-
-    // Game loop methods
     void GetInput(BYTE*, DIMOUSESTATE) override;
-    void Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate) override;
-    void Render(LPD3DXSPRITE spriteBrush) override;
     void PlaySounds() override;
-
     void CleanUp() override;
+    void Update(int frameToUpdate) override;
+    void RenderGraphics(LPD3DXSPRITE graphicsBrush) override;
+    void RenderText(LPD3DXSPRITE textBrush) override;
+    void RenderLine() override;
 };

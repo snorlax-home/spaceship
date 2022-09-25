@@ -9,7 +9,8 @@ class DirectXManager
 {
 private:
     IDirect3DDevice9* d3dDevice;
-    LPD3DXSPRITE spriteBrush;
+    LPD3DXSPRITE graphicsBrush;
+    LPD3DXSPRITE textBrush;
     WindowsManager* windowsManager;
 public:
     DirectXManager(WindowsManager* windowsManager, int windowWidth, int windowHeight);
@@ -18,6 +19,7 @@ public:
     void PostRenderGraphics();
     void PostRenderLine();
     void CleanUp();
-    LPD3DXSPRITE GetSpriteBrush();
+    LPD3DXSPRITE GetGraphicsBrush();
+    LPD3DXSPRITE GetTextBrush();
     IDirect3DDevice9* GetDevice();
 };

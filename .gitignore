@@ -3,3 +3,5 @@
 /.vscode
 /Debug
 /x64
+/Build
+/Release

@@ -1,9 +1,14 @@
 ﻿#include "GameOver.h"
 #include "colors.h"
+#include "RenderManager.h"
 #include "Utils.cpp"
 
-GameOver::GameOver(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice,
-                   GameLevelManager* gameLevelManager): GameLevel(audioManager, d3DDevice, gameLevelManager)
+GameOver::GameOver(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, StateMachine* stateMachine,
+                   CursorManager* cursorManager, int WindowWidth,
+                   int WindowHeight): GameLevel(audioManager, d3DDevice, stateMachine, cursorManager,
+                                                "GameOver",
+                                                RenderState::Graphics | RenderState::Text | RenderState::Line,
+                                                WindowWidth, WindowHeight)
 {
 }
 
@@ -11,13 +16,13 @@ GameOver::~GameOver()
 {
 }
 
-void ctnGame(GameLevelManager* gameManager)
+void ctnGame(StateMachine* stateMachine)
 {
     PrintLine("Continue Game");
-    gameManager->SetLevel(0);
+    stateMachine->ChangeState("MainMenu");
 };
 
-void exitGame(GameLevelManager* gameManager)
+void exitGame(StateMachine* stateMachine)
 {
     PrintLine("Quit Game");
     PostQuitMessage(0);
@@ -27,31 +32,31 @@ void GameOver::InitLevel()
 {
     texture = nullptr;
     D3DXCreateTextureFromFile(d3DDevice, "Assets/gameover.jpg", &texture);
-    // button.push_back(Button(&ctnGame, "Continue?", D3DXVECTOR2(100, 400), D3DXVECTOR2(200, 50), WHITE(255),
-    //                         WHITE(255), RED(255), RED(200), GREEN(255), GREEN(205), this->d3DDevice,
-    //                         this->gameLevelManager));
-    button.push_back(Button(&exitGame, "Quit Game", D3DXVECTOR2(275, 400), D3DXVECTOR2(200, 50), WHITE(255),
-                            WHITE(255), RED(255), RED(255), GREEN(255), GREEN(255), this->d3DDevice,
-                            this->gameLevelManager));
+    button.push_back(new Button(&ctnGame, "Continue?", D3DXVECTOR2(100, 400), D3DXVECTOR2(200, 50), WHITE(255),
+                                WHITE(255), RED(255), RED(200), GREEN(255), GREEN(205), this->d3DDevice,
+                                this->stateMachine));
+    button.push_back(new Button(&exitGame, "Quit Game", D3DXVECTOR2(500, 400), D3DXVECTOR2(200, 50), WHITE(255),
+                                WHITE(255), RED(255), RED(255), GREEN(255), GREEN(255), this->d3DDevice,
+                                this->stateMachine));
 }
 
 void GameOver::GetInput(BYTE* byte, DIMOUSESTATE dimousestate)
 {
-    GameLevel::GetInput(byte, dimousestate);
-}
-
-void GameOver::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate)
-{
-    for (int i = 0; i < frameToUpdate; i++)
+    for (int i = 0; i < button.size(); i++)
     {
-        for (Button b : button)
-        {
-            b.Update(mouseX, mouseY, mouseState);
-        }
+        button[i]->GetInput(cursorManager->GetCursorX(), cursorManager->GetCursorY(), dimousestate);
     }
 }
 
-void GameOver::Render(LPD3DXSPRITE spriteBrush)
+void GameOver::Update(int frameToUpdate)
+{
+    for (int i = 0; i < button.size(); i++)
+    {
+        button[i]->Update();
+    }
+}
+
+void GameOver::RenderGraphics(LPD3DXSPRITE spriteBrush)
 {
     RECT bgRect;
     bgRect.left = 0;
@@ -59,21 +64,30 @@ void GameOver::Render(LPD3DXSPRITE spriteBrush)
     bgRect.right = 800;
     bgRect.bottom = 600;
     spriteBrush->Draw(texture, &bgRect, NULL, new D3DXVECTOR3(125, 0, 0), D3DCOLOR_XRGB(255, 255, 255));
-    for (Button b : button)
+}
+
+void GameOver::RenderText(LPD3DXSPRITE textBrush)
+{
+    for (int i = 0; i < button.size(); i++)
     {
-        b.Render(spriteBrush);
+        button[i]->Render(textBrush);
     }
 }
 
 void GameOver::RenderLine()
 {
-    for (Button b : button)
+    for (int i = 0; i < button.size(); i++)
     {
-        b.RenderLine();
+        button[i]->RenderLine();
     }
 }
 
 void GameOver::CleanUp()
 {
-    GameLevel::CleanUp();
+    texture->Release();
+    texture = nullptr;
+}
+
+void GameOver::PlaySounds()
+{
 }

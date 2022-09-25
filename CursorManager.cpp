@@ -19,6 +19,8 @@ void CursorManager::Init(int WindowWidth, int WindowHeight, IDirect3DDevice9* d3
 
     cursorPosition.y = WindowWidth / 2;
     cursorPosition.x = WindowHeight / 2;
+    cursorX = cursorPosition.x;
+    cursorY = cursorPosition.y;
 }
 
 void CursorManager::GetInput()

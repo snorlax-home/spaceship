@@ -42,21 +42,27 @@ void DirectXManager::Init(int windowWidth, int windowHeight)
                                  &d3dPP, &d3dDevice);
     HRMessage(hr, "Create Direct3D9 device.");
 
-    spriteBrush = nullptr;
-    hr = D3DXCreateSprite(d3dDevice, &spriteBrush);
-    HRMessage(hr, "Create sprite brush.");
+    graphicsBrush = nullptr;
+    textBrush = nullptr;
+    hr = D3DXCreateSprite(d3dDevice, &graphicsBrush);
+    HRMessage(hr, "Create graphics brush.");
+    hr = D3DXCreateSprite(d3dDevice, &textBrush);
+    HRMessage(hr, "Create text brush.");
 }
 
 void DirectXManager::PreRender()
 {
     d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
     d3dDevice->BeginScene();
-    spriteBrush->Begin(D3DXSPRITE_ALPHABLEND);
+    graphicsBrush->Begin(D3DXSPRITE_ALPHABLEND);
+    textBrush->Begin(D3DXSPRITE_ALPHABLEND);
+    
 }
 
 void DirectXManager::PostRenderGraphics()
 {
-    spriteBrush->End();
+    graphicsBrush->End();
+    textBrush->End();
 }
 
 void DirectXManager::PostRenderLine()
@@ -67,17 +73,26 @@ void DirectXManager::PostRenderLine()
 
 void DirectXManager::CleanUp()
 {
-    spriteBrush->Release();
-    spriteBrush = NULL;
+    graphicsBrush->Release();
+    graphicsBrush = NULL;
+
+    textBrush->Release();
+    textBrush = NULL;
 
     d3dDevice->Release();
     d3dDevice = NULL;
 }
 
-LPD3DXSPRITE DirectXManager::GetSpriteBrush()
+LPD3DXSPRITE DirectXManager::GetGraphicsBrush()
 {
-    return spriteBrush;
+    return graphicsBrush;
 }
+
+LPD3DXSPRITE DirectXManager::GetTextBrush()
+{
+    return textBrush;
+}
+
 
 IDirect3DDevice9* DirectXManager::GetDevice()
 {
