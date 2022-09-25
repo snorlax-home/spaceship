@@ -161,7 +161,7 @@
   <ItemGroup>
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Button.h" />
-    <ClInclude Include="colors.h" />
+    <ClInclude Include="Colors.h" />
     <ClInclude Include="CreditsLevel.h" />
     <ClInclude Include="DirectInputManager.h" />
     <ClInclude Include="DirectXManager.h" />

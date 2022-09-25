@@ -22,6 +22,7 @@ private:
 	bool massCollided;
 	GameSound* bounceSound;
 	GameSound* collectSound;
+	D3DCOLOR textureColor;
 
 	// Spaceship exclusive methods
 	bool CircleCollisionDetection(int radiusB, D3DXVECTOR2 positionB);

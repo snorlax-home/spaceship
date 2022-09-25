@@ -4,7 +4,6 @@
 #include "DirectXManager.h"
 #include "GameLevel.h"
 
-
 RenderManager::RenderManager(DirectXManager* directXManager, CursorManager* cursorManager):
     directXManager(directXManager), cursorManager(cursorManager)
 {

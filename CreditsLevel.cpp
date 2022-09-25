@@ -1,7 +1,7 @@
 ﻿#include "CreditsLevel.h"
 
 #include "AudioManager.h"
-#include "colors.h"
+#include "Colors.h"
 #include "Label.h"
 #include "RenderManager.h"
 #include "StateMachine.h"

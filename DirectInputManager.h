@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include <dinput.h>
-
 #include "WindowsManager.h"
 
 #pragma comment(lib, "dinput8.lib")

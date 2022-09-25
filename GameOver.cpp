@@ -1,5 +1,5 @@
 ﻿#include "GameOver.h"
-#include "colors.h"
+#include "Colors.h"
 #include "RenderManager.h"
 #include "Utils.cpp"
 

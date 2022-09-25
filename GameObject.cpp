@@ -125,8 +125,6 @@ D3DXVECTOR2 GameObject::GetScaling()
     return scaling;
 }
 
-
-
 RECT GameObject::GetDisplayRect()
 {
     return displayRect;

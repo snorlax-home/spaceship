@@ -1,7 +1,6 @@
 ﻿#include "DirectXManager.h"
 #include <iostream>
 
-
 void HRMessage(HRESULT hr, const char* currentProcess)
 {
     if (FAILED(hr))
