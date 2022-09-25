@@ -1,7 +1,7 @@
 #include "SpaceshipGameLevel.h"
 #include <ctime>
 
-#include "colors.h"
+#include "Colors.h"
 #include "RenderManager.h"
 #include "StateMachine.h"
 #include "Utils.cpp"

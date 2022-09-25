@@ -3,6 +3,9 @@
 
 using namespace std;
 
+int greenValue = 255;
+int blueValue = 255;
+
 Spaceship::Spaceship()
 {
     playerNum = -1;
@@ -19,6 +22,7 @@ Spaceship::Spaceship()
     massCollided = false;
     bounceSound = new GameSound();
     collectSound = new GameSound();
+    textureColor = D3DCOLOR_XRGB(255, greenValue, blueValue);
 }
 
 Spaceship::~Spaceship()
@@ -383,6 +387,11 @@ void Spaceship::CollisionSpaceship(Spaceship* anotherSpaceship)
  
         // Set bounceSound to true so that the bounce sound will be played
         bounceSound->SetPlaySoundFlag(true);
+
+        greenValue = 5;
+        blueValue = 5;
+        this->textureColor = D3DCOLOR_XRGB(255, greenValue, blueValue);
+        anotherSpaceship->textureColor = D3DCOLOR_XRGB(255, greenValue, blueValue);
     }
 }
 
@@ -551,6 +560,14 @@ void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBac
     NextFrame(this->playerNum);
 
     AlterSoundPan();
+
+    if (greenValue < 255 && blueValue < 255)
+    {
+        greenValue += 2;
+        blueValue += 2;
+    }
+    this->textureColor = D3DCOLOR_XRGB(255, greenValue, blueValue);
+    anotherSpaceship->textureColor = D3DCOLOR_XRGB(255, greenValue, blueValue);
 }
 
 void Spaceship::Draw(LPD3DXSPRITE spriteBrush)
@@ -559,7 +576,7 @@ void Spaceship::Draw(LPD3DXSPRITE spriteBrush)
                                &spriteCenter, direction, &position);
     spriteBrush->SetTransform(&matrix);
 
-    HRESULT hr = spriteBrush->Draw(objectTexture, &displayRect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
+    HRESULT hr = spriteBrush->Draw(objectTexture, &displayRect, NULL, NULL, textureColor);
     if (FAILED(hr))
     {
         std::cout << "Draw Failed." << endl;
