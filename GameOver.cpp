@@ -1,4 +1,6 @@
 ﻿#include "GameOver.h"
+
+#include "AudioManager.h"
 #include "Colors.h"
 #include "RenderManager.h"
 #include "Utils.cpp"
@@ -32,6 +34,15 @@ void GameOver::InitLevel()
 {
     texture = nullptr;
     D3DXCreateTextureFromFile(d3DDevice, "Assets/gameover.jpg", &texture);
+
+    backgroundMusic = new GameSound();
+    
+    backgroundMusic->Init("Assets/Audio/game-over.mp3", 1.0, 1.0, 0.0, false);
+    backgroundMusic->SetSound(
+        audioManager->CreateStreams(backgroundMusic->GetSoundFilePath(), backgroundMusic->GetLoop()));
+    audioManager->PlayMusic(backgroundMusic->GetSound(), backgroundMusic->GetVolume(), backgroundMusic->GetPitch(),
+                            backgroundMusic->GetPan());
+    
     button.push_back(new Button(&ctnGame, "Continue?", D3DXVECTOR2(100, 400), D3DXVECTOR2(200, 50), WHITE(255),
                                 WHITE(255), RED(255), RED(200), GREEN(255), GREEN(205), this->d3DDevice,
                                 this->stateMachine));
@@ -90,6 +101,10 @@ void GameOver::RenderLine()
 
 void GameOver::CleanUp()
 {
+    audioManager->PauseMusicChannel();
+    backgroundMusic->CleanUp();
+    backgroundMusic = nullptr;
+    
     texture->Release();
     texture = nullptr;
 }

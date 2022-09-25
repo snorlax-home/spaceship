@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Button.h"
 #include "GameLevel.h"
+#include "GameSound.h"
 
 /**
  * \brief Game Over level
@@ -13,6 +14,7 @@ class GameOver : public GameLevel
 private:
     std::vector<Button*> button; 
     LPDIRECT3DTEXTURE9 texture;
+    GameSound* backgroundMusic;
 public:
     GameOver(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, StateMachine* stateMachine,
              CursorManager* cursorManager, int WindowWidth, int WindowHeight);

@@ -178,6 +178,7 @@
     <ClInclude Include="Mass.h" />
     <ClInclude Include="CursorManager.h" />
     <ClInclude Include="RenderManager.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Spaceship.h" />
     <ClInclude Include="SpaceshipGameLevel.h" />
     <ClInclude Include="StateMachine.h" />
@@ -199,6 +200,12 @@
     <Content Include="Spaceship.sln" />
     <Content Include="Spaceship.vcxproj.filters" />
     <Content Include="Spaceship.vcxproj.user" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Spaceship.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\kekw-icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

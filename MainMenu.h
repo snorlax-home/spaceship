@@ -2,6 +2,7 @@
 #include <vector>
 #include "Button.h"
 #include "GameLevel.h"
+#include "GameSound.h"
 #include "Line.h"
 
 
@@ -19,6 +20,7 @@ private:
     std::vector<Button*> button; 
     std::vector<Line> lines;
     LPDIRECT3DTEXTURE9 texture;
+    GameSound* backgroundMusic;
 public:
     MainMenu(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice,StateMachine* stateMachine,CursorManager* cursorManager, int WindowWidth, int WindowHeight);
     ~MainMenu() override;

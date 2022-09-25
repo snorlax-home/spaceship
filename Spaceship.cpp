@@ -433,10 +433,16 @@ void Spaceship::CollisionSpaceship(Spaceship* anotherSpaceship)
         // Set bounceSound to true so that the bounce sound will be played
         bounceSound->SetPlaySoundFlag(true);
 
+        /*
+         * Since collisions happens between two spaceships, we can alter their colour
+         * to show the spaceship is damaged (visual effects) by changing the RGB values of texture
+         */
         this->textureGreenValue = 5;
         this->textureBlueValue = 5;
         anotherSpaceship->textureGreenValue = 5;
         anotherSpaceship->textureBlueValue = 5;
+
+        // After modifying the RGB values, save them into 'textureColor' variable
         this->textureColor = D3DCOLOR_XRGB(this->textureRedValue, this->textureGreenValue, this->textureBlueValue);
         anotherSpaceship->textureColor = D3DCOLOR_XRGB(anotherSpaceship->textureRedValue, anotherSpaceship->textureGreenValue, anotherSpaceship->textureBlueValue);
     }
@@ -467,6 +473,10 @@ void Spaceship::CollisionMass(Mass* anotherMass)
 
 void Spaceship::NextFrame(int playerNumber)
 {
+    /*
+     * Used to identify the area of the sprite sheet to crop out
+     * and saved in the RECT which will then used later in rendering section
+     */
     frameCounter++;
 
     if (frameCounter > maxFrame)
@@ -476,53 +486,65 @@ void Spaceship::NextFrame(int playerNumber)
 
     int leftRect = (playerNum - 1) * GameObject::GetSpriteWidth();
     int topRect = frameCounter * GameObject::GetSpriteHeight();
-    int rightRect = leftRect + GameObject::GetSpriteWidth();
-    int bottomRect = topRect + GameObject::GetSpriteHeight();
 
     GameObject::SetDisplayRect(leftRect, topRect);
 }
 
 void Spaceship::WindowBounce(int windowWidth, int windowHeight)
 {
-    /*
-     * Check if the spaceship is colliding with the window
-     * If yes, then set velocity of the spaceship to be 1.2 and opposite direction
-     * then, set the wallCollided to true
-     */
+    // Check if the spaceship collides with the window border (left or right)
     if (GameObject::GetPosition().x < 0 || GameObject::GetPosition().x > windowWidth - GameObject::GetSpriteWidth())
     {
+        // If the spaceship collides with the left border
         if (GameObject::GetPosition().x < 0)
         {
+            // Push / Teleport the spaceship to position 0 of x
             GameObject::SetPositionX(0);
         }
+        // Otherwise it should collides with the right border
         else
         {
+            // Push / Teleport the spaceship to position of windowWidth - spriteWidth
             GameObject::SetPositionX(windowWidth - GameObject::GetSpriteWidth());
         }
+
+        /*
+         * Now, we have to identify where to reflect the spaceship,
+         * if it collides with the windows border. This can be achieved
+         * by calculating the wall normal vector, then reflect the spaceship's
+         * normal velocity.
+         */
         // Normal Vector of Line Segment
-        D3DXVECTOR2 BorderSP = D3DXVECTOR2(0, 0);
-        D3DXVECTOR2 BorderEP = D3DXVECTOR2(0, 600);
-        D3DXVECTOR2 minus = BorderEP - BorderSP;
-        D3DXVECTOR2 BorderDir = minus / D3DXVec2Length(&minus);
+        D3DXVECTOR2 BorderSP = D3DXVECTOR2(0, 0);           // Start Point of the line
+        D3DXVECTOR2 BorderEP = D3DXVECTOR2(0, 600);         // End Point of the line
+        D3DXVECTOR2 minus = BorderEP - BorderSP;                // Calculate the result of subtraction for direction
+        D3DXVECTOR2 BorderDir = minus / D3DXVec2Length(&minus); // Direction
         
         D3DXVECTOR2 BorderNorm = D3DXVECTOR2(-BorderDir.y, BorderDir.x);
-        
+
+        // Norm of velocity, calculated by the norm vector of wall multiply by dot product
         D3DXVECTOR2 velocityNorm = BorderNorm * D3DXVec2Dot(&velocity, &BorderNorm);
-        D3DXVECTOR2 velocityTangent = velocity - velocityNorm;
+        D3DXVECTOR2 velocityTangent = velocity - velocityNorm;  // Tangent Velocity
+        // Set the velocity of the spaceship
         SetVelocity(velocityTangent - velocityNorm);
         
         cout << "Collision detected between spaceship and window left or right" << endl;
         bounceSound->SetPlaySoundFlag(true);
     }
 
+    // Check if the spaceship collides with the window border (top or bottom)
     if (GameObject::GetPosition().y < 0 || GameObject::GetPosition().y > windowHeight - GameObject::GetSpriteHeight())
     {
+        // If the spaceship collides with the top border
         if (GameObject::GetPosition().y < 0)
         {
+            // Push / Teleport the spaceship to position 0 of Y
             GameObject::SetPositionY(0);
         }
+        // Otherwise it should collides with the bottom border
         else
         {
+            // Push / Teleport the spaceship to position of windowHeight - spriteHeight
             GameObject::SetPositionY(windowHeight - GameObject::GetSpriteHeight());
         }
         
@@ -627,9 +649,10 @@ void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBac
 
     // Update the pan of the sound effects based on the position of the ship
     AlterSoundPan();
-
+    
     if (this->textureGreenValue < 255 || anotherSpaceship->textureGreenValue < 255)
     {
+        // Increases the RGB values back to normal for each update
         this->textureGreenValue += 2;
         this->textureBlueValue += 2;
         anotherSpaceship->textureGreenValue += 2;
@@ -641,6 +664,7 @@ void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBac
 
 void Spaceship::Draw(LPD3DXSPRITE spriteBrush)
 {
+    // Draw the spaceships by using the sprite brush passed into this function
     D3DXMatrixTransformation2D(&matrix, NULL, 0.5f, &scaling,
                                &spriteCenter, direction, &position);
     spriteBrush->SetTransform(&matrix);

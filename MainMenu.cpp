@@ -1,4 +1,6 @@
 ﻿#include "MainMenu.h"
+
+#include "AudioManager.h"
 #include "Colors.h"
 #include "RenderManager.h"
 #include "Line.h"
@@ -35,6 +37,15 @@ void MainMenu::InitLevel()
 {
     texture = nullptr;
     D3DXCreateTextureFromFile(d3DDevice, "Assets/main.jpg", &texture);
+
+    backgroundMusic = new GameSound();
+
+    backgroundMusic->Init("Assets/Audio/annoying-main-menu.mp3", 0.5, 1.0, 0.0, true);
+    backgroundMusic->SetSound(
+        audioManager->CreateStreams(backgroundMusic->GetSoundFilePath(), backgroundMusic->GetLoop()));
+
+    audioManager->PlayMusic(backgroundMusic->GetSound(), backgroundMusic->GetVolume(), backgroundMusic->GetPitch(),
+                            backgroundMusic->GetPan());
 
     // Menu buttons
     button.push_back(new Button(&startGame, "Start Game", D3DXVECTOR2(300, 300), D3DXVECTOR2(200, 50), WHITE(255),
@@ -261,6 +272,10 @@ void MainMenu::RenderLine()
 
 void MainMenu::CleanUp()
 {
+    audioManager->PauseMusicChannel();
+    backgroundMusic->CleanUp();
+    backgroundMusic = nullptr;
+    
     for (int i = 0; i < button.size(); i++)
     {
         button[i]->CleanUp();
