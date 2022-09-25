@@ -13,7 +13,6 @@ private:
     D3DXVECTOR2 scaling;
     RECT displayRect;
     D3DXVECTOR2 position;
-    float mass;
 
 protected:
     LPDIRECT3DTEXTURE9 objectTexture;
@@ -23,9 +22,9 @@ public:
     GameObject();
 
     // Destructor
-    ~GameObject();
+    virtual ~GameObject();
 
-    virtual void Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int positionX, int positionY, float mass);
+    virtual void Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int positionX, int positionY);
 
     // Setters
     virtual void SetTextureWidth(int textureWidth);
@@ -39,7 +38,6 @@ public:
     virtual void SetPosition(float x, float y);
     virtual void SetPositionX(float x);
     virtual void SetPositionY(float y);
-    virtual void SetMass(float mass);
     virtual void SetObjectTextureAddress(LPDIRECT3DTEXTURE9* objectTexture);
 
     // Getters
@@ -56,7 +54,6 @@ public:
     virtual D3DXVECTOR2 GetPosition();
     virtual D3DXVECTOR2 *GetPositionAddress();
     virtual D3DXMATRIX *GetMatrixAddress();
-    virtual float GetMass();
     virtual LPDIRECT3DTEXTURE9 GetObjectTexture();
     virtual LPDIRECT3DTEXTURE9* GetObjectTextureAddress();
 
@@ -64,4 +61,6 @@ public:
     virtual void Update();
     virtual void Draw();
     virtual void PlaySounds();
+    
+    virtual void CleanUp();
 };
