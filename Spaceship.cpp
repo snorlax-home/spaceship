@@ -476,8 +476,6 @@ void Spaceship::NextFrame(int playerNumber)
 
     int leftRect = (playerNum - 1) * GameObject::GetSpriteWidth();
     int topRect = frameCounter * GameObject::GetSpriteHeight();
-    int rightRect = leftRect + GameObject::GetSpriteWidth();
-    int bottomRect = topRect + GameObject::GetSpriteHeight();
 
     GameObject::SetDisplayRect(leftRect, topRect);
 }
