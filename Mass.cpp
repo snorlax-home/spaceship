@@ -24,55 +24,13 @@ void Mass::Init(int textureWidth, int textureHeight, int spriteWidth, int sprite
 	this->hp = massHp;
 	this->mass = mass;
 	
-	InitDisplayRect();
+	displayRect.top = 0;
+	displayRect.left = 0;
+	displayRect.right = spriteWidth;
+	displayRect.bottom = spriteHeight;
 }
 
 // Setters
-void Mass::SetTextureWidth(int spriteWidth)
-{
-	GameObject::SetTextureWidth(spriteWidth);
-}
-
-void Mass::SetTextureHeight(int spriteHeight)
-{
-	GameObject::SetTextureHeight(spriteHeight);
-}
-
-void Mass::SetSpriteWidth(int spriteWidth)
-{
-	GameObject::SetSpriteWidth(spriteWidth);
-}
-
-void Mass::SetSpriteHeight(int spriteHeight)
-{
-	GameObject::SetSpriteHeight(spriteHeight);
-}
-
-void Mass::SetScaling(float scalingX, float scalingY)
-{
-	GameObject::SetScaling(scalingX, scalingY);
-}
-
-void Mass::SetPosition(D3DXVECTOR2 position)
-{
-	GameObject::SetPosition(position);
-}
-
-void Mass::SetPosition(float x, float y)
-{
-	GameObject::SetPosition(x, y);
-}
-
-void Mass::SetPositionX(float x)
-{
-	GameObject::SetPositionX(x);
-}
-
-void Mass::SetPositionY(float y)
-{
-	GameObject::SetPositionY(y);
-}
-
 void Mass::SetMass(float newMass)
 {
 	this->mass = newMass;
@@ -89,67 +47,6 @@ void Mass::SetConsumed(bool consumed)
 }
 
 // Getters
-
-int Mass::GetTextureWidth()
-{
-	return GameObject::GetTextureWidth();
-}
-
-int Mass::GetTextureHeight()
-{
-	return GameObject::GetTextureHeight();
-}
-
-int Mass::GetSpriteWidth()
-{
-	return GameObject::GetSpriteWidth();
-}
-
-int Mass::GetSpriteHeight()
-{
-	return GameObject::GetSpriteHeight();
-}
-
-D3DXVECTOR2 Mass::GetSpriteCenter()
-{
-	return GameObject::GetSpriteCenter();
-}
-
-D3DXVECTOR2* Mass::GetSpriteCenterAddress()
-{
-	return GameObject::GetSpriteCenterAddress();
-}
-
-D3DXVECTOR2 Mass::GetScaling()
-{
-	return GameObject::GetScaling();
-}
-
-D3DXVECTOR2* Mass::GetScalingAddress()
-{
-	return GameObject::GetScalingAddress();
-}
-
-RECT Mass::GetDisplayRect()
-{
-	return GameObject::GetDisplayRect();
-}
-
-RECT* Mass::GetDisplayRectAddress()
-{
-	return GameObject::GetDisplayRectAddress();
-}
-
-D3DXVECTOR2 Mass::GetPosition()
-{
-	return GameObject::GetPosition();
-}
-
-D3DXVECTOR2* Mass::GetPositionAddress()
-{
-	return GameObject::GetPositionAddress();
-}
-
 float Mass::GetMass()
 {
 	return mass;
@@ -164,17 +61,6 @@ bool Mass::GetConsumed()
 {
 	return consumed;
 }
-
-void Mass::InitDisplayRect()
-{
-	int rectTop = 0;
-	int rectLeft = 0;
-	int rectRight = rectLeft + GameObject::GetSpriteWidth();
-	int rectBottom = rectTop + GameObject::GetSpriteHeight();
-
-	GameObject::SetDisplayRect(rectTop, rectLeft, rectRight, rectBottom);
-}
-
 
 // Game Loop Methods
 void Mass::Update()
@@ -192,11 +78,11 @@ void Mass::Update()
 
 void Mass::Draw(LPD3DXSPRITE spriteBrush)
 {
-	D3DXMatrixTransformation2D(this->GetMatrixAddress(), NULL, 0.0f, this->GetScalingAddress(), this->GetSpriteCenterAddress(), 0.0f, this->GetPositionAddress());
-	spriteBrush->SetTransform(this->GetMatrixAddress());
+	D3DXMatrixTransformation2D(&matrix, NULL, 0.0f, &scaling, &spriteCenter, 0.0f, &position);
+	spriteBrush->SetTransform(&matrix);
 	if (this->GetHp() > 0)
 	{
-		HRESULT hr = spriteBrush->Draw(objectTexture, GetDisplayRectAddress(), NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
+		HRESULT hr = spriteBrush->Draw(objectTexture, &displayRect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
 		if (FAILED(hr))
 		{
 			std::cout << "Draw Failed." << endl;
@@ -204,7 +90,3 @@ void Mass::Draw(LPD3DXSPRITE spriteBrush)
 	}
 }
 
-void Mass::CleanUp()
-{
-	GameObject::CleanUp();
-}

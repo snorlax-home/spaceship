@@ -3,7 +3,7 @@
 
 class GameObject
 {
-private:
+protected:
     int textureWidth;
     int textureHeight;
     int spriteWidth;
@@ -13,8 +13,6 @@ private:
     D3DXVECTOR2 scaling;
     RECT displayRect;
     D3DXVECTOR2 position;
-
-protected:
     LPDIRECT3DTEXTURE9 objectTexture;
 
 public:
@@ -33,7 +31,7 @@ public:
     virtual void SetSpriteHeight(int spriteHeight);
     virtual void SetScaling(float scalingX, float scalingY);
     virtual void SetDisplayRect(RECT displayRect);
-    virtual void SetDisplayRect(int displayRectLeft, int displayRectTop, int displayRectRight, int displayRectBottom);
+    virtual void SetDisplayRect(int displayRectLeft, int displayRectTop);
     virtual void SetPosition(D3DXVECTOR2 position);
     virtual void SetPosition(float x, float y);
     virtual void SetPositionX(float x);
@@ -46,17 +44,11 @@ public:
     virtual int GetSpriteWidth();
     virtual int GetSpriteHeight();
     virtual D3DXVECTOR2 GetSpriteCenter();
-    virtual D3DXVECTOR2 *GetSpriteCenterAddress();
     virtual D3DXVECTOR2 GetScaling();
-    virtual D3DXVECTOR2 *GetScalingAddress();
     virtual RECT GetDisplayRect();
-    virtual RECT *GetDisplayRectAddress();
     virtual D3DXVECTOR2 GetPosition();
-    virtual D3DXVECTOR2 *GetPositionAddress();
-    virtual D3DXMATRIX *GetMatrixAddress();
     virtual LPDIRECT3DTEXTURE9 GetObjectTexture();
-    virtual LPDIRECT3DTEXTURE9* GetObjectTextureAddress();
-
+    
     // GameLoop Methods
     virtual void Update();
     virtual void Draw();

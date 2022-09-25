@@ -19,11 +19,12 @@ private:
 	 * Therefore, if you want to change the properties of music while also play other sound effects
 	 * a channel pointer that points to the channel object playing the music must be specifically created
 	 */
-	FMOD::Channel *soundEffectChannel = 0;
-	FMOD::Channel *musicChannel = 0;
+	FMOD::Channel *soundEffectChannel;
+	FMOD::Channel *musicChannel;
 	FMOD_RESULT result;
-	void *extraDriverData = 0;
+	void *extraDriverData;
 
+	void ResultCheck(FMOD_RESULT result, const char *message);
 public:
 	// Constructor and Destructor
 	AudioManager();
@@ -35,13 +36,13 @@ public:
 	FMOD::Channel *GetSoundEffectChannel();
 	FMOD::Channel *GetMusicChannel();
 	FMOD_RESULT GetResult();
+	
 	// Other Methods
 	FMOD::Sound* CreateSounds(const char* soundFilePath, bool loop);
 	FMOD::Sound* CreateStreams(const char* soundFilePath, bool loop);
-	void UpdateSound();
-	void ResultCheck(FMOD_RESULT result, const char *message);
 	void PlaySoundEffect(FMOD::Sound* sound, float volume, float pitch, float pan);
 	void PlayMusic(FMOD::Sound* sound, float volume, float pitch, float pan);
+	void UpdateSound();
 	// Altering channel properties only limited to music Channel
 	// TODO: continue write comment here
 	void AlterMusicChannelVolume(float volume);
@@ -49,4 +50,6 @@ public:
 	void AlterMusicChannelPan(float pan);
 	void PauseMusicChannel();
 	void ResumeMusicChannel();
+
+	void CleanUp();
 };

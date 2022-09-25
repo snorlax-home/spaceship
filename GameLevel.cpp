@@ -9,8 +9,8 @@ GameLevel::GameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, St
                      CursorManager* cursorManager, std::string gameLevelName, int renderState, int WindowWidth,
                      int WindowHeight):
     audioManager(audioManager), d3DDevice(d3DDevice),
-    stateMachine(stateMachine), cursorManager(cursorManager), WindowWidth(WindowWidth),
-    WindowHeight(WindowHeight), gameLevelName(gameLevelName), renderState(
+    stateMachine(stateMachine), cursorManager(cursorManager), windowWidth(WindowWidth),
+    windowHeight(WindowHeight), gameLevelName(gameLevelName), renderState(
         renderState)
 {
 }

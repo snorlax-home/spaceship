@@ -40,9 +40,12 @@ void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int tex
     
     frameCounter = 0;
     this->maxFrame = maxFrame;
-
-    InitDisplayRect();
-
+    
+    displayRect.top = 0;
+    displayRect.left = (playerNum - 1) * spriteWidth;
+    displayRect.right = displayRect.left + spriteWidth;
+    displayRect.bottom = displayRect.top + spriteHeight;
+    
     velocity = D3DXVECTOR2(0, 0);
     acceleration = D3DXVECTOR2(0, 0);
     this->engineForce = engineForce;
@@ -62,38 +65,34 @@ void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int tex
 // Setters
 void Spaceship::SetTextureWidth(int textureWidth)
 {
-    GameObject::SetTextureWidth(textureWidth);
+    this->textureWidth = textureWidth;
 
     // Update the sprite width and display display rect
-    GameObject::SetSpriteWidth(GameObject::GetTextureWidth() / textureColumn);
+    spriteWidth = textureWidth / textureColumn;
 }
 
 void Spaceship::SetTextureHeight(int textureHeight)
 {
-    GameObject::SetTextureHeight(textureHeight);
-
+    this->textureHeight = textureHeight;
+    
     // Update sprite height and display rect
-    GameObject::SetSpriteHeight(GameObject::GetTextureHeight() / textureRow);
+    spriteHeight = textureHeight / textureRow;
 }
 
 void Spaceship::SetTextureRow(int texture_row)
 {
     this->textureRow = texture_row;
 
-    GameObject::SetSpriteHeight(GameObject::GetTextureHeight() / texture_row);
+    spriteHeight = textureHeight / texture_row;
 }
 
 void Spaceship::SetTextureColumn(int texture_column)
 {
     this->textureColumn = texture_column;
 
-    GameObject::SetSpriteWidth(GameObject::GetTextureWidth() / texture_column);
+    spriteWidth = textureWidth / texture_column;
 }
 
-void Spaceship::SetScaling(float scalingX, float scalingY)
-{
-    GameObject::SetScaling(scalingX, scalingY);
-}
 
 void Spaceship::SetFrameCounter(int frame_counter)
 {
@@ -103,26 +102,6 @@ void Spaceship::SetFrameCounter(int frame_counter)
 void Spaceship::SetMaxFrame(int max_frame)
 {
     this->maxFrame = max_frame;
-}
-
-void Spaceship::SetPosition(D3DXVECTOR2 position)
-{
-    GameObject::SetPosition(position);
-}
-
-void Spaceship::SetPosition(float x, float y)
-{
-    GameObject::SetPosition(x, y);
-}
-
-void Spaceship::SetPositionX(float x)
-{
-    GameObject::SetPositionX(x);
-}
-
-void Spaceship::SetPositionY(float y)
-{
-    GameObject::SetPositionY(y);
 }
 
 void Spaceship::SetVelocity(D3DXVECTOR2 spaceShipVelocity)
@@ -198,16 +177,6 @@ int Spaceship::GetPlayerNum()
     return playerNum;
 }
 
-int Spaceship::GetTextureWidth()
-{
-    return GameObject::GetTextureWidth();
-}
-
-int Spaceship::GetTextureHeight()
-{
-    return GameObject::GetTextureHeight();
-}
-
 int Spaceship::GetTextureRow()
 {
     return textureRow;
@@ -218,35 +187,7 @@ int Spaceship::GetTextureColumn()
     return textureColumn;
 }
 
-int Spaceship::GetSpriteWidth()
-{
-    return GameObject::GetSpriteWidth();
-}
 
-int Spaceship::GetSpriteHeight()
-{
-    return GameObject::GetSpriteHeight();
-}
-
-D3DXVECTOR2 Spaceship::GetSpriteCenter()
-{
-    return GameObject::GetSpriteCenter();
-}
-
-D3DXVECTOR2* Spaceship::GetSpriteCenterAddress()
-{
-    return GameObject::GetSpriteCenterAddress();
-}
-
-D3DXVECTOR2 Spaceship::GetScaling()
-{
-    return GameObject::GetScaling();
-}
-
-D3DXVECTOR2* Spaceship::GetScalingAddress()
-{
-    return GameObject::GetScalingAddress();
-}
 
 int Spaceship::GetFrameCounter()
 {
@@ -258,25 +199,6 @@ int Spaceship::GetMaxFrame()
     return maxFrame;
 }
 
-RECT Spaceship::GetDisplayRect()
-{
-    return GameObject::GetDisplayRect();
-}
-
-RECT* Spaceship::GetDisplayRectAddress()
-{
-    return GameObject::GetDisplayRectAddress();
-}
-
-D3DXVECTOR2 Spaceship::GetPosition()
-{
-    return GameObject::GetPosition();
-}
-
-D3DXVECTOR2* Spaceship::GetPositionAddress()
-{
-    return GameObject::GetPositionAddress();
-}
 
 D3DXVECTOR2 Spaceship::GetVelocity()
 {
@@ -311,16 +233,6 @@ float Spaceship::GetRotationSpeed()
 bool Spaceship::GetMassCollided()
 {
     return massCollided;
-}
-
-void Spaceship::InitDisplayRect()
-{
-    int rectTop = 0;
-    int rectLeft = (playerNum - 1) * GameObject::GetSpriteWidth();
-    int rectRight = rectLeft + GameObject::GetSpriteWidth();
-    int rectBottom = rectTop + GameObject::GetSpriteHeight();
-
-    GameObject::SetDisplayRect(rectLeft, rectTop, rectRight, rectBottom);
 }
 
 // Game methods
@@ -507,7 +419,7 @@ void Spaceship::NextFrame(int playerNumber)
     int rightRect = leftRect + GameObject::GetSpriteWidth();
     int bottomRect = topRect + GameObject::GetSpriteHeight();
 
-    GameObject::SetDisplayRect(leftRect, topRect, rightRect, bottomRect);
+    GameObject::SetDisplayRect(leftRect, topRect);
 }
 
 void Spaceship::WindowBounce(int windowWidth, int windowHeight)
@@ -614,7 +526,6 @@ void Spaceship::Move(bool turnLeft, bool turnRight, bool goForward, bool goBackw
     // Reset acceleration
     acceleration.x = 0;
     acceleration.y = 0;
-    
 }
 
 void Spaceship::AlterSoundPan()
@@ -644,17 +555,15 @@ void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBac
 
 void Spaceship::Draw(LPD3DXSPRITE spriteBrush)
 {
-    D3DXMatrixTransformation2D(this->GetMatrixAddress(), NULL, 0.5f, this->GetScalingAddress(),
-                               this->GetSpriteCenterAddress(), this->GetDirection(), this->GetPositionAddress());
-    spriteBrush->SetTransform(this->GetMatrixAddress());
+    D3DXMatrixTransformation2D(&matrix, NULL, 0.5f, &scaling,
+                               &spriteCenter, direction, &position);
+    spriteBrush->SetTransform(&matrix);
 
-    HRESULT hr = spriteBrush->Draw(objectTexture, GetDisplayRectAddress(), NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
+    HRESULT hr = spriteBrush->Draw(objectTexture, &displayRect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
     if (FAILED(hr))
     {
         std::cout << "Draw Failed." << endl;
     }
-
-    
 }
 
 

@@ -19,7 +19,8 @@ protected:
     CursorManager* cursorManager;
     std::string gameLevelName;
     int renderState;
-    int WindowWidth, WindowHeight;
+    int windowWidth;
+    int windowHeight;
 
 
 public:
@@ -28,15 +29,20 @@ public:
               std::string gameLevelName, int renderState, int WindowWidth, int WindowHeight);
     virtual ~GameLevel();
     virtual void InitLevel();
+
+    // Getters
+    virtual LPDIRECT3DDEVICE9 GetD3DDevice();
+    virtual AudioManager* GetAudioManager();
+    virtual int GetRenderState();
+    virtual std::string GetLevelName();
+
+    // Game loop methods
     virtual void GetInput(BYTE* diKeys, DIMOUSESTATE mouseState);
     virtual void Update(int frameToUpdate);
     virtual void PlaySounds();
     virtual void RenderMovable(LPD3DXSPRITE movableBrush);
     virtual void RenderStatic(LPD3DXSPRITE staticBrush);
     virtual void RenderLine();
+    
     virtual void CleanUp();
-    LPDIRECT3DDEVICE9 GetD3DDevice();
-    AudioManager* GetAudioManager();
-    int GetRenderState();
-    std::string GetLevelName();
 };

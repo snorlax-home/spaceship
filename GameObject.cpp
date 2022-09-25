@@ -57,7 +57,7 @@ void GameObject::SetDisplayRect(RECT displayRect)
     this->displayRect = displayRect;
 }
 
-void GameObject::SetDisplayRect(int displayRectLeft, int displayRectTop, int displayRectRight, int displayRectBottom)
+void GameObject::SetDisplayRect(int displayRectLeft, int displayRectTop)
 {
     this->displayRect.top = displayRectTop;
     this->displayRect.left = displayRectLeft;
@@ -119,45 +119,25 @@ D3DXVECTOR2 GameObject::GetSpriteCenter()
     return spriteCenter;
 }
 
-D3DXVECTOR2 *GameObject::GetSpriteCenterAddress()
-{
-    return &spriteCenter;
-}
 
 D3DXVECTOR2 GameObject::GetScaling()
 {
     return scaling;
 }
 
-D3DXVECTOR2 *GameObject::GetScalingAddress()
-{
-    return &scaling;
-}
+
 
 RECT GameObject::GetDisplayRect()
 {
     return displayRect;
 }
 
-RECT *GameObject::GetDisplayRectAddress()
-{
-    return &displayRect;
-}
 
 D3DXVECTOR2 GameObject::GetPosition()
 {
     return position;
 }
 
-D3DXVECTOR2 *GameObject::GetPositionAddress()
-{
-    return &position;
-}
-
-D3DXMATRIX* GameObject::GetMatrixAddress()
-{
-    return &matrix;
-}
 
 
 LPDIRECT3DTEXTURE9 GameObject::GetObjectTexture()
@@ -165,10 +145,6 @@ LPDIRECT3DTEXTURE9 GameObject::GetObjectTexture()
     return objectTexture;
 }
 
-LPDIRECT3DTEXTURE9* GameObject::GetObjectTextureAddress()
-{
-    return &objectTexture;
-}
 
 // Game Loop Methods
 void GameObject::Update()
@@ -185,7 +161,8 @@ void GameObject::PlaySounds()
 
 void GameObject::CleanUp()
 {
-    
+    objectTexture->Release();
+    objectTexture = nullptr;
 }
 
 

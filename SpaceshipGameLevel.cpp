@@ -38,7 +38,7 @@ void SpaceshipGameLevel::InitLevel()
 
     this->label1 = new Label(this->d3DDevice, "Player 1 Score : 0", WHITE(255), D3DXVECTOR2(20, 25), 200, 100,
                              DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-    this->label2 = new Label(this->d3DDevice, "Player 2 Score : 0", WHITE(255), D3DXVECTOR2(WindowWidth - 220, 25), 200,
+    this->label2 = new Label(this->d3DDevice, "Player 2 Score : 0", WHITE(255), D3DXVECTOR2(windowWidth - 220, 25), 200,
                              100,
                              DT_CENTER | DT_VCENTER | DT_SINGLELINE);
     srand(time(0));
@@ -57,7 +57,7 @@ void SpaceshipGameLevel::InitLevel()
     {
         masses[i]->SetObjectTextureAddress(&massTexture);
     }
-
+    
     // Initialize players
     player1->Init(1, 64, 64, 2, 2, 1, 100, 300, 1.0, 0, 1, 0.1, audioManager);
     player2->Init(2, 64, 64, 2, 2, 1, 600, 300, 1.0, 0, 1, 0.1, audioManager);
@@ -65,7 +65,7 @@ void SpaceshipGameLevel::InitLevel()
     // Initialize masses
     for (int i = 0; i < masses.size(); i++)
     {
-        masses[i]->Init(32, 32, 9, 9, this->WindowWidth, this->WindowHeight, 1, 1);
+        masses[i]->Init(32, 32, 9, 9, this->windowWidth, this->windowHeight, 1, 1);
     }
 
     // Initialize player point
@@ -194,9 +194,9 @@ void SpaceshipGameLevel::Update(int frameToUpdate)
     {
         // update player1 and player 2 for the number of frames to update
         player1->Update(aKeyPressed, dKeyPressed, wKeyPressed, sKeyPressed, friction, player2, &masses,
-                        WindowWidth, WindowHeight);
+                        windowWidth, windowHeight);
         player2->Update(leftKeyPressed, rightKeyPressed, upKeyPressed, downKeyPressed, friction, player1, &masses,
-                        WindowWidth, WindowHeight);
+                        windowWidth, windowHeight);
     }
 
     for (int i = 0; i < masses.size(); i++)
@@ -273,6 +273,6 @@ void SpaceshipGameLevel::CleanUp()
 
     playerTexture->Release();
     massTexture->Release();
-    playerTexture = NULL;
-    massTexture = NULL;
+    playerTexture = nullptr;
+    massTexture = nullptr;
 }
