@@ -11,10 +11,9 @@ SpaceshipGameLevel::SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEV
                                        int WindowHeight): GameLevel(audioManager, d3DDevice,
                                                                     stateMachine, cursorManager,
                                                                     "Spaceship",
-                                                                    RenderState::Graphics |
-                                                                    RenderState::Text, WindowWidth, WindowHeight)
+                                                                    RenderState::Movable |
+                                                                    RenderState::Static, WindowWidth, WindowHeight)
 {
-
 }
 
 SpaceshipGameLevel::~SpaceshipGameLevel()
@@ -36,12 +35,12 @@ void SpaceshipGameLevel::InitLevel()
     }
 
     backgroundMusic = new GameSound();
-    
-    this->label1 = new Label(this->d3DDevice, "Player 1 Score : 0", WHITE(255), D3DXVECTOR2(20, 20), 200, 100,
-                             DT_CENTER);
-    this->label2 = new Label(this->d3DDevice, "Player 2 Score : 0", WHITE(255), D3DXVECTOR2(WindowWidth - 220, 20), 200,
+
+    this->label1 = new Label(this->d3DDevice, "Player 1 Score : 0", WHITE(255), D3DXVECTOR2(20, 25), 200, 100,
+                             DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+    this->label2 = new Label(this->d3DDevice, "Player 2 Score : 0", WHITE(255), D3DXVECTOR2(WindowWidth - 220, 25), 200,
                              100,
-                             DT_CENTER);
+                             DT_CENTER | DT_VCENTER | DT_SINGLELINE);
     srand(time(0));
     hr = D3DXCreateTextureFromFile(GetD3DDevice(), "Assets/spaceships.png", &playerTexture);
     // HRManager("Failed to load player texture.");
@@ -58,7 +57,7 @@ void SpaceshipGameLevel::InitLevel()
     {
         masses[i]->SetObjectTextureAddress(&massTexture);
     }
-    
+
     // Initialize players
     player1->Init(1, 64, 64, 2, 2, 1, 100, 300, 1.0, 0, 1, 0.1, audioManager);
     player2->Init(2, 64, 64, 2, 2, 1, 600, 300, 1.0, 0, 1, 0.1, audioManager);
@@ -223,7 +222,7 @@ void SpaceshipGameLevel::Update(int frameToUpdate)
     PointCheck();
 }
 
-void SpaceshipGameLevel::RenderGraphics(LPD3DXSPRITE spriteBrush)
+void SpaceshipGameLevel::RenderMovable(LPD3DXSPRITE spriteBrush)
 {
     player1->Draw(spriteBrush);
     player2->Draw(spriteBrush);
@@ -240,7 +239,7 @@ void SpaceshipGameLevel::PlaySounds()
 }
 
 
-void SpaceshipGameLevel::RenderText(LPD3DXSPRITE spriteBrush)
+void SpaceshipGameLevel::RenderStatic(LPD3DXSPRITE spriteBrush)
 {
     label1->Render(spriteBrush);
     label2->Render(spriteBrush);
@@ -255,12 +254,12 @@ void SpaceshipGameLevel::CleanUp()
     audioManager->PauseMusicChannel();
     backgroundMusic->CleanUp();
     backgroundMusic = nullptr;
-    
+
     player1->CleanUp();
     player2->CleanUp();
     player1 = nullptr;
     player2 = nullptr;
-    
+
     for (int i = 0; i < masses.size(); i++)
     {
         masses[i]->CleanUp();
@@ -268,10 +267,10 @@ void SpaceshipGameLevel::CleanUp()
     }
     masses.clear();
     masses.shrink_to_fit();
-    
+
     // TODO: clean up the label
     //label1->CleanUp();
-    
+
     playerTexture->Release();
     massTexture->Release();
     playerTexture = NULL;

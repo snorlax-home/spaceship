@@ -12,6 +12,8 @@ protected:
     D3DCOLOR color;
 public:
     Line(LPDIRECT3DDEVICE9 d3dDevice, int numVertices, std::vector<D3DXVECTOR2> vertices, D3DCOLOR color);
+    ~Line();
     void SetColor(D3DCOLOR color);
     void Render();
+    void CleanUp();
 };

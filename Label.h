@@ -20,4 +20,5 @@ public:
     void SetLabelText(std::string labelText);
     void SetColor(D3DCOLOR color);
     void Render(LPD3DXSPRITE spriteBrush);
+    void CleanUp();
 };

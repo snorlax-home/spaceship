@@ -18,7 +18,7 @@ MainMenu::MainMenu(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, Stat
                    CursorManager* cursorManager, int WindowWidth,
                    int WindowHeight):
     GameLevel(audioManager, d3DDevice, stateMachine, cursorManager, "MainMenu",
-              RenderState::Graphics | RenderState::Line | RenderState::Text, WindowWidth, WindowHeight)
+              RenderState::Line | RenderState::Static, WindowWidth, WindowHeight)
 {
 }
 
@@ -218,21 +218,21 @@ void MainMenu::Update(int frameToUpdate)
     }
 }
 
-void MainMenu::RenderGraphics(LPD3DXSPRITE graphicsBrush)
+void MainMenu::RenderMovable(LPD3DXSPRITE movableBrush)
+{
+}
+
+void MainMenu::RenderStatic(LPD3DXSPRITE staticBrush)
 {
     RECT bgRect;
     bgRect.left = 0;
     bgRect.top = 0;
     bgRect.right = 800;
     bgRect.bottom = 600;
-    graphicsBrush->Draw(texture, &bgRect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
-}
-
-void MainMenu::RenderText(LPD3DXSPRITE textBrush)
-{
+    staticBrush->Draw(texture, &bgRect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
     for (Button* b : button)
     {
-        b->Render(textBrush);
+        b->Render(staticBrush);
     }
 }
 
@@ -250,6 +250,14 @@ void MainMenu::RenderLine()
 
 void MainMenu::CleanUp()
 {
+    for (int i = 0; i < button.size(); i++)
+    {
+        button[i]->CleanUp();
+    }
+    for (int i = 0; i < lines.size(); i++)
+    {
+        lines[i].CleanUp();
+    }
 }
 
 void MainMenu::PlaySounds()

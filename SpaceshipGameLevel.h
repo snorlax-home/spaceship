@@ -43,8 +43,8 @@ public:
     void PointUpdate();
     void PointCheck();
     
-    void RenderGraphics(LPD3DXSPRITE graphicsBrush) override;
-    void RenderText(LPD3DXSPRITE textBrush) override;
+    void RenderMovable(LPD3DXSPRITE graphicsBrush) override;
+    void RenderStatic(LPD3DXSPRITE textBrush) override;
     void RenderLine() override;
 
     // Game Loop methods

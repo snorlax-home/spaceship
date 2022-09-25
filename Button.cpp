@@ -88,6 +88,11 @@ void Button::Render(LPD3DXSPRITE spriteBrush)
     label->Render(spriteBrush);
 }
 
+void Button::CleanUp()
+{
+    line->CleanUp();
+}
+
 void Button::RenderLine()
 {
     line->Render();
@@ -104,11 +109,6 @@ void Button::GetInput(LONG X, LONG Y, DIMOUSESTATE mouseState)
 void Button::Update()
 {
     // Check hover state
-    PrintLine("MouseX : " + std::to_string(mouseX) + " MouseY : " + std::to_string(mouseY));
-    PrintLine(
-        "RECT : " + std::to_string(mouseX > rect.left) + " " + std::to_string(mouseY > rect.top) + " " + std::to_string(
-            mouseX < rect.right) + " "
-        + std::to_string(mouseY < rect.bottom));
     if (mouseX > rect.left && mouseX < rect.right && mouseY > rect.top && mouseY < rect.bottom)
     {
         isHover = true;
@@ -117,13 +117,10 @@ void Button::Update()
     {
         isHover = false;
     }
-    PrintLine("IsHover : " + std::to_string(isHover));
     if (mouseState.rgbButtons[0] & 0x80)
     {
         if (isHover)
         {
-            PrintLine("MouseX" + std::to_string(mouseX));
-            PrintLine("MouseY" + std::to_string(mouseY));
             isClick = true;
             onClick(stateMachine);
         }

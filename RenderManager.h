@@ -6,8 +6,8 @@ class GameLevel;
 
 enum RenderState
 {
-    Graphics = 0b001,
-    Text = 0b010,
+    Movable = 0b001,
+    Static = 0b010,
     Line = 0b100
 };
 
@@ -20,12 +20,12 @@ private:
 private:
     static bool CheckRenderGraphics(int state)
     {
-        return (state & RenderState::Graphics) == RenderState::Graphics;
+        return (state & RenderState::Movable) == RenderState::Movable;
     }
 
     static bool CheckRenderText(int state)
     {
-        return (state & RenderState::Text) == RenderState::Text;
+        return (state & RenderState::Static) == RenderState::Static;
     }
 
     static bool CheckRenderLine(int state)

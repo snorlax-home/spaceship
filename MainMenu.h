@@ -19,7 +19,7 @@ public:
     void Update(int frameToUpdate);
     void CleanUp() override;
     void PlaySounds() override;
-    void RenderGraphics(LPD3DXSPRITE graphicsBrush) override;
-    void RenderText(LPD3DXSPRITE textBrush) override;
+    void RenderMovable(LPD3DXSPRITE movableBrush) override;
+    void RenderStatic(LPD3DXSPRITE staticBrush) override;
     void RenderLine() override;
 };

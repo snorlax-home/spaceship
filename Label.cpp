@@ -53,3 +53,4 @@ void Label::Render(LPD3DXSPRITE spriteBrush)
         font->DrawText(spriteBrush, labelText.c_str(), labelText.length(), &labelRect, format, color);
     }
 }
+
