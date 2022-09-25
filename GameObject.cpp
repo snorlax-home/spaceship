@@ -8,9 +8,8 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::Init(char GameObjectType, int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int positionX, int positionY, float mass)
+void GameObject::Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int positionX, int positionY, float mass)
 {
-    this->gameObjectType = GameObjectType;
     this->textureWidth = textureWidth;
     this->textureHeight = textureHeight;
     this->spriteWidth = spriteWidth;
@@ -22,10 +21,6 @@ void GameObject::Init(char GameObjectType, int textureWidth, int textureHeight, 
     this->mass = mass;
 }
 
-void GameObject::SetGameObjectType(char GameObjectType)
-{
-    this->gameObjectType = GameObjectType;
-}
 
 void GameObject::SetTextureWidth(int textureWidth)
 {
@@ -94,11 +89,6 @@ void GameObject::SetMass(float mass)
 
 
 // Getters
-char GameObject::GetGameObjectType()
-{
-    return gameObjectType;
-}
-
 int GameObject::GetTextureWidth()
 {
     return textureWidth;

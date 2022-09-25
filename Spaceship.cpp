@@ -8,7 +8,6 @@ Spaceship::Spaceship()
     playerNum = -1;
     textureRow = 0;
     textureColumn = 0;
-    spriteFPS = 0;
     frameCounter = 0;
     maxFrame = 0;
     velocity = D3DXVECTOR2(0,0);
@@ -16,11 +15,9 @@ Spaceship::Spaceship()
     engineForce = 0.0f;
     direction = 0.0f;
     rotationSpeed = 0.0f;
-    // spaceshipCollided = false;
     massCollided = false;
-    // wallCollided = false;
-    bounceSound = nullptr;
-    collectSound = nullptr;
+    bounceSound = new GameSound();
+    collectSound = new GameSound();
 }
 
 Spaceship::~Spaceship()
@@ -28,18 +25,17 @@ Spaceship::~Spaceship()
 }
 
 void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int textureRow, int textureColumn,
-                     int spriteFPS, int maxFrame,
+                     int maxFrame,
                      int positionX, int positionY, float engineForce, float direction, float mass,
                      float rotationSpeed, AudioManager* audioManager)
 {
-    GameObject::Init('S', textureWidth, textureHeight, textureWidth / textureColumn, textureHeight / textureRow,
+    GameObject::Init(textureWidth, textureHeight, textureWidth / textureColumn, textureHeight / textureRow,
                      positionX, positionY, mass);
 
     this->playerNum = playerNum;
     this->textureColumn = textureColumn;
     this->textureRow = textureRow;
-
-    this->spriteFPS = spriteFPS;
+    
     frameCounter = 0;
     this->maxFrame = maxFrame;
 
@@ -50,22 +46,13 @@ void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int tex
     this->engineForce = engineForce;
     this->direction = direction;
     this->rotationSpeed = rotationSpeed;
-
-
-    // Initialize and load spaceship AudioManager
-    // spaceshipAudioManager = new SpaceshipAudioManager();
-    // spaceshipAudioManager->InitializeAudio();
-    // spaceshipAudioManager->LoadSounds();
-
+    
     // Initialize sounds
-    bounceSound = new GameSound();
-    collectSound = new GameSound();
-
     bounceSound->Init("Assets/Audio/bounce.mp3", 1.0, 1.0, 0.0, false);
     collectSound->Init("Assets/Audio/point-get.ogg", 1.0, 1.0, 0.0, false);
-
-    bounceSound->SetSound(audioManager->CreateSounds(bounceSound->GetSoundFilePath(),bounceSound->GetLoop()));
-    collectSound->SetSound(audioManager->CreateSounds(collectSound->GetSoundFilePath(),collectSound->GetLoop()));
+    
+    bounceSound->SetSound(audioManager->CreateSounds(bounceSound->GetSoundFilePath(), bounceSound->GetLoop()));
+    collectSound->SetSound(audioManager->CreateSounds(collectSound->GetSoundFilePath(), collectSound->GetLoop()));
 }
 
 // Setters
@@ -102,11 +89,6 @@ void Spaceship::SetTextureColumn(int texture_column)
 void Spaceship::SetScaling(float scalingX, float scalingY)
 {
     GameObject::SetScaling(scalingX, scalingY);
-}
-
-void Spaceship::SetSpriteFPS(int sprite_fps)
-{
-    this->spriteFPS = sprite_fps;
 }
 
 void Spaceship::SetFrameCounter(int frame_counter)
@@ -201,20 +183,10 @@ void Spaceship::SetRotationSpeed(float rotation_speed)
     this->rotationSpeed = rotation_speed;
 }
 
-// void Spaceship::SetSpaceshipCollided(bool spaceship_Collided)
-// {
-//     this->spaceshipCollided = spaceship_Collided;
-// }
-//
 void Spaceship::SetMassCollided(bool mass_Collided)
 {
     this->massCollided = mass_Collided;
 }
-//
-// void Spaceship::SetWallCollided(bool wall_collided)
-// {
-//     this->wallCollided = wall_collided;
-// }
 
 // Getters
 int Spaceship::GetPlayerNum()
@@ -270,11 +242,6 @@ D3DXVECTOR2 Spaceship::GetScaling()
 D3DXVECTOR2* Spaceship::GetScalingAddress()
 {
     return GameObject::GetScalingAddress();
-}
-
-int Spaceship::GetSpriteFPS()
-{
-    return spriteFPS;
 }
 
 int Spaceship::GetFrameCounter()
@@ -342,8 +309,6 @@ bool Spaceship::GetMassCollided()
     return massCollided;
 }
 
-
-
 void Spaceship::InitDisplayRect()
 {
     int rectTop = 0;
@@ -391,14 +356,116 @@ void Spaceship::CollisionSpaceship(Spaceship* anotherSpaceship)
     if (CircleCollisionDetection(anotherSpaceship->GetSpriteWidth() / 2,
                                  anotherSpaceship->GetPosition() + anotherSpaceship->GetSpriteCenter()))
     {
-        // TODO: how to change this to be more realistic?
-        velocity.x *= -1.2;
-        velocity.y *= -1.2;
+        //------------ Push spaceship out of each other---------------
+        /*
+         * Getting both spaceships center point (vector of the window)
+         * by adding the position of the spaceship (top left of the sprite) and the center of the sprite (vector of the sprite, not window)
+         */
+        D3DXVECTOR2 centerPointPosition = GameObject::GetPosition() + GameObject::GetSpriteCenter();
+        D3DXVECTOR2 anotherSpaceshipCenterPointPosition = anotherSpaceship->GetPosition() + anotherSpaceship->GetSpriteCenter();
 
-        anotherSpaceship->SetVelocityX(-velocity.x);
-        anotherSpaceship->SetVelocityY(-velocity.y);
-        cout << "Collision detected between spaceships" << endl;
+        // Get the distance between the two spaceship center points
+        D3DXVECTOR2 distance = centerPointPosition - anotherSpaceshipCenterPointPosition;
+
+        /*
+         * Get the overlap between the two spaceships by using the distance between the two center points and subtracting the radius of the two spaceships
+         * then multiply by 0.5 to get the overlap for each spaceship
+         */
+        float overlap = 0.5f * (D3DXVec2Length(&distance) - (GameObject::GetSpriteWidth() / 2) - (anotherSpaceship->GetSpriteWidth() / 2));
+
+        /*
+         * Now, that we know how much they overlap, we need to translate that into a vector
+         * We do this by multiplying overlap with the unit vector of the distance between the two center points
+         * How to get unit vector of distance
+         *  Example: Getting the x component of distance: distance.x / D3DXVec2Length(&distance)
+         * Then we will get the current position and minus the overlap vector to get the new position
+         * minus because we want to push this spaceship in the opposite direction of the other spaceship
+         * do this for x and y component
+         */
+        int positionX = GetPosition().x - (overlap * distance.x / D3DXVec2Length(&distance));
+        int positionY = GetPosition().y - (overlap * distance.y / D3DXVec2Length(&distance));
         
+        // Similar to above, but add the overlap vector because we want to push the other spaceship in the opposite direction of this spaceship
+        int anotherSpaceshipPositionX = anotherSpaceship->GetPosition().x + (overlap * distance.x / D3DXVec2Length(&distance));
+        int anotherSpaceshipPositionY = anotherSpaceship->GetPosition().y + (overlap * distance.y / D3DXVec2Length(&distance));
+
+        // Set the new position of the two spaceships
+        SetPosition(positionX, positionY);
+        anotherSpaceship->SetPosition(anotherSpaceshipPositionX, anotherSpaceshipPositionY);
+        //------------ Push spaceship out of each other END---------------
+
+        //------------ Calculate new velocity for both spaceships---------------
+        /*
+         * Getting the vector between the two center points and normalize it by dividing the length of the vector
+         * Therefore, we will get the normal unit vector
+         */
+        float normalX = (anotherSpaceshipCenterPointPosition.x - centerPointPosition.x) / D3DXVec2Length(&distance);
+        float normalY = (anotherSpaceshipCenterPointPosition.y - centerPointPosition.y) / D3DXVec2Length(&distance);
+
+        /*
+         * Get the tangential unit vector by flipping the y-axis and the x-axis of the normal unit vector
+         * Tangential unit vector is perpendicular to the normal unit vector, can be proven using dot product of tangent unit vector and normal unit vector
+         */
+        float tangentX = -normalY;
+        float tangentY = normalX;
+
+        /*
+         * Dot Product between the spaceship's velocity vector and the tangential unit vector
+         * i.e. how much of the velocity vector will be transferred towards the tangential vector
+         */
+        float dpTangent1 = GetVelocity().x * tangentX + GetVelocity().y * tangentY;
+        float dpTangent2 = anotherSpaceship->GetVelocity().x * tangentX + anotherSpaceship->GetVelocity().y * tangentY;
+
+        
+        /*
+         * Dot Product between the spaceship's velocity vector and the normal unit vector
+         * i.e. How much of the velocity vector will be transferred towards the normal vector
+         */
+        float dpNormal1 = GetVelocity().x * normalX + GetVelocity().y * normalY;
+        float dpNormal2 = anotherSpaceship->GetVelocity().x * normalX + anotherSpaceship->GetVelocity().y * normalY;
+        
+        /*
+         * One Dimensional Elastic Collision Formula, for the normal
+         * Using the equation
+         * v1 = m1 - m2 / m1 + m2 * v1 + 2 * m2 / m1 + m2 * v2
+         * v2 = m2 - m1 / m1 + m2 * v2 + 2 * m1 / m1 + m2 * v1
+         * u1 is substituted with dpNormal1 
+         * u2 is substituted with dpNormal2
+         * used the velocity transferred to the normal vector instead of directly using the velocity
+         *
+         * Note:
+         * m1 and m2 are the mass of the two objects
+         * u1 and u2 are the initial velocity of the two objects
+         * v1 and v2 are the final velocity of the two objects
+         */
+        
+        float v1 = (GetMass() - anotherSpaceship->GetMass()) / (GetMass() + anotherSpaceship->GetMass()) * dpNormal1 + 2.0f * anotherSpaceship->GetMass() / (GetMass() + anotherSpaceship->GetMass()) * dpNormal2;
+        float v2 = (anotherSpaceship->GetMass() - GetMass()) / (GetMass() + anotherSpaceship->GetMass()) * dpNormal2 + 2.0f * GetMass() / (GetMass() + anotherSpaceship->GetMass()) * dpNormal1;
+
+        /*
+         * Updating this spaceship velocity by adding together the tangential response and the normal response
+         * Tangential response is the tangent unit vector multiply by the velocity transferred to the tangential vector
+         * Tangential response does not need to go through the elastic collision formula because it is not the point of collision
+         * Normal response is the normal unit vector multiply by the final velocity of the normal vector
+         */
+        float velocityX = tangentX * dpTangent1 + normalX * v1;
+        float velocityY = tangentY * dpTangent1 + normalY * v1;
+
+        // Do the same thing for the other spaceship
+        float anotherSpaceshipVelocityX = tangentX * dpTangent2 + normalX * v2;
+        float anotherSpaceshipVelocityY = tangentY * dpTangent2 + normalY * v2;
+
+        // Note: By adding together the velocity vector of this spaceship and the other spaceship,
+        // it should be equal to the velocity of this spaceship before collision response is calculated
+
+        // Set the velocity of this spaceship and the other spaceship
+        SetVelocity(velocityX,velocityY);
+        anotherSpaceship->SetVelocity(anotherSpaceshipVelocityX, anotherSpaceshipVelocityY);
+        //------------ Calculate new velocity for both spaceships END ---------------
+        
+        cout << "Collision detected between spaceships" << endl;
+ 
+        // Set bounceSound to true so that the bounce sound will be played
         bounceSound->SetPlaySoundFlag(true);
     }
 }
@@ -414,8 +481,8 @@ void Spaceship::CollisionMass(Mass* anotherMass)
                                  anotherMass->GetPosition() + anotherMass->GetSpriteCenter()))
     {
         GameObject::SetMass(GameObject::GetMass() + anotherMass->GetMass());
-
-        anotherMass->Consumed();
+        
+        anotherMass->SetHp(anotherMass->GetHp() - 1);
         cout << "Collision detected between spaceship and mass" << endl;
         massCollided = true;
         collectSound->SetPlaySoundFlag(true);
@@ -448,19 +515,55 @@ void Spaceship::WindowBounce(int windowWidth, int windowHeight)
      */
     if (GameObject::GetPosition().x < 0 || GameObject::GetPosition().x > windowWidth - GameObject::GetSpriteWidth())
     {
-        // TODO: nid to change this or not?
-        velocity.x *= -1.2;
+        if (GameObject::GetPosition().x < 0)
+        {
+            GameObject::SetPositionX(0);
+        }
+        else
+        {
+            GameObject::SetPositionX(windowWidth - GameObject::GetSpriteWidth());
+        }
+        // Normal Vector of Line Segment
+        D3DXVECTOR2 BorderSP = D3DXVECTOR2(0, 0);
+        D3DXVECTOR2 BorderEP = D3DXVECTOR2(0, 600);
+        D3DXVECTOR2 minus = BorderEP - BorderSP;
+        D3DXVECTOR2 BorderDir = minus / D3DXVec2Length(&minus);
         
-        cout << "Collision detected between spaceship and window" << endl;
+        D3DXVECTOR2 BorderNorm = D3DXVECTOR2(-BorderDir.y, BorderDir.x);
+        
+        D3DXVECTOR2 velocityNorm = BorderNorm * D3DXVec2Dot(&velocity, &BorderNorm);
+        D3DXVECTOR2 velocityTangent = velocity - velocityNorm;
+        SetVelocity(velocityTangent - velocityNorm);
+        
+        cout << "Collision detected between spaceship and window left or right" << endl;
         bounceSound->SetPlaySoundFlag(true);
-        
     }
+
     if (GameObject::GetPosition().y < 0 || GameObject::GetPosition().y > windowHeight - GameObject::GetSpriteHeight())
     {
-        velocity.y *= -1.2;
+        if (GameObject::GetPosition().y < 0)
+        {
+            GameObject::SetPositionY(0);
+        }
+        else
+        {
+            GameObject::SetPositionY(windowHeight - GameObject::GetSpriteHeight());
+        }
+        
+        // Normal Vector of Line Segment
+        D3DXVECTOR2 BorderSP = D3DXVECTOR2(0, 0);
+        D3DXVECTOR2 BorderEP = D3DXVECTOR2(800, 0);
+        D3DXVECTOR2 minus = BorderEP - BorderSP;
+        D3DXVECTOR2 BorderDir = minus / D3DXVec2Length(&minus);
+        
+        D3DXVECTOR2 BorderNorm = D3DXVECTOR2(BorderDir.y, -BorderDir.x);
+
+        D3DXVECTOR2 velocityNorm = BorderNorm * D3DXVec2Dot(&velocity, &BorderNorm);
+        D3DXVECTOR2 velocityTangent = velocity - velocityNorm;
+        SetVelocity(velocityTangent - velocityNorm);
         
         bounceSound->SetPlaySoundFlag(true);
-        std::cout << "Collision detected between spaceship and window" << endl;
+        std::cout << "Collision detected between spaceship and top or bottom" << endl;
     }
 }
 
@@ -517,14 +620,16 @@ void Spaceship::AlterSoundPan()
 
 
 void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction,
-                       Spaceship* anotherSpaceship, Mass* massArray[], int arraySize, int windowWidth, int windowHeight)
+                       Spaceship* anotherSpaceship, std::vector<Mass*>* masses, int windowWidth, int windowHeight)
 {
     Move(turnLeft, turnRight, goForward, goBackward, friction);
     CollisionSpaceship(anotherSpaceship);
-    for (int i = 0; i < arraySize; i++)
+
+    for (int i = 0; i < masses->size(); i++)
     {
-        CollisionMass(massArray[i]);
+        CollisionMass(masses->at(i));
     }
+    
     WindowBounce(windowWidth, windowHeight);
 
     // TODO: Make NextFrame work properly
