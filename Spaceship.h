@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-
 #include "GameObject.h"
 #include "Mass.h"
 #include "AudioManager.h"
@@ -19,6 +18,7 @@ private:
 	float engineForce;
 	float direction;
 	float rotationSpeed;
+	float mass;
 	bool massCollided;
 	GameSound* bounceSound;
 	GameSound* collectSound;
@@ -34,7 +34,7 @@ private:
 
 public:
 	Spaceship();
-	~Spaceship();
+	~Spaceship() override;
 	
 	void Init(int playerNum, int textureWidth, int textureHeight, int textureRow, int textureColumn, int maxFrame, int positionX, int positionY,
 		float engineForce, float direction, float mass, float rotationSpeed, AudioManager* audioManager);
@@ -56,7 +56,7 @@ public:
 	void SetAccelerationY(float y);
 	void SetEngineForce(float engine_Force);
 	void SetDirection(float spaceship_Direction);
-	void SetMass(float mass) override;
+	void SetMass(float spaceship_Mass);
 	void SetRotationSpeed(float rotation_speed);
 	void SetMassCollided(bool mass_Collided);
 
@@ -70,7 +70,7 @@ public:
 	D3DXVECTOR2 GetAcceleration();
 	float GetEngineForce();
 	float GetDirection();
-	float GetMass() override;
+	float GetMass();
 	float GetRotationSpeed();
 	bool GetMassCollided();
 	
@@ -79,4 +79,6 @@ public:
 	            vector<Mass*>* masses, int windowWidth, int windowHeight);
 	void Draw(LPD3DXSPRITE spriteBrush);
 	void PlaySounds(AudioManager *audioManager);
+
+	void CleanUp() override;
 };

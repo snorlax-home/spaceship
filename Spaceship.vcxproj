@@ -193,8 +193,8 @@
     <Content Include="Assets\gameover.jpg" />
     <Content Include="Assets\main.jpg" />
     <Content Include="Assets\mass.png" />
-    <Content Include="Assets\practical9.png" />
     <Content Include="Assets\cursor.png" />
+    <Content Include="Assets\spaceships.png" />
     <Content Include="Spaceship.sln" />
     <Content Include="Spaceship.vcxproj.filters" />
     <Content Include="Spaceship.vcxproj.user" />
