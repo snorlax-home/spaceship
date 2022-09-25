@@ -49,7 +49,7 @@ void SpaceshipGameLevel::InitLevel()
     // Initialize masses
     for (int i = 0; i < masses.size(); i++)
     {
-        masses[i]->Init(32, 32, 9, 9, this->windowWidth, this->windowHeight, 1, 1);
+        masses[i]->Init(32, 32, 9, 9, this->WindowWidth, this->WindowHeight, 1, 1);
     }
 
     // Initialize player point
@@ -195,9 +195,9 @@ void SpaceshipGameLevel::Update(int frameToUpdate)
     for (int i = 0; i < frameToUpdate; i++)
     {
         // update player1 and player 2 for the number of frames to update
-        player1->Update(aKeyPressed, dKeyPressed, wKeyPressed, sKeyPressed, friction, player2, massArray, 3,
+        player1->Update(aKeyPressed, dKeyPressed, wKeyPressed, sKeyPressed, friction, player2, &masses,
                         WindowWidth, WindowHeight);
-        player2->Update(leftKeyPressed, rightKeyPressed, upKeyPressed, downKeyPressed, friction, player1, massArray, 3,
+        player2->Update(leftKeyPressed, rightKeyPressed, upKeyPressed, downKeyPressed, friction, player1, &masses,
                         WindowWidth, WindowHeight);
     }
 
