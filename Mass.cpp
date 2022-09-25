@@ -183,13 +183,13 @@ void Mass::Update()
 	}
 }
 
-void Mass::Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture)
+void Mass::Draw(LPD3DXSPRITE spriteBrush)
 {
 	D3DXMatrixTransformation2D(this->GetMatrixAddress(), NULL, 0.0f, this->GetScalingAddress(), this->GetSpriteCenterAddress(), 0.0f, this->GetPositionAddress());
 	spriteBrush->SetTransform(this->GetMatrixAddress());
 	if (this->GetHp() > 0)
 	{
-		HRESULT hr = spriteBrush->Draw(texture, GetDisplayRectAddress(), NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
+		HRESULT hr = spriteBrush->Draw(objectTexture, GetDisplayRectAddress(), NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
 		if (FAILED(hr))
 		{
 			std::cout << "Draw Failed." << endl;

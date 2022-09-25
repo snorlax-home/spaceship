@@ -33,7 +33,7 @@ private:
     bool aKeyPressed;
     bool dKeyPressed;
     bool gameEnd;
-    LPDIRECT3DTEXTURE9 playertexture;
+    LPDIRECT3DTEXTURE9 playerTexture;
     LPDIRECT3DTEXTURE9 massTexture;
     GameSound* backgroundMusic;
 

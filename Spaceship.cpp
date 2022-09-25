@@ -638,13 +638,13 @@ void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBac
     AlterSoundPan();
 }
 
-void Spaceship::Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture)
+void Spaceship::Draw(LPD3DXSPRITE spriteBrush)
 {
     D3DXMatrixTransformation2D(this->GetMatrixAddress(), NULL, 0.5f, this->GetScalingAddress(),
                                this->GetSpriteCenterAddress(), this->GetDirection(), this->GetPositionAddress());
     spriteBrush->SetTransform(this->GetMatrixAddress());
 
-    HRESULT hr = spriteBrush->Draw(texture, GetDisplayRectAddress(), NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
+    HRESULT hr = spriteBrush->Draw(objectTexture, GetDisplayRectAddress(), NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
     if (FAILED(hr))
     {
         std::cout << "Draw Failed." << endl;
