@@ -43,13 +43,15 @@ public:
 	void PlaySoundEffect(FMOD::Sound* sound, float volume, float pitch, float pan);
 	void PlayMusic(FMOD::Sound* sound, float volume, float pitch, float pan);
 	void UpdateSound();
-	// Altering channel properties only limited to music Channel
-	// TODO: continue write comment here
+	/* Altering channel properties only limited to music Channel
+	* as once music is played, have to change the channel properties to alter the music properties
+	 */
 	void AlterMusicChannelVolume(float volume);
 	void AlterMusicChannelPitch(float pitch);
 	void AlterMusicChannelPan(float pan);
 	void PauseMusicChannel();
 	void ResumeMusicChannel();
 
+	// Clean up the audioManager object
 	void CleanUp();
 };

@@ -10,7 +10,7 @@ LevelManager::~LevelManager()
     for (std::pair<const std::string, GameLevel*> map : levelMap)
     {
         levelMap.erase(map.first);
-    }
+    } 
 }
 
 void LevelManager::RegisterLevel(std::string levelName, GameLevel* level)

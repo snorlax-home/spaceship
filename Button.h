@@ -3,7 +3,7 @@
 #include <dinput.h>
 #include <functional>
 
-#include "StateMachine.h"
+#include "StateMachine.h" 
 #include "Label.h"
 #include "Line.h"
 

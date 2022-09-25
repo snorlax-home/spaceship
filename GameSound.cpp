@@ -4,6 +4,7 @@
 
 GameSound::GameSound()
 {
+    // Initialize variables to NULL
     sound = nullptr;
     soundFilePath = nullptr;
     volume = 0.0f;
@@ -20,6 +21,7 @@ GameSound::~GameSound()
 
 void GameSound::Init(const char* filePath, float soundVolume,float soundPitch, float soundPan, bool soundLoop)
 {
+    // Assign values to variables
     this->soundFilePath = filePath;
     this->volume = soundVolume;
     this->pitch = soundPitch;
@@ -28,6 +30,7 @@ void GameSound::Init(const char* filePath, float soundVolume,float soundPitch, f
 }
 
 // Setters
+// Set the pointer to the sound object
 void GameSound::SetSound(FMOD::Sound* newSound)
 {
 	this->sound = newSound;
@@ -64,6 +67,7 @@ void GameSound::SetLoop(bool soundLoop)
     this->loop = soundLoop;
 }
 
+// Set the play sound flag to determine if the sound should be played
 void GameSound::SetPlaySoundFlag(bool playSound)
 {
     this->playSoundFlag = playSound;
@@ -76,21 +80,6 @@ FMOD::Sound* GameSound::GetSound()
     return sound;
 }
 
-
-void GameSound::GetSoundName()
-{
-    char* soundName = nullptr;
-    FMOD_RESULT result = sound->getName(soundName, 256);
-    if (result == FMOD_OK)
-    {
-        std::cout << "Sound name: " << soundName << std::endl;
-    }
-    else
-    {
-        std::cout << "Error getting sound name" << std::endl;
-    }
-    // std::cout << soundName << std::endl;
-}
 
 // Get the file path for the sound file
 const char* GameSound::GetSoundFilePath()
@@ -122,14 +111,19 @@ bool GameSound::GetLoop()
     return loop;
 }
 
+// Get the play sound flag to determine if the sound should be played
 bool GameSound::GetPlaySoundFlag()
 {
     return playSoundFlag;
 }
 
+// Clean up GameSound object
 void GameSound::CleanUp()
 {
+    // Release the sound object
     sound->release();
+
+    // Set pointers to NULL
     sound = nullptr;
     soundFilePath = nullptr;
 }

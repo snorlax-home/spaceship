@@ -10,7 +10,7 @@ class SpaceshipGameLevel : public GameLevel
 private:
     Label* label1;
     Label* label2;
-
+    
     Spaceship* player1;
     Spaceship* player2;
 
@@ -19,6 +19,8 @@ private:
     int player1Points;
     int player2Points;
     float friction;
+
+    // flags for keyboard keys
     bool upKeyPressed;
     bool downKeyPressed;
     bool leftKeyPressed;
@@ -28,6 +30,7 @@ private:
     bool aKeyPressed;
     bool dKeyPressed;
     bool gameEnd;
+    
     LPDIRECT3DTEXTURE9 playerTexture;
     LPDIRECT3DTEXTURE9 massTexture;
     GameSound* backgroundMusic;

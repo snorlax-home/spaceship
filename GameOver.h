@@ -11,7 +11,7 @@
 class GameOver : public GameLevel
 {
 private:
-    std::vector<Button*> button;
+    std::vector<Button*> button; 
     LPDIRECT3DTEXTURE9 texture;
 public:
     GameOver(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, StateMachine* stateMachine,
