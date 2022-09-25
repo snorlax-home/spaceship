@@ -9,6 +9,11 @@ void startGame(StateMachine* stateMachine)
     stateMachine->ChangeState("Spaceship");
 }
 
+void creditScreen(StateMachine* stateMachine)
+{
+    stateMachine->ChangeState("Credits");
+}
+
 void quitGame(StateMachine* stateMachine)
 {
     PostQuitMessage(0);
@@ -34,7 +39,10 @@ void MainMenu::InitLevel()
     button.push_back(new Button(&startGame, "Start Game", D3DXVECTOR2(300, 300), D3DXVECTOR2(200, 50), WHITE(255),
                                 WHITE(255), GREEN(255), GREEN(255),BLUE(255), BLUE(255), this->d3DDevice,
                                 this->stateMachine));
-    button.push_back(new Button(&quitGame, "Quit Game", D3DXVECTOR2(300, 400), D3DXVECTOR2(200, 50), WHITE(255),
+    button.push_back(new Button(&quitGame, "Quit Game", D3DXVECTOR2(300, 375), D3DXVECTOR2(200, 50), WHITE(255),
+                                WHITE(255), GREEN(255), GREEN(255),RED(255), RED(255), this->d3DDevice,
+                                this->stateMachine));
+    button.push_back(new Button(&creditScreen, "Credits", D3DXVECTOR2(300, 450), D3DXVECTOR2(200, 50), WHITE(255),
                                 WHITE(255), GREEN(255), GREEN(255),RED(255), RED(255), this->d3DDevice,
                                 this->stateMachine));
     // Spaceship vertex
