@@ -3,20 +3,22 @@
 #include <d3dx9.h>
 #include "Utils.cpp"
 
-Button::Button(std::function<void(GameLevelManager*)> onClick, LPCSTR buttonText, D3DXVECTOR2 position,
-               D3DXVECTOR2 size, D3DCOLOR color,
-               D3DCOLOR textColor, LPDIRECT3DDEVICE9 d3dDevice, GameLevelManager* gameLevelManager)
+void Button::SetMouseX(LONG X)
 {
-    Button(onClick, buttonText, position, size, color, textColor, GREEN(255), textColor, RED(255), textColor,
-           d3dDevice, gameLevelManager);
+    this->mouseX = X;
 }
 
-Button::Button(std::function<void(GameLevelManager*)> onClick, LPCSTR buttonText, D3DXVECTOR2 position,
+void Button::SetMouseY(LONG Y)
+{
+    this->mouseY = Y;
+}
+
+Button::Button(std::function<void(StateMachine*)> onClick, LPCSTR buttonText, D3DXVECTOR2 position,
                D3DXVECTOR2 size, D3DCOLOR color,
                D3DCOLOR textColor, D3DCOLOR hoverColor, D3DCOLOR hoverTextColor, D3DCOLOR clickColor,
-               D3DCOLOR clickTextColor, LPDIRECT3DDEVICE9 d3dDevice, GameLevelManager* gameLevelManager)
+               D3DCOLOR clickTextColor, LPDIRECT3DDEVICE9 d3dDevice, StateMachine* gameLevelManager)
 {
-    this->gameLevelManager= gameLevelManager;
+    this->stateMachine = gameLevelManager;
     this->onClick = onClick;
     this->buttonText = buttonText;
     this->position = position;
@@ -27,8 +29,10 @@ Button::Button(std::function<void(GameLevelManager*)> onClick, LPCSTR buttonText
     this->hoverTextColor = hoverTextColor;
     this->clickColor = clickColor;
     this->clickTextColor = clickTextColor;
-    isHover = false;
-    isClick = false;
+    this->isHover = false;
+    this->isClick = false;
+    this->mouseX = 0;
+    this->mouseY = 0;
     CalcRect();
     this->label = InitLabel(d3dDevice);
     this->line = InitLine(d3dDevice);
@@ -89,9 +93,22 @@ void Button::RenderLine()
     line->Render();
 }
 
-void Button::Update(LONG mouseX, LONG mouseY, DIMOUSESTATE mouseState)
+void Button::GetInput(LONG X, LONG Y, DIMOUSESTATE mouseState)
 {
-    // Check hover stage
+    SetMouseX(X);
+    SetMouseY(Y);
+    this->mouseState = mouseState;
+    // PrintLine("MouseState : " + std::to_string(mouseState.rgbButtons[0]));
+}
+
+void Button::Update()
+{
+    // Check hover state
+    PrintLine("MouseX : " + std::to_string(mouseX) + " MouseY : " + std::to_string(mouseY));
+    PrintLine(
+        "RECT : " + std::to_string(mouseX > rect.left) + " " + std::to_string(mouseY > rect.top) + " " + std::to_string(
+            mouseX < rect.right) + " "
+        + std::to_string(mouseY < rect.bottom));
     if (mouseX > rect.left && mouseX < rect.right && mouseY > rect.top && mouseY < rect.bottom)
     {
         isHover = true;
@@ -100,7 +117,7 @@ void Button::Update(LONG mouseX, LONG mouseY, DIMOUSESTATE mouseState)
     {
         isHover = false;
     }
-
+    PrintLine("IsHover : " + std::to_string(isHover));
     if (mouseState.rgbButtons[0] & 0x80)
     {
         if (isHover)
@@ -108,7 +125,7 @@ void Button::Update(LONG mouseX, LONG mouseY, DIMOUSESTATE mouseState)
             PrintLine("MouseX" + std::to_string(mouseX));
             PrintLine("MouseY" + std::to_string(mouseY));
             isClick = true;
-            onClick(gameLevelManager);
+            onClick(stateMachine);
         }
     }
     else

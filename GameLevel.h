@@ -2,9 +2,12 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <dinput.h>
+#include <string>
 
-#include "AudioManager.h"
-#include "GameLevelManager.h"
+#include "CursorManager.h"
+
+class AudioManager;
+class StateMachine;
 
 class GameLevel
 {
@@ -12,18 +15,28 @@ protected:
     // Managers
     LPDIRECT3DDEVICE9 d3DDevice;
     AudioManager* audioManager;
-    GameLevelManager* gameLevelManager;
+    StateMachine* stateMachine;
+    CursorManager* cursorManager;
+    std::string gameLevelName;
+    int renderState;
+    int WindowWidth, WindowHeight;
+
 
 public:
-    GameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, GameLevelManager* gameLevelManager);
-    ~GameLevel();
+    GameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, StateMachine* stateMachine,
+              CursorManager* cursorManager,
+              std::string gameLevelName, int renderState, int WindowWidth, int WindowHeight);
+    virtual ~GameLevel();
     virtual void InitLevel();
-    virtual void GetInput(BYTE*, DIMOUSESTATE);
-    virtual void Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate);
-    virtual void Render(LPD3DXSPRITE);
+    virtual void GetInput(BYTE* diKeys, DIMOUSESTATE mouseState);
+    virtual void Update(int frameToUpdate);
     virtual void PlaySounds();
+    virtual void RenderGraphics(LPD3DXSPRITE graphicsBrush);
+    virtual void RenderText(LPD3DXSPRITE textBrush);
     virtual void RenderLine();
     virtual void CleanUp();
-    virtual LPDIRECT3DDEVICE9 GetD3DDevice();
-    virtual AudioManager* GetAudioManager();
+    LPDIRECT3DDEVICE9 GetD3DDevice();
+    AudioManager* GetAudioManager();
+    int GetRenderState();
+    std::string GetLevelName();
 };

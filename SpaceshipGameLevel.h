@@ -16,7 +16,6 @@ private:
     Mass* mass1;
     Mass* mass2;
     Mass* mass3;
-    //SpaceshipLevelAudioManager* spaceshipLevelAudioManager;
     int player1Points;
     int player2Points;
     float friction;
@@ -33,8 +32,6 @@ private:
     bool sKeyPressed; 
     bool aKeyPressed;
     bool dKeyPressed;
-    int windowWidth;
-    int windowHeight;
     bool gameEnd;
     LPDIRECT3DTEXTURE9 playertexture;
     LPDIRECT3DTEXTURE9 massTexture;
@@ -42,12 +39,15 @@ private:
     
 
 public:
-    SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, GameLevelManager* gameLevelManager,
+    SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, StateMachine* stateMachine,CursorManager* cursorManager,
                        int windowWidth, int windowHeight);
+    ~SpaceshipGameLevel() override;
     void InitLevel();
     void GetInput(BYTE*, DIMOUSESTATE) override;
-    void Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate);
-    void Render(LPD3DXSPRITE spriteBrush);
     void PlaySounds();
     void CleanUp();
+    void Update(int frameToUpdate) override;
+    void RenderGraphics(LPD3DXSPRITE graphicsBrush) override;
+    void RenderText(LPD3DXSPRITE textBrush) override;
+    void RenderLine() override;
 };

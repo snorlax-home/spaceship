@@ -1,18 +1,62 @@
 #include "GameLevel.h"
 
-GameLevel::GameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, GameLevelManager* gameLevelManager)
+#include <stdexcept>
+
+#include "AudioManager.h"
+#include "StateMachine.h"
+
+GameLevel::GameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, StateMachine* stateMachine,
+                     CursorManager* cursorManager, std::string gameLevelName, int renderState, int WindowWidth,
+                     int WindowHeight):
+    audioManager(audioManager), d3DDevice(d3DDevice),
+    stateMachine(stateMachine), cursorManager(cursorManager), WindowWidth(WindowWidth),
+    WindowHeight(WindowHeight), gameLevelName(gameLevelName), renderState(
+        renderState)
 {
-    this->audioManager = audioManager;
-    this->d3DDevice = d3DDevice;
-    this->gameLevelManager = gameLevelManager;
 }
 
 GameLevel::~GameLevel()
-{
-}
+= default;
 
 void GameLevel::InitLevel()
 {
+    throw std::logic_error("The method or operation is not implemented.");
+}
+
+void GameLevel::PlaySounds()
+{
+    throw std::logic_error("The method or operation is not implemented.");
+}
+
+void GameLevel::RenderGraphics(LPD3DXSPRITE graphicsBrush)
+{
+    throw std::logic_error("The method or operation is not implemented.");
+}
+
+void GameLevel::RenderText(LPD3DXSPRITE textBrush)
+{
+    throw std::logic_error("The method or operation is not implemented.");
+}
+
+void GameLevel::RenderLine()
+{
+    throw std::logic_error("The method or operation is not implemented.");
+}
+
+void GameLevel::GetInput(BYTE*, DIMOUSESTATE)
+{
+    throw std::logic_error("The method or operation is not implemented.");
+}
+
+void GameLevel::Update(int frameToUpdate)
+{
+    throw std::logic_error("The method or operation is not implemented.");
+}
+
+
+void GameLevel::CleanUp()
+{
+    throw std::logic_error("The method or operation is not implemented.");
 }
 
 LPDIRECT3DDEVICE9 GameLevel::GetD3DDevice()
@@ -25,31 +69,12 @@ AudioManager* GameLevel::GetAudioManager()
     return audioManager;
 }
 
-void GameLevel::PlaySounds()
+int GameLevel::GetRenderState()
 {
+    return renderState;
 }
 
-
-
-void GameLevel::GetInput(BYTE*, DIMOUSESTATE)
+std::string GameLevel::GetLevelName()
 {
-}
-
-void GameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate)
-{
-    GetInput(diKeys, mouseState);
-}
-
-void GameLevel::Render(LPD3DXSPRITE spriteBrush)
-{
-}
-
-
-
-void GameLevel::RenderLine()
-{
-}
-
-void GameLevel::CleanUp()
-{
+    return gameLevelName;
 }

@@ -1,18 +1,28 @@
 ﻿#include "MainMenu.h"
 #include "colors.h"
+#include "RenderManager.h"
+#include "Line.h"
+#include "Utils.cpp"
 
-void startGame(GameLevelManager* gameManager)
+void startGame(StateMachine* stateMachine)
 {
-    gameManager->NextLevel();
+    stateMachine->ChangeState("Spaceship");
 }
 
-void quitGame(GameLevelManager* gameManager)
+void quitGame(StateMachine* stateMachine)
 {
     PostQuitMessage(0);
 }
 
-MainMenu::MainMenu(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, GameLevelManager* gameLevelManager):
-    GameLevel(audioManager, d3DDevice, gameLevelManager)
+MainMenu::MainMenu(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, StateMachine* stateMachine,
+                   CursorManager* cursorManager, int WindowWidth,
+                   int WindowHeight):
+    GameLevel(audioManager, d3DDevice, stateMachine, cursorManager, "MainMenu",
+              RenderState::Graphics | RenderState::Line | RenderState::Text, WindowWidth, WindowHeight)
+{
+}
+
+MainMenu::~MainMenu()
 {
 }
 
@@ -21,12 +31,12 @@ void MainMenu::InitLevel()
     texture = nullptr;
     D3DXCreateTextureFromFile(d3DDevice, "Assets/main.jpg", &texture);
 
-    button.push_back(Button(&startGame, "Start Game", D3DXVECTOR2(300, 300), D3DXVECTOR2(200, 50), WHITE(255),
-                            WHITE(255), GREEN(255), GREEN(255),BLUE(255), BLUE(255), this->d3DDevice,
-                            this->gameLevelManager));
-    button.push_back(Button(&quitGame, "Quit Game", D3DXVECTOR2(300, 400), D3DXVECTOR2(200, 50), WHITE(255),
-                            WHITE(255), GREEN(255), GREEN(255),RED(255), RED(255), this->d3DDevice,
-                            this->gameLevelManager));
+    button.push_back(new Button(&startGame, "Start Game", D3DXVECTOR2(300, 300), D3DXVECTOR2(200, 50), WHITE(255),
+                                WHITE(255), GREEN(255), GREEN(255),BLUE(255), BLUE(255), this->d3DDevice,
+                                this->stateMachine));
+    button.push_back(new Button(&quitGame, "Quit Game", D3DXVECTOR2(300, 400), D3DXVECTOR2(200, 50), WHITE(255),
+                                WHITE(255), GREEN(255), GREEN(255),RED(255), RED(255), this->d3DDevice,
+                                this->stateMachine));
     // Spaceship vertex
     std::vector<D3DXVECTOR2> vertexS = {
         D3DXVECTOR2(50, 60),
@@ -177,56 +187,60 @@ void MainMenu::InitLevel()
     };
 
     lines = {
-        Line(d3DDevice, vertexS.size(), vertexS, WHITE(255)),
-        Line(d3DDevice, vertexP1.size(), vertexP1, WHITE(255)),
-        Line(d3DDevice, vertexP2.size(), vertexP2, WHITE(255)),
-        Line(d3DDevice, vertexA1.size(), vertexA1, WHITE(255)),
-        Line(d3DDevice, vertexA2.size(), vertexA2, WHITE(255)),
-        Line(d3DDevice, vertexC.size(), vertexC, WHITE(255)),
-        Line(d3DDevice, vertexE.size(), vertexE, WHITE(255)),
-        Line(d3DDevice, vertexS2.size(), vertexS2, WHITE(255)),
-        Line(d3DDevice, vertexH.size(), vertexH, WHITE(255)),
-        Line(d3DDevice, vertexI.size(), vertexI, WHITE(255)),
-        Line(d3DDevice, vertexP3.size(), vertexP3, WHITE(255)),
-        Line(d3DDevice, vertexP4.size(), vertexP4, WHITE(255)),
+        Line::Line(d3DDevice, vertexS.size(), vertexS, WHITE(255)),
+        Line::Line(d3DDevice, vertexP1.size(), vertexP1, WHITE(255)),
+        Line::Line(d3DDevice, vertexP2.size(), vertexP2, WHITE(255)),
+        Line::Line(d3DDevice, vertexA1.size(), vertexA1, WHITE(255)),
+        Line::Line(d3DDevice, vertexA2.size(), vertexA2, WHITE(255)),
+        Line::Line(d3DDevice, vertexC.size(), vertexC, WHITE(255)),
+        Line::Line(d3DDevice, vertexE.size(), vertexE, WHITE(255)),
+        Line::Line(d3DDevice, vertexS2.size(), vertexS2, WHITE(255)),
+        Line::Line(d3DDevice, vertexH.size(), vertexH, WHITE(255)),
+        Line::Line(d3DDevice, vertexI.size(), vertexI, WHITE(255)),
+        Line::Line(d3DDevice, vertexP3.size(), vertexP3, WHITE(255)),
+        Line::Line(d3DDevice, vertexP4.size(), vertexP4, WHITE(255)),
     };
 }
 
 void MainMenu::GetInput(BYTE* byte, DIMOUSESTATE dimousestate)
 {
-    GameLevel::GetInput(byte, dimousestate);
-}
-
-void MainMenu::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate)
-{
-    for (int i = 0; i < frameToUpdate; i++)
+    for (int i = 0; i < button.size(); i++)
     {
-        for (Button b : button)
-        {
-            b.Update(mouseX, mouseY, mouseState);
-        }
+        button[i]->GetInput(cursorManager->GetCursorX(), cursorManager->GetCursorY(), dimousestate);
     }
 }
 
-void MainMenu::Render(LPD3DXSPRITE spriteBrush)
+void MainMenu::Update(int frameToUpdate)
+{
+    for (int i = 0; i < button.size(); i++)
+    {
+        button[i]->Update();
+    }
+}
+
+void MainMenu::RenderGraphics(LPD3DXSPRITE graphicsBrush)
 {
     RECT bgRect;
     bgRect.left = 0;
     bgRect.top = 0;
     bgRect.right = 800;
     bgRect.bottom = 600;
-    spriteBrush->Draw(texture, &bgRect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
-    for (Button b : button)
+    graphicsBrush->Draw(texture, &bgRect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
+}
+
+void MainMenu::RenderText(LPD3DXSPRITE textBrush)
+{
+    for (Button* b : button)
     {
-        b.Render(spriteBrush);
+        b->Render(textBrush);
     }
 }
 
 void MainMenu::RenderLine()
 {
-    for (Button b : button)
+    for (int i = 0; i < button.size(); i++)
     {
-        b.RenderLine();
+        button[i]->RenderLine();
     }
     for (int i = 0; i < lines.size(); i++)
     {
@@ -236,5 +250,8 @@ void MainMenu::RenderLine()
 
 void MainMenu::CleanUp()
 {
-    GameLevel::CleanUp();
+}
+
+void MainMenu::PlaySounds()
+{
 }

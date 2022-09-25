@@ -2,16 +2,18 @@
 #include <ctime>
 
 #include "colors.h"
+#include "RenderManager.h"
+#include "StateMachine.h"
 #include "Utils.cpp"
 
 SpaceshipGameLevel::SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice,
-                                       GameLevelManager* gameLevelManager, int windowWidth,
-                                       int windowHeight): GameLevel(audioManager, d3DDevice,
-                                                                    gameLevelManager)
+                                       StateMachine* stateMachine, CursorManager* cursorManager, int WindowWidth,
+                                       int WindowHeight): GameLevel(audioManager, d3DDevice,
+                                                                    stateMachine, cursorManager,
+                                                                    "Spaceship",
+                                                                    RenderState::Graphics |
+                                                                    RenderState::Text, WindowWidth, WindowHeight)
 {
-    this->windowWidth = windowWidth;
-    this->windowHeight = windowHeight;
-
     // Create the players
     player1 = new Spaceship();
     player2 = new Spaceship();
@@ -28,7 +30,7 @@ void SpaceshipGameLevel::InitLevel()
 {
     this->label1 = new Label(this->d3DDevice, "Player 1 Score : 0", WHITE(255), D3DXVECTOR2(20, 20), 200, 100,
                              DT_CENTER);
-    this->label2 = new Label(this->d3DDevice, "Player 2 Score : 0", WHITE(255), D3DXVECTOR2(windowWidth - 220, 20), 200,
+    this->label2 = new Label(this->d3DDevice, "Player 2 Score : 0", WHITE(255), D3DXVECTOR2(WindowWidth - 220, 20), 200,
                              100,
                              DT_CENTER);
     srand(time(0));
@@ -40,22 +42,20 @@ void SpaceshipGameLevel::InitLevel()
     // HRManager("Failed to load mass texture.");
 
 
-
-    
-    textBrush = nullptr;
-    hr = D3DXCreateSprite(d3DDevice, &textBrush);
+    spriteBrush = nullptr;
+    hr = D3DXCreateSprite(d3DDevice, &spriteBrush);
     if (FAILED(hr))
     {
-        PrintLine("Failed to create textBrush.");
+        PrintLine("Failed to create spriteBrush.");
     }
     // Initialize players
     player1->Init(1, 64, 64, 2, 2, 10, 1, 100, 300, 1.0, 0, 1, 0.1, audioManager);
     player2->Init(2, 64, 64, 2, 2, 10, 1, 600, 300, 1.0, 0, 1, 0.1, audioManager);
 
     // Initialize masses
-    mass1->Init(32, 32, 9, 9, this->windowWidth, this->windowHeight, 1, 1);
-    mass2->Init(32, 32, 9, 9, this->windowWidth, this->windowHeight, 1, 1);
-    mass3->Init(32, 32, 9, 9, this->windowWidth, this->windowHeight, 1, 1);
+    mass1->Init(32, 32, 9, 9, this->WindowWidth, this->WindowHeight, 1, 1);
+    mass2->Init(32, 32, 9, 9, this->WindowWidth, this->WindowHeight, 1, 1);
+    mass3->Init(32, 32, 9, 9, this->WindowWidth, this->WindowHeight, 1, 1);
 
     // Initialize the mass array
     massArray[0] = mass1;
@@ -79,28 +79,24 @@ void SpaceshipGameLevel::InitLevel()
     aKeyPressed = false;
     dKeyPressed = false;
 
-
-
-    // Set window width and height
-    this->windowWidth = windowWidth;
-    this->windowHeight = windowHeight;
-
     gameEnd = false;
 
     // Initialize background music
-    backgroundMusic->Init("Assets/Audio/space-theme.wav",1.0,0.5,0.0, true);
+    backgroundMusic->Init("Assets/Audio/space-theme.wav", 1.0, 0.5, 0.0, true);
 
     // Create stream and set it into FMOD::Sound variable in backgroundMusic
-    backgroundMusic->SetSound(audioManager->CreateStreams(backgroundMusic->GetSoundFilePath(),backgroundMusic->GetLoop()));
-    
+    backgroundMusic->SetSound(
+        audioManager->CreateStreams(backgroundMusic->GetSoundFilePath(), backgroundMusic->GetLoop()));
+
     // Play the background music
-    audioManager->PlayMusic(backgroundMusic->GetSound(), backgroundMusic->GetVolume(), backgroundMusic->GetPitch(), backgroundMusic->GetPan());
+    audioManager->PlayMusic(backgroundMusic->GetSound(), backgroundMusic->GetVolume(), backgroundMusic->GetPitch(),
+                            backgroundMusic->GetPan());
 }
 
 void SpaceshipGameLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
 {
     // player1 movement
-// W key
+    // W key
     if (diKeys[DIK_W] & 0x80)
     {
         if (player1->GetPosition().y == 0)
@@ -117,7 +113,7 @@ void SpaceshipGameLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
     // 	S key
     if (diKeys[DIK_S] & 0x80)
     {
-        if (player1->GetPosition().y > this->windowHeight - player1->GetSpriteHeight())
+        if (player1->GetPosition().y > this->WindowHeight - player1->GetSpriteHeight())
         {
             sKeyPressed = false;
         }
@@ -145,7 +141,7 @@ void SpaceshipGameLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
     // 	D key
     if (diKeys[DIK_D] & 0x80)
     {
-        if (player1->GetPosition().x > this->windowWidth - player1->GetSpriteWidth())
+        if (player1->GetPosition().x > this->WindowWidth - player1->GetSpriteWidth())
         {
             dKeyPressed = false;
         }
@@ -174,7 +170,7 @@ void SpaceshipGameLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
     // down key
     if (diKeys[DIK_DOWN] & 0x80)
     {
-        if (player2->GetPosition().y > this->windowHeight - player2->GetSpriteHeight())
+        if (player2->GetPosition().y > this->WindowHeight - player2->GetSpriteHeight())
         {
             downKeyPressed = false;
         }
@@ -202,7 +198,7 @@ void SpaceshipGameLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
     // 	right key
     if (diKeys[DIK_RIGHT] & 0x80)
     {
-        if (player2->GetPosition().x > this->windowWidth - player2->GetSpriteWidth())
+        if (player2->GetPosition().x > this->WindowWidth - player2->GetSpriteWidth())
         {
             rightKeyPressed = false;
         }
@@ -214,15 +210,15 @@ void SpaceshipGameLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
     }
 }
 
-void SpaceshipGameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mouseX, LONG mouseY, int frameToUpdate)
+void SpaceshipGameLevel::Update(int frameToUpdate)
 {
     for (int i = 0; i < frameToUpdate; i++)
     {
         // update player1 and player 2 for the number of frames to update
         player1->Update(aKeyPressed, dKeyPressed, wKeyPressed, sKeyPressed, friction, player2, massArray, 3,
-                        windowWidth, windowHeight);
+                        WindowWidth, WindowHeight);
         player2->Update(leftKeyPressed, rightKeyPressed, upKeyPressed, downKeyPressed, friction, player1, massArray, 3,
-                        windowWidth, windowHeight);
+                        WindowWidth, WindowHeight);
     }
     if (player1->GetMassCollided())
     {
@@ -235,7 +231,7 @@ void SpaceshipGameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mous
         player2Points++;
         player2->SetMassCollided(false);
     }
-    
+
     aKeyPressed = false;
     dKeyPressed = false;
     wKeyPressed = false;
@@ -271,23 +267,19 @@ void SpaceshipGameLevel::Update(BYTE* diKeys, DIMOUSESTATE mouseState, LONG mous
     if (player1Points == 2 || player2Points == 2)
     {
         gameEnd = true;
-        gameLevelManager->NextLevel();
+        stateMachine->ChangeState("GameOver");
     }
-    
+
     audioManager->AlterMusicChannelPitch(0.5 + ((player1Points + player2Points) * 0.1));
 }
 
-void SpaceshipGameLevel::Render(LPD3DXSPRITE spriteBrush)
+void SpaceshipGameLevel::RenderGraphics(LPD3DXSPRITE spriteBrush)
 {
-    textBrush->Begin(D3DXSPRITE_ALPHABLEND);
-    player1->Draw(textBrush, playertexture);
-    player2->Draw(textBrush, playertexture);
-    mass1->Draw(textBrush, massTexture);
-    mass2->Draw(textBrush, massTexture);
-    mass3->Draw(textBrush, massTexture);
-    textBrush->End();
-    label1->Render(spriteBrush);
-    label2->Render(spriteBrush);
+    player1->Draw(spriteBrush, playertexture);
+    player2->Draw(spriteBrush, playertexture);
+    mass1->Draw(spriteBrush, massTexture);
+    mass2->Draw(spriteBrush, massTexture);
+    mass3->Draw(spriteBrush, massTexture);
 }
 
 void SpaceshipGameLevel::PlaySounds()
@@ -305,4 +297,19 @@ void SpaceshipGameLevel::CleanUp()
     mass3 = NULL;
     playertexture = NULL;
     massTexture = NULL;
+}
+
+SpaceshipGameLevel::~SpaceshipGameLevel()
+{
+}
+
+
+void SpaceshipGameLevel::RenderText(LPD3DXSPRITE spriteBrush)
+{
+    label1->Render(spriteBrush);
+    label2->Render(spriteBrush);
+}
+
+void SpaceshipGameLevel::RenderLine()
+{
 }
