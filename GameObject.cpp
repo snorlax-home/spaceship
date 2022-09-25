@@ -2,13 +2,18 @@
 
 GameObject::GameObject()
 {
+    textureWidth = 0;
+    textureHeight = 0;
+    spriteHeight = 0;
+    spriteWidth = 0;
 }
 
 GameObject::~GameObject()
 {
+    delete this;
 }
 
-void GameObject::Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int positionX, int positionY, float mass)
+void GameObject::Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int positionX, int positionY)
 {
     this->textureWidth = textureWidth;
     this->textureHeight = textureHeight;
@@ -16,9 +21,7 @@ void GameObject::Init(int textureWidth, int textureHeight, int spriteWidth, int 
     this->spriteHeight = spriteHeight;
     this->spriteCenter = D3DXVECTOR2(spriteWidth / 2, spriteHeight / 2);
     this->scaling = D3DXVECTOR2(1.0f, 1.0f);
-
     this->position = D3DXVECTOR2(positionX, positionY);
-    this->mass = mass;
 }
 
 
@@ -82,10 +85,6 @@ void GameObject::SetPositionY(float y)
     this->position.y = y;
 }
 
-void GameObject::SetMass(float mass)
-{
-    this->mass = mass;
-}
 
 void GameObject::SetObjectTextureAddress(LPDIRECT3DTEXTURE9* objectTexture)
 {
@@ -160,10 +159,6 @@ D3DXMATRIX* GameObject::GetMatrixAddress()
     return &matrix;
 }
 
-float GameObject::GetMass()
-{
-    return mass;
-}
 
 LPDIRECT3DTEXTURE9 GameObject::GetObjectTexture()
 {
@@ -186,6 +181,11 @@ void GameObject::Draw()
 
 void GameObject::PlaySounds()
 {
+}
+
+void GameObject::CleanUp()
+{
+    
 }
 
 

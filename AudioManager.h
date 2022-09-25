@@ -31,7 +31,6 @@ public:
 	// 	Initialize the audio system
 	void InitializeAudio();
 	// Getters
-	//std::vector<FMOD::Sound*> GetSounds();
 	FMOD::System *GetAudioSystem();
 	FMOD::Channel *GetSoundEffectChannel();
 	FMOD::Channel *GetMusicChannel();
@@ -48,5 +47,6 @@ public:
 	void AlterMusicChannelVolume(float volume);
 	void AlterMusicChannelPitch(float pitch);
 	void AlterMusicChannelPan(float pan);
-	//void AlterChannel(float volume, float pitch, float pan);
+	void PauseMusicChannel();
+	void ResumeMusicChannel();
 };

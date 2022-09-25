@@ -4,6 +4,15 @@
 
 GameSound::GameSound()
 {
+}
+
+GameSound::~GameSound()
+{
+    delete this;
+}
+
+void GameSound::Init(const char* filePath, float soundVolume,float soundPitch, float soundPan, bool soundLoop)
+{
     sound = nullptr;
     soundFilePath = nullptr;
     volume = 0.0f;
@@ -11,16 +20,8 @@ GameSound::GameSound()
     pan = 0.0f;
     loop = false;
     playSoundFlag = false;
-}
-
-GameSound::~GameSound()
-{
-    // TODO: wat to do here?
-}
-
-void GameSound::Init(const char* filePath, float soundVolume,float soundPitch, float soundPan, bool soundLoop)
-{
-    this->soundFilePath = filePath; //Do we really need this?
+    
+    this->soundFilePath = filePath;
     this->volume = soundVolume;
     this->pitch = soundPitch;
     this->pan = soundPan;
@@ -125,4 +126,11 @@ bool GameSound::GetLoop()
 bool GameSound::GetPlaySoundFlag()
 {
     return playSoundFlag;
+}
+
+void GameSound::CleanUp()
+{
+    sound->release();
+    sound = nullptr;
+    soundFilePath = nullptr;
 }

@@ -14,6 +14,17 @@ SpaceshipGameLevel::SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEV
                                                                     RenderState::Graphics |
                                                                     RenderState::Text, WindowWidth, WindowHeight)
 {
+
+}
+
+SpaceshipGameLevel::~SpaceshipGameLevel()
+{
+    delete this;
+}
+
+
+void SpaceshipGameLevel::InitLevel()
+{
     // Create the players
     player1 = new Spaceship();
     player2 = new Spaceship();
@@ -25,10 +36,7 @@ SpaceshipGameLevel::SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEV
     }
 
     backgroundMusic = new GameSound();
-}
-
-void SpaceshipGameLevel::InitLevel()
-{
+    
     this->label1 = new Label(this->d3DDevice, "Player 1 Score : 0", WHITE(255), D3DXVECTOR2(20, 20), 200, 100,
                              DT_CENTER);
     this->label2 = new Label(this->d3DDevice, "Player 2 Score : 0", WHITE(255), D3DXVECTOR2(WindowWidth - 220, 20), 200,
@@ -113,7 +121,7 @@ void SpaceshipGameLevel::PointCheck()
     std::string player2Score = "Player 2 Score : " + std::to_string(player2Points);
     label1->SetLabelText(player1Score);
     label2->SetLabelText(player2Score);
-    if (player1Points + player2Points == 10)
+    if (player1Points + player2Points == masses.size())
     {
         gameEnd = true;
         stateMachine->ChangeState("GameOver");
@@ -210,7 +218,7 @@ void SpaceshipGameLevel::Update(int frameToUpdate)
 
     PointUpdate();
 
-    audioManager->AlterMusicChannelPitch(0.5 + ((player1Points + player2Points) * 0.1));
+    audioManager->AlterMusicChannelPitch(0.5 + float(player1Points + player2Points) / float(masses.size() * 2));
 
     PointCheck();
 }
@@ -231,22 +239,6 @@ void SpaceshipGameLevel::PlaySounds()
     player2->PlaySounds(audioManager);
 }
 
-void SpaceshipGameLevel::CleanUp()
-{
-    player1 = NULL;
-    player2 = NULL;
-    for (int i = 0; i < masses.size(); i++)
-    {
-        masses[i] = NULL;
-    }
-    playerTexture = NULL;
-    massTexture = NULL;
-}
-
-SpaceshipGameLevel::~SpaceshipGameLevel()
-{
-}
-
 
 void SpaceshipGameLevel::RenderText(LPD3DXSPRITE spriteBrush)
 {
@@ -256,4 +248,32 @@ void SpaceshipGameLevel::RenderText(LPD3DXSPRITE spriteBrush)
 
 void SpaceshipGameLevel::RenderLine()
 {
+}
+
+void SpaceshipGameLevel::CleanUp()
+{
+    audioManager->PauseMusicChannel();
+    backgroundMusic->CleanUp();
+    backgroundMusic = nullptr;
+    
+    player1->CleanUp();
+    player2->CleanUp();
+    player1 = nullptr;
+    player2 = nullptr;
+    
+    for (int i = 0; i < masses.size(); i++)
+    {
+        masses[i]->CleanUp();
+        masses[i] = nullptr;
+    }
+    masses.clear();
+    masses.shrink_to_fit();
+    
+    // TODO: clean up the label
+    //label1->CleanUp();
+    
+    playerTexture->Release();
+    massTexture->Release();
+    playerTexture = NULL;
+    massTexture = NULL;
 }

@@ -6,7 +6,13 @@ using namespace std;
 Mass::Mass()
 {
 	hp = 0;
+	mass = 0;
 	consumed = false;
+}
+
+Mass::~Mass()
+{
+	delete this;
 }
 
 void Mass::Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int windowWidth, int windowHeight, float mass, int massHp)
@@ -14,9 +20,10 @@ void Mass::Init(int textureWidth, int textureHeight, int spriteWidth, int sprite
 	int positionX = rand() % (windowWidth - spriteHeight);
 	int positionY = rand() % (windowHeight - spriteHeight);
 
-	GameObject::Init(textureWidth, textureHeight, spriteWidth, spriteHeight, positionX, positionY, mass);
+	GameObject::Init(textureWidth, textureHeight, spriteWidth, spriteHeight, positionX, positionY);
 	this->hp = massHp;
-
+	this->mass = mass;
+	
 	InitDisplayRect();
 }
 
@@ -66,9 +73,9 @@ void Mass::SetPositionY(float y)
 	GameObject::SetPositionY(y);
 }
 
-void Mass::SetMass(float mass)
+void Mass::SetMass(float newMass)
 {
-	GameObject::SetMass(mass);
+	this->mass = newMass;
 }
 
 void Mass::SetHp(int hp)
@@ -145,7 +152,7 @@ D3DXVECTOR2* Mass::GetPositionAddress()
 
 float Mass::GetMass()
 {
-	return GameObject::GetMass();
+	return mass;
 }
 
 int Mass::GetHp()
@@ -195,4 +202,9 @@ void Mass::Draw(LPD3DXSPRITE spriteBrush)
 			std::cout << "Draw Failed." << endl;
 		}
 	}
+}
+
+void Mass::CleanUp()
+{
+	GameObject::CleanUp();
 }

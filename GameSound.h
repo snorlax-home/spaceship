@@ -25,7 +25,6 @@ public:
     void SetPlaySoundFlag(bool playSound);
     // Getters
     FMOD::Sound* GetSound();
-    //FMOD::Sound* GetSoundAddress();
     void GetSoundName();
     const char* GetSoundFilePath();
     float GetVolume();
@@ -33,4 +32,6 @@ public:
     float GetPan();
     bool GetLoop();
     bool GetPlaySoundFlag();
+
+    void CleanUp();
 };

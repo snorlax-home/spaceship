@@ -3,7 +3,6 @@
 #include "Label.h"
 #include "Spaceship.h"
 #include "Mass.h"
-//#include "SpaceshipLevelAudioManager.h"
 #include "GameSound.h"
 
 class SpaceshipGameLevel : public GameLevel
@@ -20,10 +19,7 @@ private:
     int player1Points;
     int player2Points;
     float friction;
-    LPD3DXSPRITE spriteBrush;
-    LPD3DXSPRITE textBrush;
-    HRESULT hr; // Is this appropriate here?
-    int point;
+    HRESULT hr; // TODO: Is this appropriate here?
     bool upKeyPressed;
     bool downKeyPressed;
     bool leftKeyPressed;
@@ -46,11 +42,15 @@ public:
     void InitLevel();
     void PointUpdate();
     void PointCheck();
-    void GetInput(BYTE*, DIMOUSESTATE) override;
-    void PlaySounds() override;
-    void CleanUp() override;
-    void Update(int frameToUpdate) override;
+    
     void RenderGraphics(LPD3DXSPRITE graphicsBrush) override;
     void RenderText(LPD3DXSPRITE textBrush) override;
     void RenderLine() override;
+
+    // Game Loop methods
+    void GetInput(BYTE*, DIMOUSESTATE) override;
+    void Update(int frameToUpdate) override;
+    void PlaySounds() override;
+
+    void CleanUp() override;
 };

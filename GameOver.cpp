@@ -58,16 +58,22 @@ void GameOver::Update(int frameToUpdate)
 
 void GameOver::RenderGraphics(LPD3DXSPRITE spriteBrush)
 {
+    // RECT bgRect;
+    // bgRect.left = 0;
+    // bgRect.top = 0;
+    // bgRect.right = 800;
+    // bgRect.bottom = 600;
+    // spriteBrush->Draw(texture, &bgRect, NULL, new D3DXVECTOR3(125, 0, 0), D3DCOLOR_XRGB(255, 255, 255));
+}
+
+void GameOver::RenderText(LPD3DXSPRITE textBrush)
+{
     RECT bgRect;
     bgRect.left = 0;
     bgRect.top = 0;
     bgRect.right = 800;
     bgRect.bottom = 600;
-    spriteBrush->Draw(texture, &bgRect, NULL, new D3DXVECTOR3(125, 0, 0), D3DCOLOR_XRGB(255, 255, 255));
-}
-
-void GameOver::RenderText(LPD3DXSPRITE textBrush)
-{
+    textBrush->Draw(texture, &bgRect, NULL, new D3DXVECTOR3(125, 0, 0), D3DCOLOR_XRGB(255, 255, 255));
     for (int i = 0; i < button.size(); i++)
     {
         button[i]->Render(textBrush);
