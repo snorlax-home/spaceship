@@ -15,13 +15,14 @@ private:
     LPDIRECTINPUTDEVICE8 dInputMouseDevice;
     BYTE diKeys[256];
     DIMOUSESTATE mouseState;
-protected:
     WindowsManager* windowManager;
 public:
     DirectInputManager(WindowsManager* windowManager);
     void Init();
-    void GetInput();
-    void CleanUp();
+
     DIMOUSESTATE GetMouseState();
     BYTE* GetKeyState();
+    
+    void GetInput();
+    void CleanUp();
 };

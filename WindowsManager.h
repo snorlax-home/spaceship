@@ -9,10 +9,9 @@ private:
     MSG msg;
     WNDCLASS wndClass;
     LPCSTR windowName;
-protected:
+
     // Actual message handler
     // virtual LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
-    
     bool showCursor;
     int windowWidth;
     int windowHeight;

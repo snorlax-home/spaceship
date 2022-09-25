@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-class DirectXManager;
+class Direct3DManager;
 class CursorManager;
 class GameLevel;
 
@@ -14,10 +14,9 @@ enum RenderState
 class RenderManager
 {
 private:
-    DirectXManager* directXManager;
+    Direct3DManager* direct3DManager;
     CursorManager* cursorManager;
 
-private:
     static bool CheckRenderGraphics(int state)
     {
         return (state & RenderState::Movable) == RenderState::Movable;
@@ -34,7 +33,7 @@ private:
     }
 
 public:
-    RenderManager(DirectXManager* directXManager, CursorManager* cursorManager);
+    RenderManager(Direct3DManager* directXManager, CursorManager* cursorManager);
     ~RenderManager();
     void Render(GameLevel* gameLevel);
 };

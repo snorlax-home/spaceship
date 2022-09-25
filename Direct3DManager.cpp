@@ -1,4 +1,4 @@
-﻿#include "DirectXManager.h"
+﻿#include "Direct3DManager.h"
 #include <iostream>
 
 
@@ -14,13 +14,13 @@ void HRMessage(HRESULT hr, const char* currentProcess)
     }
 }
 
-DirectXManager::DirectXManager(WindowsManager* windowsManager, int windowWidth, int windowHeight)
+Direct3DManager::Direct3DManager(WindowsManager* windowsManager, int windowWidth, int windowHeight)
 {
     this->windowsManager = windowsManager;
     Init(windowWidth, windowHeight);
 }
 
-void DirectXManager::Init(int windowWidth, int windowHeight)
+void Direct3DManager::Init(int windowWidth, int windowHeight)
 {
     HRESULT hr;
     IDirect3D9* direct3D9 = Direct3DCreate9(D3D_SDK_VERSION);
@@ -42,59 +42,59 @@ void DirectXManager::Init(int windowWidth, int windowHeight)
                                  &d3dPP, &d3dDevice);
     HRMessage(hr, "Create Direct3D9 device.");
 
-    graphicsBrush = nullptr;
-    textBrush = nullptr;
-    hr = D3DXCreateSprite(d3dDevice, &graphicsBrush);
+    movableBrush = nullptr;
+    staticBrush = nullptr;
+    hr = D3DXCreateSprite(d3dDevice, &movableBrush);
     HRMessage(hr, "Create graphics brush.");
-    hr = D3DXCreateSprite(d3dDevice, &textBrush);
+    hr = D3DXCreateSprite(d3dDevice, &staticBrush);
     HRMessage(hr, "Create text brush.");
 }
 
-void DirectXManager::PreRender()
+void Direct3DManager::PreRender()
 {
     d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
     d3dDevice->BeginScene();
-    graphicsBrush->Begin(D3DXSPRITE_ALPHABLEND);
-    textBrush->Begin(D3DXSPRITE_ALPHABLEND);
+    movableBrush->Begin(D3DXSPRITE_ALPHABLEND);
+    staticBrush->Begin(D3DXSPRITE_ALPHABLEND);
     
 }
 
-void DirectXManager::PostRenderGraphics()
+void Direct3DManager::PostRenderGraphics()
 {
-    graphicsBrush->End();
-    textBrush->End();
+    movableBrush->End();
+    staticBrush->End();
 }
 
-void DirectXManager::PostRenderLine()
+void Direct3DManager::PostRenderLine()
 {
     d3dDevice->EndScene();
     d3dDevice->Present(NULL, NULL, NULL, NULL);
 }
 
-void DirectXManager::CleanUp()
+void Direct3DManager::CleanUp()
 {
-    graphicsBrush->Release();
-    graphicsBrush = NULL;
+    movableBrush->Release();
+    movableBrush = NULL;
 
-    textBrush->Release();
-    textBrush = NULL;
+    staticBrush->Release();
+    staticBrush = NULL;
 
     d3dDevice->Release();
     d3dDevice = NULL;
 }
 
-LPD3DXSPRITE DirectXManager::GetGraphicsBrush()
+LPD3DXSPRITE Direct3DManager::GetMovableBrush()
 {
-    return graphicsBrush;
+    return movableBrush;
 }
 
-LPD3DXSPRITE DirectXManager::GetTextBrush()
+LPD3DXSPRITE Direct3DManager::GetStaticBrush()
 {
-    return textBrush;
+    return staticBrush;
 }
 
 
-IDirect3DDevice9* DirectXManager::GetDevice()
+IDirect3DDevice9* Direct3DManager::GetDevice()
 {
     return d3dDevice;
 }

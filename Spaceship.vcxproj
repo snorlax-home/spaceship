@@ -137,7 +137,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CreditsLevel.cpp" />
     <ClCompile Include="DirectInputManager.cpp" />
-    <ClCompile Include="DirectXManager.cpp" />
+    <ClCompile Include="Direct3DManager.cpp" />
     <ClCompile Include="FrameTimer.cpp" />
     <ClCompile Include="GameLevel.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -164,7 +164,7 @@
     <ClInclude Include="colors.h" />
     <ClInclude Include="CreditsLevel.h" />
     <ClInclude Include="DirectInputManager.h" />
-    <ClInclude Include="DirectXManager.h" />
+    <ClInclude Include="Direct3DManager.h" />
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="GameLevel.h" />
     <ClInclude Include="GameObject.h" />

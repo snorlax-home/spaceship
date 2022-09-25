@@ -1,5 +1,6 @@
 ﻿#include "CreditsLevel.h"
 
+#include "AudioManager.h"
 #include "colors.h"
 #include "Label.h"
 #include "RenderManager.h"
@@ -26,11 +27,11 @@ void CreditsLevel::AddLabel(std::string content, int width, int height, int star
 
 void CreditsLevel::InitLevel()
 {
-
-    AnimationTimer = 0;
-    int width = WindowWidth;
+    backgroundMusic = new GameSound();
+    animationTimer = 0;
+    int width = windowWidth;
     int height = 30;
-    int startPoint = WindowHeight / 2 - 100;
+    int startPoint = windowHeight / 2 - 100;
     int spacing = 50;
     AddLabel("===================Credits===================", width, height, startPoint);
     startPoint += spacing;
@@ -58,7 +59,7 @@ void CreditsLevel::InitLevel()
     startPoint += spacing;
     AddLabel("Rendering", width, height, startPoint);
     startPoint += spacing;
-    AddLabel("Edge Collision Detection", width, height, startPoint);
+    AddLabel("Edge Collision Detection & Response", width, height, startPoint);
     startPoint += spacing;
     AddLabel("Spaceship Game Level", width, height, startPoint);
     startPoint += spacing * 2;
@@ -143,6 +144,12 @@ void CreditsLevel::InitLevel()
     startPoint += spacing;
     AddLabel("|||||                      |||||", width, height, startPoint);
     startPoint += spacing;
+
+    backgroundMusic->Init("Assets/Audio/rickroll.mp3", 1.0, 1.0, 0.0, true);
+    backgroundMusic->SetSound(
+        audioManager->CreateStreams(backgroundMusic->GetSoundFilePath(), backgroundMusic->GetLoop()));
+    audioManager->PlayMusic(backgroundMusic->GetSound(), backgroundMusic->GetVolume(), backgroundMusic->GetPitch(),
+        backgroundMusic->GetPan());
 }
 
 void CreditsLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
@@ -153,17 +160,17 @@ void CreditsLevel::Update(int frameToUpdate)
 {
     for (int i = 0; i < frameToUpdate; i++)
     {
-        AnimationTimer ++;
-        if (AnimationTimer % 2 == 0)
+        animationTimer ++;
+        if (animationTimer % 2 == 0)
         {
             for (int i = 0; i < labelList.size(); i++)
             {
-                D3DXVECTOR2 currentLocation = labelList[i]->GetLabelLocation();
-                labelList[i]->SetLabelLocation(D3DXVECTOR2(currentLocation.x, currentLocation.y - 5));
+                D3DXVECTOR2 currentLocation = labelList[i]->GetLabelPosition();
+                labelList[i]->SetLabelPosition(D3DXVECTOR2(currentLocation.x, currentLocation.y - 5));
             }
         }
     }
-    if (AnimationTimer > 1000)
+    if (animationTimer > 1000)
     {
         stateMachine->ChangeState("MainMenu");
     }
@@ -191,5 +198,8 @@ void CreditsLevel::RenderLine()
 
 void CreditsLevel::CleanUp()
 {
+    audioManager->PauseMusicChannel();
+    backgroundMusic->CleanUp();
+    backgroundMusic = nullptr;
     labelList.clear();
 }

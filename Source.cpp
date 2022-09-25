@@ -4,7 +4,7 @@
 #include "CreditsLevel.h"
 #include "CursorManager.h"
 #include "DirectInputManager.h"
-#include "DirectXManager.h"
+#include "Direct3DManager.h"
 #include "FrameTimer.h"
 #include "GameLevel.h"
 #include "GameOver.h"
@@ -22,7 +22,7 @@
 // Global managers
 WindowsManager* windowManager;
 DirectInputManager* directInputManager;
-DirectXManager* directXManager;
+Direct3DManager* directXManager;
 CursorManager* cursorManager;
 AudioManager* audioManager;
 FrameTimer* timer;
@@ -36,7 +36,7 @@ void Init()
 {
     windowManager = new WindowsManager("Spaceship Mania", false, WindowWidth, WindowHeight);
     directInputManager = new DirectInputManager(windowManager);
-    directXManager = new DirectXManager(windowManager, WindowWidth, WindowHeight);
+    directXManager = new Direct3DManager(windowManager, WindowWidth, WindowHeight);
     cursorManager = new CursorManager(WindowWidth,WindowHeight, directInputManager, directXManager->GetDevice());
     levelManager = new LevelManager();
     stateMachine = new StateMachine(levelManager);

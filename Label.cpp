@@ -39,12 +39,12 @@ void Label::SetLabelText(string text)
     this->labelText = text;
 }
 
-D3DXVECTOR2 Label::GetLabelLocation()
+D3DXVECTOR2 Label::GetLabelPosition()
 {
     return this->labelPosition;
 }
 
-void Label::SetLabelLocation(D3DXVECTOR2 labelPosition)
+void Label::SetLabelPosition(D3DXVECTOR2 labelPosition)
 {
     this->labelPosition = labelPosition;
     CalcRect();
@@ -63,4 +63,8 @@ void Label::Render(LPD3DXSPRITE spriteBrush)
         CalcRect();
         font->DrawText(spriteBrush, labelText.c_str(), labelText.length(), &labelRect, format, color);
     }
+}
+
+void Label::CleanUp()
+{
 }

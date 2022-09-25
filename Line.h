@@ -5,7 +5,7 @@
 
 class Line
 {
-protected:
+private:
     LPD3DXLINE line;
     std::vector<D3DXVECTOR2> vertices;
     int numVertices;
