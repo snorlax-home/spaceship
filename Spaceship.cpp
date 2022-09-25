@@ -482,7 +482,7 @@ void Spaceship::CollisionMass(Mass* anotherMass)
     {
         GameObject::SetMass(GameObject::GetMass() + anotherMass->GetMass());
         
-        anotherMass->SetHp(anotherMass->GetHp() - 1);
+        anotherMass->SetConsumed(true);
         cout << "Collision detected between spaceship and mass" << endl;
         massCollided = true;
         collectSound->SetPlaySoundFlag(true);

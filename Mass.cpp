@@ -6,6 +6,7 @@ using namespace std;
 Mass::Mass()
 {
 	hp = 0;
+	consumed = false;
 }
 
 void Mass::Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int windowWidth, int windowHeight, float mass, int massHp)
@@ -73,6 +74,11 @@ void Mass::SetMass(float mass)
 void Mass::SetHp(int hp)
 {
 	this->hp = hp;
+}
+
+void Mass::SetConsumed(bool consumed)
+{
+	this->consumed = consumed;
 }
 
 // Getters
@@ -147,6 +153,11 @@ int Mass::GetHp()
 	return hp;
 }
 
+bool Mass::GetConsumed()
+{
+	return consumed;
+}
+
 void Mass::InitDisplayRect()
 {
 	int rectTop = 0;
@@ -161,10 +172,14 @@ void Mass::InitDisplayRect()
 // Game Loop Methods
 void Mass::Update()
 {
-	if (hp <= 0)
+	if (consumed)
 	{
-		GameObject::SetPosition(-10, -10);
-		cout << "Mass consumed" << endl;
+		hp = 0;
+		// Set position outside of the screen, to avoid collision with the player
+		// -10, -10 to avoid player getting too close to the edge of the screen and mass get consumed again
+		SetPosition(-10,10);
+		std::cout << "Mass consumed" << endl;
+		consumed = false;
 	}
 }
 

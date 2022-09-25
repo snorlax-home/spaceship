@@ -5,6 +5,7 @@ class Mass : public GameObject
 {
 private:
     int hp;
+    bool consumed;
 
 public:
     Mass();
@@ -23,6 +24,7 @@ public:
     void SetPositionY(float y);
     void SetMass(float mass);
     void SetHp(int hp);
+    void SetConsumed(bool consumed);
     // Getters
     int GetTextureWidth();
     int GetTextureHeight();
@@ -38,8 +40,8 @@ public:
     D3DXVECTOR2 *GetPositionAddress();
     float GetMass();
     int GetHp();
+    bool GetConsumed();
     // Other methods
-    void Consumed();
     void InitDisplayRect();
 
     // Game Loop Methods
