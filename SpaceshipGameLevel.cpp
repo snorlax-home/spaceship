@@ -60,11 +60,6 @@ void SpaceshipGameLevel::InitLevel()
     // Set Texture into GameObjects
     player1->SetObjectTextureAddress(&playerTexture);
     player2->SetObjectTextureAddress(&playerTexture);
-
-    for (int i = 0; i < masses.size(); i++)
-    {
-        masses[i]->SetObjectTextureAddress(&massTexture);
-    }
     
     // Initialize players
     player1->Init(1, 64, 64, 2, 2, 1, 100, 300, 1.0, 0, 1, 0.1, audioManager);
@@ -73,6 +68,7 @@ void SpaceshipGameLevel::InitLevel()
     // Initialize masses
     for (int i = 0; i < masses.size(); i++)
     {
+        masses[i]->SetObjectTextureAddress(&massTexture);
         masses[i]->Init(32, 32, 9, 9, this->windowWidth, this->windowHeight, 1, 1);
     }
 
