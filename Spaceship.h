@@ -23,6 +23,14 @@ private:
 	GameSound* bounceSound;
 	GameSound* collectSound;
 
+	// Spaceship exclusive methods
+	bool CircleCollisionDetection(int radiusB, D3DXVECTOR2 positionB);
+	void CollisionSpaceship(Spaceship *anotherSpaceship);
+	void CollisionMass(Mass *anotherMass);
+	void WindowBounce(int windowWidth, int windowHeight);
+	void Move(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction);
+	void NextFrame(int playerNumber);
+	void AlterSoundPan();
 
 public:
 	Spaceship();
@@ -36,13 +44,8 @@ public:
 	void SetTextureHeight(int textureHeight) override;
 	void SetTextureRow(int texture_row);
 	void SetTextureColumn(int texture_column);
-	void SetScaling(float scalingX, float scalingY) override;
 	void SetFrameCounter(int frame_counter);
 	void SetMaxFrame(int max_frame);
-	void SetPosition(D3DXVECTOR2 position) override;
-	void SetPosition(float x, float y) override;
-	void SetPositionX(float x) override;
-	void SetPositionY(float y) override;
 	void SetVelocity(D3DXVECTOR2 spaceShipVelocity);
 	void SetVelocity(float x, float y);
 	void SetVelocityX(float x);
@@ -59,22 +62,10 @@ public:
 
 	// Getters
 	int GetPlayerNum();
-	int GetTextureWidth() override;
-	int GetTextureHeight() override;
 	int GetTextureRow();
 	int GetTextureColumn();
-	int GetSpriteWidth() override;
-	int GetSpriteHeight() override;
-	D3DXVECTOR2 GetSpriteCenter() override;
-	D3DXVECTOR2 *GetSpriteCenterAddress() override;
-	D3DXVECTOR2 GetScaling() override;
-	D3DXVECTOR2 *GetScalingAddress() override;
 	int GetFrameCounter();
 	int GetMaxFrame();
-	RECT GetDisplayRect() override;
-	RECT *GetDisplayRectAddress() override;
-	D3DXVECTOR2 GetPosition() override;
-	D3DXVECTOR2 *GetPositionAddress() override;
 	D3DXVECTOR2 GetVelocity();
 	D3DXVECTOR2 GetAcceleration();
 	float GetEngineForce();
@@ -82,16 +73,6 @@ public:
 	float GetMass() override;
 	float GetRotationSpeed();
 	bool GetMassCollided();
-
-	// Other methods
-	void InitDisplayRect();
-	bool CircleCollisionDetection(int radiusB, D3DXVECTOR2 positionB);
-	void CollisionSpaceship(Spaceship *anotherSpaceship);
-	void CollisionMass(Mass *anotherMass);
-	void NextFrame(int playerNumber);
-	void WindowBounce(int windowWidth, int windowHeight);
-	void Move(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction);
-	void AlterSoundPan();
 	
 	// Game Loop Methods
 	void Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction, Spaceship* anotherSpaceship, std::

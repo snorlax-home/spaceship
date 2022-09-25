@@ -10,11 +10,12 @@ Spaceship::Spaceship()
     textureColumn = 0;
     frameCounter = 0;
     maxFrame = 0;
-    velocity = D3DXVECTOR2(0,0);
-    acceleration = D3DXVECTOR2(0,0);
+    velocity = D3DXVECTOR2(0, 0);
+    acceleration = D3DXVECTOR2(0, 0);
     engineForce = 0.0f;
     direction = 0.0f;
     rotationSpeed = 0.0f;
+    mass = 0.0f;
     massCollided = false;
     bounceSound = new GameSound();
     collectSound = new GameSound();
@@ -22,6 +23,7 @@ Spaceship::Spaceship()
 
 Spaceship::~Spaceship()
 {
+    delete this;
 }
 
 void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int textureRow, int textureColumn,
@@ -30,7 +32,7 @@ void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int tex
                      float rotationSpeed, AudioManager* audioManager)
 {
     GameObject::Init(textureWidth, textureHeight, textureWidth / textureColumn, textureHeight / textureRow,
-                     positionX, positionY, mass);
+                     positionX, positionY);
 
     this->playerNum = playerNum;
     this->textureColumn = textureColumn;
@@ -38,14 +40,19 @@ void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int tex
     
     frameCounter = 0;
     this->maxFrame = maxFrame;
-
-    InitDisplayRect();
-
+    
+    displayRect.top = 0;
+    displayRect.left = (playerNum - 1) * spriteWidth;
+    displayRect.right = displayRect.left + spriteWidth;
+    displayRect.bottom = displayRect.top + spriteHeight;
+    
     velocity = D3DXVECTOR2(0, 0);
     acceleration = D3DXVECTOR2(0, 0);
     this->engineForce = engineForce;
     this->direction = direction;
     this->rotationSpeed = rotationSpeed;
+
+    this->mass = mass;
     
     // Initialize sounds
     bounceSound->Init("Assets/Audio/bounce.mp3", 1.0, 1.0, 0.0, false);
@@ -58,38 +65,34 @@ void Spaceship::Init(int playerNum, int textureWidth, int textureHeight, int tex
 // Setters
 void Spaceship::SetTextureWidth(int textureWidth)
 {
-    GameObject::SetTextureWidth(textureWidth);
+    this->textureWidth = textureWidth;
 
     // Update the sprite width and display display rect
-    GameObject::SetSpriteWidth(GameObject::GetTextureWidth() / textureColumn);
+    spriteWidth = textureWidth / textureColumn;
 }
 
 void Spaceship::SetTextureHeight(int textureHeight)
 {
-    GameObject::SetTextureHeight(textureHeight);
-
+    this->textureHeight = textureHeight;
+    
     // Update sprite height and display rect
-    GameObject::SetSpriteHeight(GameObject::GetTextureHeight() / textureRow);
+    spriteHeight = textureHeight / textureRow;
 }
 
 void Spaceship::SetTextureRow(int texture_row)
 {
     this->textureRow = texture_row;
 
-    GameObject::SetSpriteHeight(GameObject::GetTextureHeight() / texture_row);
+    spriteHeight = textureHeight / texture_row;
 }
 
 void Spaceship::SetTextureColumn(int texture_column)
 {
     this->textureColumn = texture_column;
 
-    GameObject::SetSpriteWidth(GameObject::GetTextureWidth() / texture_column);
+    spriteWidth = textureWidth / texture_column;
 }
 
-void Spaceship::SetScaling(float scalingX, float scalingY)
-{
-    GameObject::SetScaling(scalingX, scalingY);
-}
 
 void Spaceship::SetFrameCounter(int frame_counter)
 {
@@ -99,26 +102,6 @@ void Spaceship::SetFrameCounter(int frame_counter)
 void Spaceship::SetMaxFrame(int max_frame)
 {
     this->maxFrame = max_frame;
-}
-
-void Spaceship::SetPosition(D3DXVECTOR2 position)
-{
-    GameObject::SetPosition(position);
-}
-
-void Spaceship::SetPosition(float x, float y)
-{
-    GameObject::SetPosition(x, y);
-}
-
-void Spaceship::SetPositionX(float x)
-{
-    GameObject::SetPositionX(x);
-}
-
-void Spaceship::SetPositionY(float y)
-{
-    GameObject::SetPositionY(y);
 }
 
 void Spaceship::SetVelocity(D3DXVECTOR2 spaceShipVelocity)
@@ -173,9 +156,9 @@ void Spaceship::SetDirection(float spaceship_Direction)
     this->direction = spaceship_Direction;
 }
 
-void Spaceship::SetMass(float mass)
+void Spaceship::SetMass(float spaceship_Mass)
 {
-    GameObject::SetMass(mass);
+    this->mass = spaceship_Mass;
 }
 
 void Spaceship::SetRotationSpeed(float rotation_speed)
@@ -194,16 +177,6 @@ int Spaceship::GetPlayerNum()
     return playerNum;
 }
 
-int Spaceship::GetTextureWidth()
-{
-    return GameObject::GetTextureWidth();
-}
-
-int Spaceship::GetTextureHeight()
-{
-    return GameObject::GetTextureHeight();
-}
-
 int Spaceship::GetTextureRow()
 {
     return textureRow;
@@ -214,35 +187,7 @@ int Spaceship::GetTextureColumn()
     return textureColumn;
 }
 
-int Spaceship::GetSpriteWidth()
-{
-    return GameObject::GetSpriteWidth();
-}
 
-int Spaceship::GetSpriteHeight()
-{
-    return GameObject::GetSpriteHeight();
-}
-
-D3DXVECTOR2 Spaceship::GetSpriteCenter()
-{
-    return GameObject::GetSpriteCenter();
-}
-
-D3DXVECTOR2* Spaceship::GetSpriteCenterAddress()
-{
-    return GameObject::GetSpriteCenterAddress();
-}
-
-D3DXVECTOR2 Spaceship::GetScaling()
-{
-    return GameObject::GetScaling();
-}
-
-D3DXVECTOR2* Spaceship::GetScalingAddress()
-{
-    return GameObject::GetScalingAddress();
-}
 
 int Spaceship::GetFrameCounter()
 {
@@ -254,25 +199,6 @@ int Spaceship::GetMaxFrame()
     return maxFrame;
 }
 
-RECT Spaceship::GetDisplayRect()
-{
-    return GameObject::GetDisplayRect();
-}
-
-RECT* Spaceship::GetDisplayRectAddress()
-{
-    return GameObject::GetDisplayRectAddress();
-}
-
-D3DXVECTOR2 Spaceship::GetPosition()
-{
-    return GameObject::GetPosition();
-}
-
-D3DXVECTOR2* Spaceship::GetPositionAddress()
-{
-    return GameObject::GetPositionAddress();
-}
 
 D3DXVECTOR2 Spaceship::GetVelocity()
 {
@@ -296,7 +222,7 @@ float Spaceship::GetEngineForce()
 
 float Spaceship::GetMass()
 {
-    return GameObject::GetMass();
+   return mass;
 }
 
 float Spaceship::GetRotationSpeed()
@@ -307,16 +233,6 @@ float Spaceship::GetRotationSpeed()
 bool Spaceship::GetMassCollided()
 {
     return massCollided;
-}
-
-void Spaceship::InitDisplayRect()
-{
-    int rectTop = 0;
-    int rectLeft = (playerNum - 1) * GameObject::GetSpriteWidth();
-    int rectRight = rectLeft + GameObject::GetSpriteWidth();
-    int rectBottom = rectTop + GameObject::GetSpriteHeight();
-
-    GameObject::SetDisplayRect(rectTop, rectLeft, rectRight, rectBottom);
 }
 
 // Game methods
@@ -439,8 +355,8 @@ void Spaceship::CollisionSpaceship(Spaceship* anotherSpaceship)
          * v1 and v2 are the final velocity of the two objects
          */
         
-        float v1 = (GetMass() - anotherSpaceship->GetMass()) / (GetMass() + anotherSpaceship->GetMass()) * dpNormal1 + 2.0f * anotherSpaceship->GetMass() / (GetMass() + anotherSpaceship->GetMass()) * dpNormal2;
-        float v2 = (anotherSpaceship->GetMass() - GetMass()) / (GetMass() + anotherSpaceship->GetMass()) * dpNormal2 + 2.0f * GetMass() / (GetMass() + anotherSpaceship->GetMass()) * dpNormal1;
+        float v1 = (mass - anotherSpaceship->GetMass()) / (mass + anotherSpaceship->GetMass()) * dpNormal1 + 2.0f * anotherSpaceship->GetMass() / (mass + anotherSpaceship->GetMass()) * dpNormal2;
+        float v2 = (anotherSpaceship->GetMass() - mass) / (mass + anotherSpaceship->GetMass()) * dpNormal2 + 2.0f * mass / (mass + anotherSpaceship->GetMass()) * dpNormal1;
 
         /*
          * Updating this spaceship velocity by adding together the tangential response and the normal response
@@ -480,7 +396,7 @@ void Spaceship::CollisionMass(Mass* anotherMass)
     if (CircleCollisionDetection(anotherMass->GetSpriteWidth() / 2,
                                  anotherMass->GetPosition() + anotherMass->GetSpriteCenter()))
     {
-        GameObject::SetMass(GameObject::GetMass() + anotherMass->GetMass());
+        mass += anotherMass->GetMass();
         
         anotherMass->SetConsumed(true);
         cout << "Collision detected between spaceship and mass" << endl;
@@ -503,7 +419,7 @@ void Spaceship::NextFrame(int playerNumber)
     int rightRect = leftRect + GameObject::GetSpriteWidth();
     int bottomRect = topRect + GameObject::GetSpriteHeight();
 
-    GameObject::SetDisplayRect(leftRect, topRect, rightRect, bottomRect);
+    GameObject::SetDisplayRect(leftRect, topRect);
 }
 
 void Spaceship::WindowBounce(int windowWidth, int windowHeight)
@@ -586,16 +502,16 @@ void Spaceship::Move(bool turnLeft, bool turnRight, bool goForward, bool goBackw
     {
         // Calculate the acceleration of the spaceship
         // a = F / m
-        acceleration.x = sin(direction) * engineForce / GameObject::GetMass();
-        acceleration.y = -cos(direction) * engineForce / GameObject::GetMass();
+        acceleration.x = sin(direction) * engineForce / mass;
+        acceleration.y = -cos(direction) * engineForce / mass;
     }
 
     if (goBackward)
     {
         // calculate the acceleration of the spaceship
         // a = F / m
-        acceleration.x = -sin(direction) * engineForce / GameObject::GetMass();
-        acceleration.y = cos(direction) * engineForce / GameObject::GetMass();
+        acceleration.x = -sin(direction) * engineForce / mass;
+        acceleration.y = cos(direction) * engineForce / mass;
     }
 
     // Update velocity
@@ -631,8 +547,7 @@ void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBac
     }
     
     WindowBounce(windowWidth, windowHeight);
-
-    // TODO: Make NextFrame work properly
+    
     NextFrame(this->playerNum);
 
     AlterSoundPan();
@@ -640,11 +555,11 @@ void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBac
 
 void Spaceship::Draw(LPD3DXSPRITE spriteBrush)
 {
-    D3DXMatrixTransformation2D(this->GetMatrixAddress(), NULL, 0.5f, this->GetScalingAddress(),
-                               this->GetSpriteCenterAddress(), this->GetDirection(), this->GetPositionAddress());
-    spriteBrush->SetTransform(this->GetMatrixAddress());
+    D3DXMatrixTransformation2D(&matrix, NULL, 0.5f, &scaling,
+                               &spriteCenter, direction, &position);
+    spriteBrush->SetTransform(&matrix);
 
-    HRESULT hr = spriteBrush->Draw(objectTexture, GetDisplayRectAddress(), NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
+    HRESULT hr = spriteBrush->Draw(objectTexture, &displayRect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
     if (FAILED(hr))
     {
         std::cout << "Draw Failed." << endl;
@@ -672,4 +587,15 @@ void Spaceship::PlaySounds(AudioManager* audioManager)
         audioManager->PlaySoundEffect(collectSound->GetSound(), collectSound->GetVolume(), collectSound->GetPitch(), collectSound->GetPan());
         collectSound->SetPlaySoundFlag(false);
     }
+}
+
+void Spaceship::CleanUp()
+{
+    bounceSound->CleanUp();
+    collectSound->CleanUp();
+
+    bounceSound = nullptr;
+    collectSound = nullptr;
+    
+    GameObject::CleanUp();
 }

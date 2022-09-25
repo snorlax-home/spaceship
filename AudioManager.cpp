@@ -6,10 +6,15 @@ using namespace std;
 // Constructor and Destructor
 AudioManager::AudioManager()
 {
+	audioSystem = nullptr;
+	soundEffectChannel = nullptr;
+	musicChannel = nullptr;
+	extraDriverData = nullptr;
 }
 
 AudioManager::~AudioManager()
 {
+	delete this;
 }
 
 void AudioManager::InitializeAudio()
@@ -117,6 +122,28 @@ void AudioManager::AlterMusicChannelPitch(float pitch)
 void AudioManager::AlterMusicChannelPan(float pan)
 {
 	ResultCheck(musicChannel->setPan(pan), "musicChannel->setPan Failed");
+}
+
+void AudioManager::PauseMusicChannel()
+{
+	ResultCheck(musicChannel->setPaused(true), "musicChannel->setPaused Failed");
+}
+
+void AudioManager::ResumeMusicChannel()
+{
+	ResultCheck(musicChannel->setPaused(false),"musicChannel->setPaused Failed");
+}
+
+void AudioManager::CleanUp()
+{
+	soundEffectChannel->stop();
+	musicChannel->stop();
+	audioSystem->close();
+	audioSystem->release();
+	soundEffectChannel = nullptr;
+	musicChannel = nullptr;
+	audioSystem = nullptr;
+	extraDriverData = nullptr;
 }
 
 
