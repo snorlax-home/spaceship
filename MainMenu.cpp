@@ -36,6 +36,7 @@ void MainMenu::InitLevel()
     texture = nullptr;
     D3DXCreateTextureFromFile(d3DDevice, "Assets/main.jpg", &texture);
 
+    // Menu buttons
     button.push_back(new Button(&startGame, "Start Game", D3DXVECTOR2(300, 300), D3DXVECTOR2(200, 50), WHITE(255),
                                 WHITE(255), GREEN(255), GREEN(255),BLUE(255), BLUE(255), this->d3DDevice,
                                 this->stateMachine));
@@ -194,6 +195,8 @@ void MainMenu::InitLevel()
         D3DXVECTOR2(630, 80),
     };
 
+
+    // Main menu spaceship title line art
     lines = {
         Line::Line(d3DDevice, vertexS.size(), vertexS, WHITE(255)),
         Line::Line(d3DDevice, vertexP1.size(), vertexP1, WHITE(255)),

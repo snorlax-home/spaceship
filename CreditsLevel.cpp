@@ -20,18 +20,20 @@ CreditsLevel::~CreditsLevel()
 
 void CreditsLevel::AddLabel(std::string content, int width, int height, int startPoint)
 {
+    // Function to create a label
     labelList.push_back(new Label(this->d3DDevice, content, WHITE(255), D3DXVECTOR2(0, startPoint), width, height,
                                   DT_CENTER | DT_VCENTER | DT_SINGLELINE));
 }
 
 void CreditsLevel::InitLevel()
 {
-
     AnimationTimer = 0;
-    int width = WindowWidth;
+    int width = windowWidth;
     int height = 30;
-    int startPoint = WindowHeight / 2 - 100;
+    int startPoint = windowHeight / 2 - 100;
     int spacing = 50;
+
+    // Text content for the credits
     AddLabel("===================Credits===================", width, height, startPoint);
     startPoint += spacing;
 
@@ -49,7 +51,7 @@ void CreditsLevel::InitLevel()
     startPoint += spacing;
     AddLabel("Credits Screen", width, height, startPoint);
     startPoint += spacing * 2;
-    
+
     AddLabel("Wong Yan Zhi", width, height, startPoint);
     startPoint += spacing;
     AddLabel("======================================", width, height, startPoint);
@@ -62,7 +64,7 @@ void CreditsLevel::InitLevel()
     startPoint += spacing;
     AddLabel("Spaceship Game Level", width, height, startPoint);
     startPoint += spacing * 2;
-    
+
     AddLabel("Ong Tun Jiun", width, height, startPoint);
     startPoint += spacing;
     AddLabel("======================================", width, height, startPoint);
@@ -75,7 +77,7 @@ void CreditsLevel::InitLevel()
     startPoint += spacing;
     AddLabel("Spaceship Game Level", width, height, startPoint);
     startPoint += spacing * 2;
-    
+
     AddLabel("API Involved ", width, height, startPoint);
     startPoint += spacing;
     AddLabel("======================================", width, height, startPoint);
@@ -84,7 +86,7 @@ void CreditsLevel::InitLevel()
     startPoint += spacing;
     AddLabel("FMOD Core API ", width, height, startPoint);
     startPoint += spacing * 2;
-    
+
     AddLabel("Special Thanks to", width, height, startPoint);
     startPoint += spacing;
     AddLabel("======================================", width, height, startPoint);
@@ -151,6 +153,7 @@ void CreditsLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
 
 void CreditsLevel::Update(int frameToUpdate)
 {
+    // Animation controller for the credits
     for (int i = 0; i < frameToUpdate; i++)
     {
         AnimationTimer ++;
@@ -163,6 +166,8 @@ void CreditsLevel::Update(int frameToUpdate)
             }
         }
     }
+
+    // Terminate the credits when the last label is out of the screen
     if (AnimationTimer > 1000)
     {
         stateMachine->ChangeState("MainMenu");

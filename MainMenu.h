@@ -5,6 +5,14 @@
 #include "Line.h"
 
 
+/**
+ * \brief Main menu of the game
+ *
+ * This class consist of three buttons
+ * First leads you to the game
+ * Second let you exit the game
+ * Third let you enter the credit scene
+ */
 class MainMenu : public GameLevel
 {
 private:

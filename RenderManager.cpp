@@ -1,37 +1,46 @@
 ﻿#include "RenderManager.h"
 
 #include "CursorManager.h"
-#include "DirectXManager.h"
+#include "Direct3DManager.h"
 #include "GameLevel.h"
 
 
-RenderManager::RenderManager(DirectXManager* directXManager, CursorManager* cursorManager):
-    directXManager(directXManager), cursorManager(cursorManager)
+RenderManager::RenderManager(Direct3DManager* direct3DManager, CursorManager* cursorManager):
+    direct3DManager(direct3DManager), cursorManager(cursorManager)
 {
 }
 
 RenderManager::~RenderManager()
 {
-    delete directXManager;
+    delete direct3DManager;
 }
 
 void RenderManager::Render(GameLevel* gameLevel)
 {
-    directXManager->PreRender();
+    // Prepare for rendering
+    direct3DManager->PreRender();
+
     int state = gameLevel->GetRenderState();
-    if (CheckRenderGraphics(state))
+    // Check the game state and render the appropriate scene
+    if (CheckRenderMovable(state))
     {
-        gameLevel->RenderMovable(directXManager->GetGraphicsBrush());
+        gameLevel->RenderMovable(direct3DManager->GetMovableBrush());
     }
-    if (CheckRenderText(state))
+    if (CheckRenderStatic(state))
     {
-        gameLevel->RenderStatic(directXManager->GetTextBrush());
+        gameLevel->RenderStatic(direct3DManager->GetStaticBrush());
     }
-    cursorManager->Render(directXManager->GetTextBrush());
-    directXManager->PostRenderGraphics();
+    cursorManager->Render(direct3DManager->GetStaticBrush());
+
+    // Present the rendered scene to the screen
+    direct3DManager->PostRenderGraphics();
+
+    // Check render line state
     if (CheckRenderLine(state))
     {
         gameLevel->RenderLine();
     }
-    directXManager->PostRenderLine();
+
+    // Present the rendered scene to the screen
+    direct3DManager->PostRenderLine();
 }

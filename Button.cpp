@@ -16,9 +16,9 @@ void Button::SetMouseY(LONG Y)
 Button::Button(std::function<void(StateMachine*)> onClick, LPCSTR buttonText, D3DXVECTOR2 position,
                D3DXVECTOR2 size, D3DCOLOR color,
                D3DCOLOR textColor, D3DCOLOR hoverColor, D3DCOLOR hoverTextColor, D3DCOLOR clickColor,
-               D3DCOLOR clickTextColor, LPDIRECT3DDEVICE9 d3dDevice, StateMachine* gameLevelManager)
+               D3DCOLOR clickTextColor, LPDIRECT3DDEVICE9 d3dDevice, StateMachine* stateMachine)
 {
-    this->stateMachine = gameLevelManager;
+    this->stateMachine = stateMachine;
     this->onClick = onClick;
     this->buttonText = buttonText;
     this->position = position;
@@ -51,6 +51,8 @@ void Button::CalcRect()
 Label* Button::InitLabel(LPDIRECT3DDEVICE9 d3dDevice)
 {
     this->label = nullptr;
+    // Initialize label with button size and position
+    // Label will be vertically and horizontally centered
     return new Label(d3dDevice, buttonText, textColor, position, size.x,
                      size.y, DT_CENTER | DT_VCENTER);
 }
@@ -58,6 +60,7 @@ Label* Button::InitLabel(LPDIRECT3DDEVICE9 d3dDevice)
 Line* Button::InitLine(LPDIRECT3DDEVICE9 d3dDevice)
 {
     this->line = nullptr;
+    // Construct vertexes for the line box
     std::vector<D3DXVECTOR2> vertex{
         D3DXVECTOR2(position.x, position.y),
         D3DXVECTOR2(position.x + size.x, position.y),
@@ -66,6 +69,7 @@ Line* Button::InitLine(LPDIRECT3DDEVICE9 d3dDevice)
         D3DXVECTOR2(position.x, position.y)
     };
     D3DCOLOR renderColor;
+    // Set the render color based on button state
     if (isHover)
     {
         renderColor = hoverColor;
@@ -79,7 +83,7 @@ Line* Button::InitLine(LPDIRECT3DDEVICE9 d3dDevice)
         renderColor = color;
     }
 
-
+    // Return line component
     return new Line(d3dDevice, vertex.size(), vertex, renderColor);
 }
 
@@ -103,7 +107,6 @@ void Button::GetInput(LONG X, LONG Y, DIMOUSESTATE mouseState)
     SetMouseX(X);
     SetMouseY(Y);
     this->mouseState = mouseState;
-    // PrintLine("MouseState : " + std::to_string(mouseState.rgbButtons[0]));
 }
 
 void Button::Update()
@@ -111,26 +114,27 @@ void Button::Update()
     // Check hover state
     if (mouseX > rect.left && mouseX < rect.right && mouseY > rect.top && mouseY < rect.bottom)
     {
+        // Mouse has collision with button
         isHover = true;
     }
     else
     {
         isHover = false;
     }
+    
     if (mouseState.rgbButtons[0] & 0x80)
     {
+        // Left mouse button down event
         if (isHover)
         {
+            // Mouse has click inside button
             isClick = true;
+            // Trigger onClick function
             onClick(stateMachine);
         }
     }
     else
     {
-        // if (isClick)
-        // {
-        //     onClick();
-        // }
         isClick = false;
     }
 

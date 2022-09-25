@@ -9,6 +9,17 @@
 class AudioManager;
 class StateMachine;
 
+/**
+ * \brief Game Level class
+ *
+ * This is the base class for all the game levels in the game
+ * This class is responsible for the following:
+ * - Loading and unloading of the level
+ * - Updating the level
+ * - Rendering the level
+ * - Handling input for the level
+ * - Handling the level's audio
+ */
 class GameLevel
 {
 protected:

@@ -5,6 +5,11 @@
 
 class Label;
 
+/**
+ * \brief Credits level of the game
+ *
+ * This level is used to display the credits of the game.
+ */
 class CreditsLevel : public GameLevel
 {
 private:

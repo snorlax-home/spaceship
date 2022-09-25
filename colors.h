@@ -1,6 +1,10 @@
 #pragma once
 #include <d3d9.h>
 
+/*
+ * \brief A class to be use for color macros
+ */
+
 #define WHITE(alpha)         D3DCOLOR_ARGB(alpha, 255, 255, 255)
 #define BLACK(alpha)         D3DCOLOR_ARGB(alpha, 0, 0, 0)
 #define RED(alpha)           D3DCOLOR_ARGB(alpha, 255, 0, 0)

@@ -4,7 +4,7 @@
 #include "CreditsLevel.h"
 #include "CursorManager.h"
 #include "DirectInputManager.h"
-#include "DirectXManager.h"
+#include "Direct3DManager.h"
 #include "FrameTimer.h"
 #include "GameLevel.h"
 #include "GameOver.h"
@@ -22,7 +22,7 @@
 // Global managers
 WindowsManager* windowManager;
 DirectInputManager* directInputManager;
-DirectXManager* directXManager;
+Direct3DManager* direct3DManager;
 CursorManager* cursorManager;
 AudioManager* audioManager;
 FrameTimer* timer;
@@ -36,11 +36,11 @@ void Init()
 {
     windowManager = new WindowsManager("Spaceship Mania", false, WindowWidth, WindowHeight);
     directInputManager = new DirectInputManager(windowManager);
-    directXManager = new DirectXManager(windowManager, WindowWidth, WindowHeight);
-    cursorManager = new CursorManager(WindowWidth,WindowHeight, directInputManager, directXManager->GetDevice());
+    direct3DManager = new Direct3DManager(windowManager, WindowWidth, WindowHeight);
+    cursorManager = new CursorManager(WindowWidth,WindowHeight, directInputManager, direct3DManager->GetDevice());
     levelManager = new LevelManager();
     stateMachine = new StateMachine(levelManager);
-    renderManager = new RenderManager(directXManager, cursorManager);
+    renderManager = new RenderManager(direct3DManager, cursorManager);
     inputManager = new InputManager(directInputManager, cursorManager);
 
     timer = new FrameTimer();
@@ -50,15 +50,15 @@ void Init()
     audioManager->InitializeAudio();
 
     MainMenu* mainMenu = new MainMenu(
-        audioManager, directXManager->GetDevice(), stateMachine, cursorManager, WindowWidth, WindowHeight
+        audioManager, direct3DManager->GetDevice(), stateMachine, cursorManager, WindowWidth, WindowHeight
     );
     SpaceshipGameLevel* spaceshipGameLevel = new SpaceshipGameLevel(
-        audioManager, directXManager->GetDevice(), stateMachine, cursorManager, WindowWidth, WindowHeight
+        audioManager, direct3DManager->GetDevice(), stateMachine, cursorManager, WindowWidth, WindowHeight
     );
     GameOver* gameOver = new GameOver(
-        audioManager, directXManager->GetDevice(), stateMachine, cursorManager,WindowWidth, WindowHeight);
+        audioManager, direct3DManager->GetDevice(), stateMachine, cursorManager,WindowWidth, WindowHeight);
     CreditsLevel* creditLevel = new CreditsLevel(
-        audioManager, directXManager->GetDevice(), stateMachine, cursorManager, WindowWidth, WindowHeight
+        audioManager, direct3DManager->GetDevice(), stateMachine, cursorManager, WindowWidth, WindowHeight
     );
     levelManager->RegisterLevel(mainMenu->GetLevelName(), mainMenu);
     levelManager->RegisterLevel(spaceshipGameLevel->GetLevelName(), spaceshipGameLevel);
@@ -94,7 +94,7 @@ void CleanUp()
     // delete levelManager;
     cursorManager->CleanUp();
     directInputManager->CleanUp();
-    directXManager->CleanUp();
+    direct3DManager->CleanUp();
     windowManager->CleanUpGameWindow();
 }
 
