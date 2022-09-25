@@ -8,6 +8,10 @@ Mass::Mass()
 	hp = 0;
 	mass = 0;
 	consumed = false;
+	textureRedValue = 255;
+	textureGreenValue = 255;
+	textureBlueValue = 255;
+	textureColor = D3DCOLOR_XRGB(textureRedValue, textureGreenValue, textureBlueValue);
 }
 
 Mass::~Mass()
@@ -82,7 +86,7 @@ void Mass::Draw(LPD3DXSPRITE spriteBrush)
 	spriteBrush->SetTransform(&matrix);
 	if (this->GetHp() > 0)
 	{
-		HRESULT hr = spriteBrush->Draw(objectTexture, &displayRect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
+		HRESULT hr = spriteBrush->Draw(objectTexture, &displayRect, NULL, NULL, textureColor);
 		if (FAILED(hr))
 		{
 			std::cout << "Draw Failed." << endl;

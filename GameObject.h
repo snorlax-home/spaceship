@@ -14,6 +14,10 @@ protected:
     RECT displayRect;
     D3DXVECTOR2 position;
     LPDIRECT3DTEXTURE9 objectTexture;
+    int textureRedValue;
+    int textureGreenValue;
+    int textureBlueValue;
+    D3DCOLOR textureColor;
 
 public:
     // Constructor

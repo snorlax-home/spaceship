@@ -3,9 +3,6 @@
 
 using namespace std;
 
-int greenValue = 255;
-int blueValue = 255;
-
 Spaceship::Spaceship()
 {
     playerNum = -1;
@@ -22,7 +19,10 @@ Spaceship::Spaceship()
     massCollided = false;
     bounceSound = new GameSound();
     collectSound = new GameSound();
-    textureColor = D3DCOLOR_XRGB(255, greenValue, blueValue);
+    textureRedValue = 255;
+    textureGreenValue = 255;
+    textureBlueValue = 255;
+    textureColor = D3DCOLOR_XRGB(textureRedValue, textureGreenValue, textureBlueValue);
 }
 
 Spaceship::~Spaceship()
@@ -388,10 +388,12 @@ void Spaceship::CollisionSpaceship(Spaceship* anotherSpaceship)
         // Set bounceSound to true so that the bounce sound will be played
         bounceSound->SetPlaySoundFlag(true);
 
-        greenValue = 5;
-        blueValue = 5;
-        this->textureColor = D3DCOLOR_XRGB(255, greenValue, blueValue);
-        anotherSpaceship->textureColor = D3DCOLOR_XRGB(255, greenValue, blueValue);
+        this->textureGreenValue = 5;
+        this->textureBlueValue = 5;
+        anotherSpaceship->textureGreenValue = 5;
+        anotherSpaceship->textureBlueValue = 5;
+        this->textureColor = D3DCOLOR_XRGB(this->textureRedValue, this->textureGreenValue, this->textureBlueValue);
+        anotherSpaceship->textureColor = D3DCOLOR_XRGB(anotherSpaceship->textureRedValue, anotherSpaceship->textureGreenValue, anotherSpaceship->textureBlueValue);
     }
 }
 
@@ -561,13 +563,15 @@ void Spaceship::Update(bool turnLeft, bool turnRight, bool goForward, bool goBac
 
     AlterSoundPan();
 
-    if (greenValue < 255 && blueValue < 255)
+    if (this->textureGreenValue < 255 || anotherSpaceship->textureGreenValue < 255)
     {
-        greenValue += 2;
-        blueValue += 2;
+        this->textureGreenValue += 2;
+        this->textureBlueValue += 2;
+        anotherSpaceship->textureGreenValue += 2;
+        anotherSpaceship->textureBlueValue += 2;
     }
-    this->textureColor = D3DCOLOR_XRGB(255, greenValue, blueValue);
-    anotherSpaceship->textureColor = D3DCOLOR_XRGB(255, greenValue, blueValue);
+    this->textureColor = D3DCOLOR_XRGB(255, textureGreenValue, textureBlueValue);
+    anotherSpaceship->textureColor = D3DCOLOR_XRGB(255, textureGreenValue, textureBlueValue);
 }
 
 void Spaceship::Draw(LPD3DXSPRITE spriteBrush)
