@@ -42,12 +42,18 @@ void SpaceshipGameLevel::InitLevel()
                              100,
                              DT_CENTER | DT_VCENTER | DT_SINGLELINE);
     srand(time(0));
-    hr = D3DXCreateTextureFromFile(GetD3DDevice(), "Assets/spaceships.png", &playerTexture);
-    // HRManager("Failed to load player texture.");
+    HRESULT hr = D3DXCreateTextureFromFile(GetD3DDevice(), "Assets/spaceships.png", &playerTexture);
+    if (FAILED(hr))
+    {
+        MessageBox(NULL, "Could not load spaceship texture", "Error", MB_OK);
+    }
 
     // load mass
     hr = D3DXCreateTextureFromFile(GetD3DDevice(), "Assets/mass.png", &massTexture);
-    // HRManager("Failed to load mass texture.");
+    if (FAILED(hr))
+    {
+        MessageBox(NULL, "Could not load mass texture", "Error", MB_OK);
+    }
 
     // Set Texture into GameObjects
     player1->SetObjectTextureAddress(&playerTexture);

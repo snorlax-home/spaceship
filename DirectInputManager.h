@@ -33,14 +33,6 @@ public:
      */
     void Init();
     /**
-     * \brief Get input from both keyboard and mouse
-     */
-    void GetInput();
-    /**
-     * \brief Clean Up the direct input interface and devices
-     */
-    void CleanUp();
-    /**
      * \brief Get the mouse state
      * \return Return the state of mouse
      */
@@ -50,4 +42,12 @@ public:
      * \return Return a byte array of keyboard data
      */
     BYTE* GetKeyState();
+    /**
+     * \brief Get input from both keyboard and mouse
+     */
+    void GetInput();
+    /**
+     * \brief Clean Up the direct input interface and devices
+     */
+    void CleanUp();
 };

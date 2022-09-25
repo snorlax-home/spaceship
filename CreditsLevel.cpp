@@ -29,7 +29,7 @@ void CreditsLevel::AddLabel(std::string content, int width, int height, int star
 void CreditsLevel::InitLevel()
 {
     backgroundMusic = new GameSound();
-    AnimationTimer = 0;
+    animationTimer = 0;
     int width = windowWidth;
     int height = 30;
     int startPoint = windowHeight / 2 - 100;
@@ -164,19 +164,19 @@ void CreditsLevel::Update(int frameToUpdate)
     // Animation controller for the credits
     for (int i = 0; i < frameToUpdate; i++)
     {
-        AnimationTimer ++;
-        if (AnimationTimer % 2 == 0)
+        animationTimer ++;
+        if (animationTimer % 2 == 0)
         {
             for (int i = 0; i < labelList.size(); i++)
             {
-                D3DXVECTOR2 currentLocation = labelList[i]->GetLabelLocation();
-                labelList[i]->SetLabelLocation(D3DXVECTOR2(currentLocation.x, currentLocation.y - 5));
+                D3DXVECTOR2 currentLocation = labelList[i]->GetLabelPosition();
+                labelList[i]->SetLabelPosition(D3DXVECTOR2(currentLocation.x, currentLocation.y - 5));
             }
         }
     }
 
     // Terminate the credits when the last label is out of the screen
-    if (AnimationTimer > 1000)
+    if (animationTimer > 1000)
     {
         stateMachine->ChangeState("MainMenu");
     }

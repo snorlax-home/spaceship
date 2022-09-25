@@ -19,7 +19,6 @@ private:
     int player1Points;
     int player2Points;
     float friction;
-    HRESULT hr; // TODO: Is this appropriate here?
     bool upKeyPressed;
     bool downKeyPressed;
     bool leftKeyPressed;
