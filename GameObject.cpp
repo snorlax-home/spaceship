@@ -87,6 +87,12 @@ void GameObject::SetMass(float mass)
     this->mass = mass;
 }
 
+void GameObject::SetObjectTextureAddress(LPDIRECT3DTEXTURE9* objectTexture)
+{
+    this->objectTexture = *objectTexture;
+}
+
+
 
 // Getters
 int GameObject::GetTextureWidth()
@@ -157,6 +163,16 @@ D3DXMATRIX* GameObject::GetMatrixAddress()
 float GameObject::GetMass()
 {
     return mass;
+}
+
+LPDIRECT3DTEXTURE9 GameObject::GetObjectTexture()
+{
+    return objectTexture;
+}
+
+LPDIRECT3DTEXTURE9* GameObject::GetObjectTextureAddress()
+{
+    return &objectTexture;
 }
 
 // Game Loop Methods

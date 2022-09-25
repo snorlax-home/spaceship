@@ -96,6 +96,6 @@ public:
 	// Game Loop Methods
 	void Update(bool turnLeft, bool turnRight, bool goForward, bool goBackward, float friction, Spaceship* anotherSpaceship, std::
 	            vector<Mass*>* masses, int windowWidth, int windowHeight);
-	void Draw(LPD3DXSPRITE spriteBrush, LPDIRECT3DTEXTURE9 texture);
+	void Draw(LPD3DXSPRITE spriteBrush);
 	void PlaySounds(AudioManager *audioManager);
 };

@@ -15,6 +15,9 @@ private:
     D3DXVECTOR2 position;
     float mass;
 
+protected:
+    LPDIRECT3DTEXTURE9 objectTexture;
+
 public:
     // Constructor
     GameObject();
@@ -37,6 +40,7 @@ public:
     virtual void SetPositionX(float x);
     virtual void SetPositionY(float y);
     virtual void SetMass(float mass);
+    virtual void SetObjectTextureAddress(LPDIRECT3DTEXTURE9* objectTexture);
 
     // Getters
     virtual int GetTextureWidth();
@@ -53,6 +57,8 @@ public:
     virtual D3DXVECTOR2 *GetPositionAddress();
     virtual D3DXMATRIX *GetMatrixAddress();
     virtual float GetMass();
+    virtual LPDIRECT3DTEXTURE9 GetObjectTexture();
+    virtual LPDIRECT3DTEXTURE9* GetObjectTextureAddress();
 
     // GameLoop Methods
     virtual void Update();

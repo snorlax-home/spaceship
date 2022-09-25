@@ -35,14 +35,22 @@ void SpaceshipGameLevel::InitLevel()
                              100,
                              DT_CENTER);
     srand(time(0));
-    hr = D3DXCreateTextureFromFile(GetD3DDevice(), "Assets/spaceships.png", &playertexture);
+    hr = D3DXCreateTextureFromFile(GetD3DDevice(), "Assets/spaceships.png", &playerTexture);
     // HRManager("Failed to load player texture.");
 
     // load mass
     hr = D3DXCreateTextureFromFile(GetD3DDevice(), "Assets/mass.png", &massTexture);
     // HRManager("Failed to load mass texture.");
 
+    // Set Texture into GameObjects
+    player1->SetObjectTextureAddress(&playerTexture);
+    player2->SetObjectTextureAddress(&playerTexture);
 
+    for (int i = 0; i < masses.size(); i++)
+    {
+        masses[i]->SetObjectTextureAddress(&massTexture);
+    }
+    
     // Initialize players
     player1->Init(1, 64, 64, 2, 2, 1, 100, 300, 1.0, 0, 1, 0.1, audioManager);
     player2->Init(2, 64, 64, 2, 2, 1, 600, 300, 1.0, 0, 1, 0.1, audioManager);
@@ -209,11 +217,11 @@ void SpaceshipGameLevel::Update(int frameToUpdate)
 
 void SpaceshipGameLevel::RenderGraphics(LPD3DXSPRITE spriteBrush)
 {
-    player1->Draw(spriteBrush, playertexture);
-    player2->Draw(spriteBrush, playertexture);
+    player1->Draw(spriteBrush);
+    player2->Draw(spriteBrush);
     for (int i = 0; i < masses.size(); i++)
     {
-        masses[i]->Draw(spriteBrush, massTexture);
+        masses[i]->Draw(spriteBrush);
     }
 }
 
@@ -231,7 +239,7 @@ void SpaceshipGameLevel::CleanUp()
     {
         masses[i] = NULL;
     }
-    playertexture = NULL;
+    playerTexture = NULL;
     massTexture = NULL;
 }
 
