@@ -4,6 +4,13 @@
 
 GameSound::GameSound()
 {
+    sound = nullptr;
+    soundFilePath = nullptr;
+    volume = 0.0f;
+    pitch = 0.0f;
+    pan = 0.0f;
+    loop = false;
+    playSoundFlag = false;
 }
 
 GameSound::~GameSound()
@@ -13,14 +20,6 @@ GameSound::~GameSound()
 
 void GameSound::Init(const char* filePath, float soundVolume,float soundPitch, float soundPan, bool soundLoop)
 {
-    sound = nullptr;
-    soundFilePath = nullptr;
-    volume = 0.0f;
-    pitch = 0.0f;
-    pan = 0.0f;
-    loop = false;
-    playSoundFlag = false;
-    
     this->soundFilePath = filePath;
     this->volume = soundVolume;
     this->pitch = soundPitch;
