@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "GameLevel.h"
+#include "GameSound.h"
 
 class Label;
 
@@ -11,6 +12,7 @@ private:
     std::vector<Label*> labelList;
     int AnimationTimer;
     bool moveUp;
+    GameSound* backgroundMusic;
 
 public:
     CreditsLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, StateMachine* stateMachine,
