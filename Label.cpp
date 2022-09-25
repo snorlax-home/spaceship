@@ -1,7 +1,7 @@
 ﻿#include "Label.h"
 #include "Utils.cpp"
 
-Label::Label(LPDIRECT3DDEVICE9 d3dDevice, LPCSTR labelText, D3DCOLOR color, D3DXVECTOR2 labelPosition, float width,
+Label::Label(LPDIRECT3DDEVICE9 d3dDevice, std::string labelText, D3DCOLOR color, D3DXVECTOR2 labelPosition, float width,
              float height, DWORD format)
 {
     this->width = width;
@@ -34,9 +34,9 @@ void Label::CalcRect()
     this->labelRect.bottom = (long)this->labelPosition.y + this->height;
 }
 
-void Label::SetLabelText(LPCSTR labelText)
+void Label::SetLabelText(string text)
 {
-    this->labelText = labelText;
+    this->labelText = text;
 }
 
 void Label::SetColor(D3DCOLOR color)
@@ -50,6 +50,6 @@ void Label::Render(LPD3DXSPRITE spriteBrush)
     if (font)
     {
         CalcRect();
-        font->DrawText(spriteBrush, labelText, lstrlen(labelText), &labelRect, format, color);
+        font->DrawText(spriteBrush, labelText.c_str(), labelText.length(), &labelRect, format, color);
     }
 }

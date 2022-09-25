@@ -19,9 +19,10 @@ SpaceshipGameLevel::SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEV
     player2 = new Spaceship();
 
     // Create the masses and add them to the vector
-    masses.push_back(new Mass());
-    masses.push_back(new Mass());
-    masses.push_back(new Mass());
+    for (int i = 0; i < 10; i++)
+    {
+        masses.push_back(new Mass());
+    }
 
     backgroundMusic = new GameSound();
 }
@@ -100,29 +101,11 @@ void SpaceshipGameLevel::PointUpdate()
 
 void SpaceshipGameLevel::PointCheck()
 {
-    if (player1Points != 0)
-    {
-        if (player1Points == 1)
-        {
-            label1->SetLabelText("Player 1 Score : 1");
-        }
-        else if (player1Points == 2)
-        {
-            label1->SetLabelText("Player 1 Score : 2");
-        }
-    }
-    if (player2Points != 0)
-    {
-        if (player2Points == 1)
-        {
-            label2->SetLabelText("Player 2 Score : 1");
-        }
-        else if (player2Points == 2)
-        {
-            label2->SetLabelText("Player 2 Score : 2");
-        }
-    }
-    if (player1Points == 2 || player2Points == 2)
+    std::string player1Score = "Player 1 Score : " + std::to_string(player1Points);
+    std::string player2Score = "Player 2 Score : " + std::to_string(player2Points);
+    label1->SetLabelText(player1Score);
+    label2->SetLabelText(player2Score);
+    if (player1Points + player2Points == 10)
     {
         gameEnd = true;
         stateMachine->ChangeState("GameOver");

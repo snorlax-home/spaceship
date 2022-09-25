@@ -7,7 +7,7 @@ class Label
 {
 protected:
     LPD3DXFONT font;
-    LPCSTR labelText;
+    std::string labelText;
     D3DCOLOR color;
     DWORD format;
     RECT labelRect;
@@ -15,9 +15,9 @@ protected:
     float width;
     float height;
 public:
-    Label(LPDIRECT3DDEVICE9 d3dDevice, LPCSTR labelText, D3DCOLOR color, D3DXVECTOR2 labelPosition, float width, float height, DWORD format);
+    Label(LPDIRECT3DDEVICE9 d3dDevice, std::string labelText, D3DCOLOR color, D3DXVECTOR2 labelPosition, float width, float height, DWORD format);
     void CalcRect();
-    void SetLabelText(LPCSTR labelText);
+    void SetLabelText(std::string labelText);
     void SetColor(D3DCOLOR color);
     void Render(LPD3DXSPRITE spriteBrush);
 };
