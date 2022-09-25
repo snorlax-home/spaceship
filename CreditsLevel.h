@@ -26,7 +26,7 @@ public:
                  CursorManager* cursorManager, int WindowWidth,
                  int WindowHeight);
     ~CreditsLevel() override;
-    void InitLevel() override;
+    void InitLevel() override; 
     void GetInput(BYTE* diKeys, DIMOUSESTATE mouseState) override;
     void Update(int frameToUpdate) override;
     void RenderMovable(LPD3DXSPRITE movableBrush) override;

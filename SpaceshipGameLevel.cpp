@@ -42,13 +42,15 @@ void SpaceshipGameLevel::InitLevel()
                              100,
                              DT_CENTER | DT_VCENTER | DT_SINGLELINE);
     srand(time(0));
+
+    // Create the spaceship textures for the players
     HRESULT hr = D3DXCreateTextureFromFile(GetD3DDevice(), "Assets/spaceships.png", &playerTexture);
     if (FAILED(hr))
     {
         MessageBox(NULL, "Could not load spaceship texture", "Error", MB_OK);
     }
 
-    // load mass
+    // Create the mass textures
     hr = D3DXCreateTextureFromFile(GetD3DDevice(), "Assets/mass.png", &massTexture);
     if (FAILED(hr))
     {
@@ -93,8 +95,12 @@ void SpaceshipGameLevel::InitLevel()
 
     gameEnd = false;
 
-    // Initialize background music
-    backgroundMusic->Init("Assets/Audio/space-theme.wav", 1.0, 0.5, 0.0, true);
+    /*
+     * Init(filePath, volume, pitch, pan, loop)
+     * volume is set to 0.5 to avoid music covering the sound effects
+     * pitch is set to 0.5 to make it slower as original sound is 130bpm
+     */
+    backgroundMusic->Init("Assets/Audio/space-theme.wav", 0.5, 0.5, 0.0, true);
 
     // Create stream and set it into FMOD::Sound variable in backgroundMusic
     backgroundMusic->SetSound(
@@ -107,6 +113,7 @@ void SpaceshipGameLevel::InitLevel()
 
 void SpaceshipGameLevel::PointUpdate()
 {
+    // Update the points of the players by checking the mass collided flag of the spaceships
     if (player1->GetMassCollided())
     {
         player1Points++;
@@ -118,14 +125,17 @@ void SpaceshipGameLevel::PointUpdate()
         player2Points++;
         player2->SetMassCollided(false);
     }
-}
 
-void SpaceshipGameLevel::PointCheck()
-{
+    // Update the score of the players
     std::string player1Score = "Player 1 Score : " + std::to_string(player1Points);
     std::string player2Score = "Player 2 Score : " + std::to_string(player2Points);
     label1->SetLabelText(player1Score);
     label2->SetLabelText(player2Score);
+}
+
+void SpaceshipGameLevel::PointCheck()
+{
+    // Check if the game is over when all of the masses are collected
     if (player1Points + player2Points == masses.size())
     {
         gameEnd = true;
@@ -203,26 +213,38 @@ void SpaceshipGameLevel::Update(int frameToUpdate)
                         windowWidth, windowHeight);
         player2->Update(leftKeyPressed, rightKeyPressed, upKeyPressed, downKeyPressed, friction, player1, &masses,
                         windowWidth, windowHeight);
-    }
 
-    for (int i = 0; i < masses.size(); i++)
-    {
-        masses[i]->Update();
+        for (int i = 0; i < masses.size(); i++)
+        {
+            masses[i]->Update();
+        }
     }
-
+    
+    // Set all keys that are pressed to false
     aKeyPressed = false;
     dKeyPressed = false;
     wKeyPressed = false;
     sKeyPressed = false;
 
-    // player2
     leftKeyPressed = false;
     rightKeyPressed = false;
     upKeyPressed = false;
     downKeyPressed = false;
 
+    // Update the points of the players
     PointUpdate();
 
+    /*
+     * Alter the pitch of the background music
+     * minimum will always be 0 even if there are no points
+     * how much the pitch will be altered is based on the points and the number of masses
+     * if there are 2 masses, each point will increase pitch by 0.25
+     * if there are 5 masses, each point will increase pitch by 0.1
+     * Maximum pitch will be capped at 1.0
+     * Achieved by using masses.size() * 2 as the divisor
+     * when all masses are collected, it will be masses.size() / masses.size() * 2, which will be 0.5
+     * Therefore, the maximum pitch will always be 1.0
+     */
     audioManager->AlterMusicChannelPitch(0.5 + float(player1Points + player2Points) / float(masses.size() * 2));
 
     PointCheck();
@@ -240,6 +262,7 @@ void SpaceshipGameLevel::RenderMovable(LPD3DXSPRITE spriteBrush)
 
 void SpaceshipGameLevel::PlaySounds()
 {
+    // Call play sound function for player1 and player2
     player1->PlaySounds(audioManager);
     player2->PlaySounds(audioManager);
 }
@@ -257,28 +280,37 @@ void SpaceshipGameLevel::RenderLine()
 
 void SpaceshipGameLevel::CleanUp()
 {
+    // Pause the background music
     audioManager->PauseMusicChannel();
+    // Clean up the background music object
     backgroundMusic->CleanUp();
+    // Assign the pointer to NULL
     backgroundMusic = nullptr;
 
+    // Clean up the spaceship objects
     player1->CleanUp();
     player2->CleanUp();
+
+    // Assign the pointers to NULL
     player1 = nullptr;
     player2 = nullptr;
 
+    // Clean up the mass objects and assign pointers to NULL
     for (int i = 0; i < masses.size(); i++)
     {
         masses[i]->CleanUp();
         masses[i] = nullptr;
     }
+    // Clear the vector
     masses.clear();
+    // Free the memory by shrinking the vector
     masses.shrink_to_fit();
 
-    // TODO: clean up the label
-    //label1->CleanUp();
-
+    // Release textures
     playerTexture->Release();
     massTexture->Release();
+
+    // Assign the pointers to NULL
     playerTexture = nullptr;
     massTexture = nullptr;
 }

@@ -16,7 +16,7 @@
 class MainMenu : public GameLevel
 {
 private:
-    std::vector<Button*> button;
+    std::vector<Button*> button; 
     std::vector<Line> lines;
     LPDIRECT3DTEXTURE9 texture;
 public:

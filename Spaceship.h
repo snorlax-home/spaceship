@@ -35,7 +35,8 @@ private:
 public:
 	Spaceship();
 	~Spaceship() override;
-	
+
+	// Method to initialize the Spaceship
 	void Init(int playerNum, int textureWidth, int textureHeight, int textureRow, int textureColumn, int maxFrame, int positionX, int positionY,
 		float engineForce, float direction, float mass, float rotationSpeed, AudioManager* audioManager);
 
@@ -46,10 +47,12 @@ public:
 	void SetTextureColumn(int texture_column);
 	void SetFrameCounter(int frame_counter);
 	void SetMaxFrame(int max_frame);
+	// Different ways for setting velocity
 	void SetVelocity(D3DXVECTOR2 spaceShipVelocity);
 	void SetVelocity(float x, float y);
 	void SetVelocityX(float x);
 	void SetVelocityY(float y);
+	// Different ways for setting acceleration
 	void SetAcceleration(D3DXVECTOR2 spaceshipAcceleration);
 	void SetAcceleration(float x, float y);
 	void SetAccelerationX(float x);

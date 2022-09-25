@@ -12,9 +12,9 @@ class LevelManager;
  */
 class StateMachine
 {
-private:
+private: 
     LevelManager* levelManager;
-    std::string currentState;
+    std::string currentState; 
 public:
     /**
      * \brief Default constructor for StateMachine

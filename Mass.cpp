@@ -21,7 +21,11 @@ Mass::~Mass()
 
 void Mass::Init(int textureWidth, int textureHeight, int spriteWidth, int spriteHeight, int windowWidth, int windowHeight, float mass, int massHp)
 {
-	int positionX = rand() % (windowWidth - spriteHeight);
+	// Set mass's position randomly within the window
+	// (windowWidth - spriteWidth) and (windowHeight - spriteHeight) are the maximum values for random generation
+	// Range for x will be 0 to (windowWidth - spriteWidth)
+	// Range for y will be 0 to (windowHeight - spriteHeight)
+	int positionX = rand() % (windowWidth - spriteWidth);
 	int positionY = rand() % (windowHeight - spriteHeight);
 
 	GameObject::Init(textureWidth, textureHeight, spriteWidth, spriteHeight, positionX, positionY);
@@ -35,32 +39,38 @@ void Mass::Init(int textureWidth, int textureHeight, int spriteWidth, int sprite
 }
 
 // Setters
-void Mass::SetMass(float newMass)
-{
-	this->mass = newMass;
-}
-
+// Set hp
 void Mass::SetHp(int hp)
 {
 	this->hp = hp;
 }
 
+// Set mass
+void Mass::SetMass(float newMass)
+{
+	this->mass = newMass;
+}
+
+// Set consumed flag
 void Mass::SetConsumed(bool consumed)
 {
 	this->consumed = consumed;
 }
 
 // Getters
-float Mass::GetMass()
-{
-	return mass;
-}
-
+// Get hp
 int Mass::GetHp()
 {
 	return hp;
 }
 
+// Get mass
+float Mass::GetMass()
+{
+	return mass;
+}
+
+// Get consumed flag
 bool Mass::GetConsumed()
 {
 	return consumed;
