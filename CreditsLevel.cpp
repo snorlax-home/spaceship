@@ -1,5 +1,6 @@
 ﻿#include "CreditsLevel.h"
 
+#include "AudioManager.h"
 #include "colors.h"
 #include "Label.h"
 #include "RenderManager.h"
@@ -27,6 +28,7 @@ void CreditsLevel::AddLabel(std::string content, int width, int height, int star
 
 void CreditsLevel::InitLevel()
 {
+    backgroundMusic = new GameSound();
     AnimationTimer = 0;
     int width = windowWidth;
     int height = 30;
@@ -51,7 +53,7 @@ void CreditsLevel::InitLevel()
     startPoint += spacing;
     AddLabel("Credits Screen", width, height, startPoint);
     startPoint += spacing * 2;
-
+    
     AddLabel("Wong Yan Zhi", width, height, startPoint);
     startPoint += spacing;
     AddLabel("======================================", width, height, startPoint);
@@ -60,11 +62,11 @@ void CreditsLevel::InitLevel()
     startPoint += spacing;
     AddLabel("Rendering", width, height, startPoint);
     startPoint += spacing;
-    AddLabel("Edge Collision Detection", width, height, startPoint);
+    AddLabel("Edge Collision Detection & Response", width, height, startPoint);
     startPoint += spacing;
     AddLabel("Spaceship Game Level", width, height, startPoint);
     startPoint += spacing * 2;
-
+    
     AddLabel("Ong Tun Jiun", width, height, startPoint);
     startPoint += spacing;
     AddLabel("======================================", width, height, startPoint);
@@ -77,7 +79,7 @@ void CreditsLevel::InitLevel()
     startPoint += spacing;
     AddLabel("Spaceship Game Level", width, height, startPoint);
     startPoint += spacing * 2;
-
+    
     AddLabel("API Involved ", width, height, startPoint);
     startPoint += spacing;
     AddLabel("======================================", width, height, startPoint);
@@ -86,7 +88,7 @@ void CreditsLevel::InitLevel()
     startPoint += spacing;
     AddLabel("FMOD Core API ", width, height, startPoint);
     startPoint += spacing * 2;
-
+    
     AddLabel("Special Thanks to", width, height, startPoint);
     startPoint += spacing;
     AddLabel("======================================", width, height, startPoint);
@@ -145,6 +147,12 @@ void CreditsLevel::InitLevel()
     startPoint += spacing;
     AddLabel("|||||                      |||||", width, height, startPoint);
     startPoint += spacing;
+
+    backgroundMusic->Init("Assets/Audio/rickroll.mp3", 1.0, 1.0, 0.0, true);
+    backgroundMusic->SetSound(
+        audioManager->CreateStreams(backgroundMusic->GetSoundFilePath(), backgroundMusic->GetLoop()));
+    audioManager->PlayMusic(backgroundMusic->GetSound(), backgroundMusic->GetVolume(), backgroundMusic->GetPitch(),
+        backgroundMusic->GetPan());
 }
 
 void CreditsLevel::GetInput(BYTE* diKeys, DIMOUSESTATE mouseState)
@@ -196,5 +204,8 @@ void CreditsLevel::RenderLine()
 
 void CreditsLevel::CleanUp()
 {
+    audioManager->PauseMusicChannel();
+    backgroundMusic->CleanUp();
+    backgroundMusic = nullptr;
     labelList.clear();
 }
