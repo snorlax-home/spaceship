@@ -515,19 +515,55 @@ void Spaceship::WindowBounce(int windowWidth, int windowHeight)
      */
     if (GameObject::GetPosition().x < 0 || GameObject::GetPosition().x > windowWidth - GameObject::GetSpriteWidth())
     {
-        // TODO: nid to change this or not?
-        velocity.x *= -1.2;
+        if (GameObject::GetPosition().x < 0)
+        {
+            GameObject::SetPositionX(0);
+        }
+        else
+        {
+            GameObject::SetPositionX(windowWidth - GameObject::GetSpriteWidth());
+        }
+        // Normal Vector of Line Segment
+        D3DXVECTOR2 BorderSP = D3DXVECTOR2(0, 0);
+        D3DXVECTOR2 BorderEP = D3DXVECTOR2(0, 600);
+        D3DXVECTOR2 minus = BorderEP - BorderSP;
+        D3DXVECTOR2 BorderDir = minus / D3DXVec2Length(&minus);
         
-        cout << "Collision detected between spaceship and window" << endl;
+        D3DXVECTOR2 BorderNorm = D3DXVECTOR2(-BorderDir.y, BorderDir.x);
+        
+        D3DXVECTOR2 velocityNorm = BorderNorm * D3DXVec2Dot(&velocity, &BorderNorm);
+        D3DXVECTOR2 velocityTangent = velocity - velocityNorm;
+        SetVelocity(velocityTangent - velocityNorm);
+        
+        cout << "Collision detected between spaceship and window left or right" << endl;
         bounceSound->SetPlaySoundFlag(true);
-        
     }
+
     if (GameObject::GetPosition().y < 0 || GameObject::GetPosition().y > windowHeight - GameObject::GetSpriteHeight())
     {
-        velocity.y *= -1.2;
+        if (GameObject::GetPosition().y < 0)
+        {
+            GameObject::SetPositionY(0);
+        }
+        else
+        {
+            GameObject::SetPositionY(windowHeight - GameObject::GetSpriteHeight());
+        }
+        
+        // Normal Vector of Line Segment
+        D3DXVECTOR2 BorderSP = D3DXVECTOR2(0, 0);
+        D3DXVECTOR2 BorderEP = D3DXVECTOR2(800, 0);
+        D3DXVECTOR2 minus = BorderEP - BorderSP;
+        D3DXVECTOR2 BorderDir = minus / D3DXVec2Length(&minus);
+        
+        D3DXVECTOR2 BorderNorm = D3DXVECTOR2(BorderDir.y, -BorderDir.x);
+
+        D3DXVECTOR2 velocityNorm = BorderNorm * D3DXVec2Dot(&velocity, &BorderNorm);
+        D3DXVECTOR2 velocityTangent = velocity - velocityNorm;
+        SetVelocity(velocityTangent - velocityNorm);
         
         bounceSound->SetPlaySoundFlag(true);
-        std::cout << "Collision detected between spaceship and window" << endl;
+        std::cout << "Collision detected between spaceship and top or bottom" << endl;
     }
 }
 
