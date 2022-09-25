@@ -21,11 +21,11 @@ void RenderManager::Render(GameLevel* gameLevel)
     int state = gameLevel->GetRenderState();
     if (CheckRenderGraphics(state))
     {
-        gameLevel->RenderGraphics(directXManager->GetGraphicsBrush());
+        gameLevel->RenderMovable(directXManager->GetGraphicsBrush());
     }
     if (CheckRenderText(state))
     {
-        gameLevel->RenderText(directXManager->GetTextBrush());
+        gameLevel->RenderStatic(directXManager->GetTextBrush());
     }
     cursorManager->Render(directXManager->GetTextBrush());
     directXManager->PostRenderGraphics();

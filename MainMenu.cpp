@@ -9,6 +9,11 @@ void startGame(StateMachine* stateMachine)
     stateMachine->ChangeState("Spaceship");
 }
 
+void creditScreen(StateMachine* stateMachine)
+{
+    stateMachine->ChangeState("Credits");
+}
+
 void quitGame(StateMachine* stateMachine)
 {
     PostQuitMessage(0);
@@ -18,7 +23,7 @@ MainMenu::MainMenu(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, Stat
                    CursorManager* cursorManager, int WindowWidth,
                    int WindowHeight):
     GameLevel(audioManager, d3DDevice, stateMachine, cursorManager, "MainMenu",
-              RenderState::Graphics | RenderState::Line | RenderState::Text, WindowWidth, WindowHeight)
+              RenderState::Line | RenderState::Static, WindowWidth, WindowHeight)
 {
 }
 
@@ -34,7 +39,10 @@ void MainMenu::InitLevel()
     button.push_back(new Button(&startGame, "Start Game", D3DXVECTOR2(300, 300), D3DXVECTOR2(200, 50), WHITE(255),
                                 WHITE(255), GREEN(255), GREEN(255),BLUE(255), BLUE(255), this->d3DDevice,
                                 this->stateMachine));
-    button.push_back(new Button(&quitGame, "Quit Game", D3DXVECTOR2(300, 400), D3DXVECTOR2(200, 50), WHITE(255),
+    button.push_back(new Button(&quitGame, "Quit Game", D3DXVECTOR2(300, 375), D3DXVECTOR2(200, 50), WHITE(255),
+                                WHITE(255), GREEN(255), GREEN(255),RED(255), RED(255), this->d3DDevice,
+                                this->stateMachine));
+    button.push_back(new Button(&creditScreen, "Credits", D3DXVECTOR2(300, 450), D3DXVECTOR2(200, 50), WHITE(255),
                                 WHITE(255), GREEN(255), GREEN(255),RED(255), RED(255), this->d3DDevice,
                                 this->stateMachine));
     // Spaceship vertex
@@ -218,21 +226,21 @@ void MainMenu::Update(int frameToUpdate)
     }
 }
 
-void MainMenu::RenderGraphics(LPD3DXSPRITE graphicsBrush)
+void MainMenu::RenderMovable(LPD3DXSPRITE movableBrush)
+{
+}
+
+void MainMenu::RenderStatic(LPD3DXSPRITE staticBrush)
 {
     RECT bgRect;
     bgRect.left = 0;
     bgRect.top = 0;
     bgRect.right = 800;
     bgRect.bottom = 600;
-    graphicsBrush->Draw(texture, &bgRect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
-}
-
-void MainMenu::RenderText(LPD3DXSPRITE textBrush)
-{
+    staticBrush->Draw(texture, &bgRect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
     for (Button* b : button)
     {
-        b->Render(textBrush);
+        b->Render(staticBrush);
     }
 }
 
@@ -250,6 +258,14 @@ void MainMenu::RenderLine()
 
 void MainMenu::CleanUp()
 {
+    for (int i = 0; i < button.size(); i++)
+    {
+        button[i]->CleanUp();
+    }
+    for (int i = 0; i < lines.size(); i++)
+    {
+        lines[i].CleanUp();
+    }
 }
 
 void MainMenu::PlaySounds()

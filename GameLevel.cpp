@@ -28,12 +28,12 @@ void GameLevel::PlaySounds()
     throw std::logic_error("The method or operation is not implemented.");
 }
 
-void GameLevel::RenderGraphics(LPD3DXSPRITE graphicsBrush)
+void GameLevel::RenderMovable(LPD3DXSPRITE movableBrush)
 {
     throw std::logic_error("The method or operation is not implemented.");
 }
 
-void GameLevel::RenderText(LPD3DXSPRITE textBrush)
+void GameLevel::RenderStatic(LPD3DXSPRITE staticBrush)
 {
     throw std::logic_error("The method or operation is not implemented.");
 }

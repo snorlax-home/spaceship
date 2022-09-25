@@ -42,4 +42,5 @@ public:
     void GetInput(LONG mouseX, LONG mouseY, DIMOUSESTATE mouseState);
     void Update();
     void Render(LPD3DXSPRITE spriteBrush);
+    void CleanUp();
 };

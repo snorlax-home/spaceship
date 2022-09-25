@@ -39,10 +39,10 @@ public:
     // Game loop methods
     virtual void GetInput(BYTE* diKeys, DIMOUSESTATE mouseState);
     virtual void Update(int frameToUpdate);
-    virtual void RenderGraphics(LPD3DXSPRITE graphicsBrush);
-    virtual void RenderText(LPD3DXSPRITE textBrush);
-    virtual void RenderLine();
     virtual void PlaySounds();
+    virtual void RenderMovable(LPD3DXSPRITE movableBrush);
+    virtual void RenderStatic(LPD3DXSPRITE staticBrush);
+    virtual void RenderLine();
     
     virtual void CleanUp();
 };

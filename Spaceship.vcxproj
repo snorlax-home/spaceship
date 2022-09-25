@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CreditsLevel.cpp" />
     <ClCompile Include="DirectInputManager.cpp" />
     <ClCompile Include="DirectXManager.cpp" />
     <ClCompile Include="FrameTimer.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="colors.h" />
+    <ClInclude Include="CreditsLevel.h" />
     <ClInclude Include="DirectInputManager.h" />
     <ClInclude Include="DirectXManager.h" />
     <ClInclude Include="FrameTimer.h" />

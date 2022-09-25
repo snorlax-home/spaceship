@@ -7,7 +7,7 @@ GameOver::GameOver(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, Stat
                    CursorManager* cursorManager, int WindowWidth,
                    int WindowHeight): GameLevel(audioManager, d3DDevice, stateMachine, cursorManager,
                                                 "GameOver",
-                                                RenderState::Graphics | RenderState::Text | RenderState::Line,
+                                                RenderState::Movable | RenderState::Static | RenderState::Line,
                                                 WindowWidth, WindowHeight)
 {
 }
@@ -56,7 +56,7 @@ void GameOver::Update(int frameToUpdate)
     }
 }
 
-void GameOver::RenderGraphics(LPD3DXSPRITE spriteBrush)
+void GameOver::RenderMovable(LPD3DXSPRITE spriteBrush)
 {
     // RECT bgRect;
     // bgRect.left = 0;
@@ -66,7 +66,7 @@ void GameOver::RenderGraphics(LPD3DXSPRITE spriteBrush)
     // spriteBrush->Draw(texture, &bgRect, NULL, new D3DXVECTOR3(125, 0, 0), D3DCOLOR_XRGB(255, 255, 255));
 }
 
-void GameOver::RenderText(LPD3DXSPRITE textBrush)
+void GameOver::RenderStatic(LPD3DXSPRITE textBrush)
 {
     RECT bgRect;
     bgRect.left = 0;

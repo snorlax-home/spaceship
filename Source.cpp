@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "AudioManager.h"
+#include "CreditsLevel.h"
 #include "CursorManager.h"
 #include "DirectInputManager.h"
 #include "DirectXManager.h"
@@ -56,10 +57,13 @@ void Init()
     );
     GameOver* gameOver = new GameOver(
         audioManager, directXManager->GetDevice(), stateMachine, cursorManager,WindowWidth, WindowHeight);
-
+    CreditsLevel* creditLevel = new CreditsLevel(
+        audioManager, directXManager->GetDevice(), stateMachine, cursorManager, WindowWidth, WindowHeight
+    );
     levelManager->RegisterLevel(mainMenu->GetLevelName(), mainMenu);
     levelManager->RegisterLevel(spaceshipGameLevel->GetLevelName(), spaceshipGameLevel);
     levelManager->RegisterLevel(gameOver->GetLevelName(), gameOver);
+    levelManager->RegisterLevel(creditLevel->GetLevelName(), creditLevel);
     stateMachine->ChangeState("MainMenu");
 }
 

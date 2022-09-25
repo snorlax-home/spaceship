@@ -10,6 +10,11 @@ Line::Line(LPDIRECT3DDEVICE9 d3dDevice, int numVertices, std::vector<D3DXVECTOR2
     this->color = color;
 }
 
+Line::~Line()
+{
+
+}
+
 void Line::SetColor(D3DCOLOR color)
 {
     this->color = color;
@@ -22,3 +27,7 @@ void Line::Render()
     line->End();
 }
 
+void Line::CleanUp()
+{
+    vertices.clear();
+}
