@@ -34,6 +34,7 @@ InputManager* inputManager;
 
 void Init()
 {
+    // Initialize all the managers
     windowManager = new WindowsManager("Spaceship Mania", false, WindowWidth, WindowHeight);
     directInputManager = new DirectInputManager(windowManager);
     direct3DManager = new Direct3DManager(windowManager, WindowWidth, WindowHeight);
@@ -43,30 +44,44 @@ void Init()
     renderManager = new RenderManager(direct3DManager, cursorManager);
     inputManager = new InputManager(directInputManager, cursorManager);
 
+    // Set the game FPS to 60
     timer = new FrameTimer();
     timer->Init(60);
 
+    // Initialize Audio
     audioManager = new AudioManager();
     audioManager->InitializeAudio();
 
+    // Create Main Menu
     MainMenu* mainMenu = new MainMenu(
         audioManager, direct3DManager->GetDevice(), stateMachine, cursorManager, WindowWidth, WindowHeight
     );
+
+    // Create Spaceships Level
     SpaceshipGameLevel* spaceshipGameLevel = new SpaceshipGameLevel(
         audioManager, direct3DManager->GetDevice(), stateMachine, cursorManager, WindowWidth, WindowHeight
     );
+
+    // Create Game Over Level
     GameOver* gameOver = new GameOver(
         audioManager, direct3DManager->GetDevice(), stateMachine, cursorManager,WindowWidth, WindowHeight);
+
+    // Create Credit Level
     CreditsLevel* creditLevel = new CreditsLevel(
         audioManager, direct3DManager->GetDevice(), stateMachine, cursorManager, WindowWidth, WindowHeight
     );
+
+    // Register all the levels by passing in the name of each levels & the pointers
     levelManager->RegisterLevel(mainMenu->GetLevelName(), mainMenu);
     levelManager->RegisterLevel(spaceshipGameLevel->GetLevelName(), spaceshipGameLevel);
     levelManager->RegisterLevel(gameOver->GetLevelName(), gameOver);
     levelManager->RegisterLevel(creditLevel->GetLevelName(), creditLevel);
+
+    // Set the game state to Main Menu
     stateMachine->ChangeState("MainMenu");
 }
 
+// Geme loop Methods
 void GetInput()
 {
     inputManager->GetInput(stateMachine->GetCurrent());

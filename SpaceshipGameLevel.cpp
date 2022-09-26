@@ -29,7 +29,7 @@ void SpaceshipGameLevel::InitLevel()
     player2 = new Spaceship();
 
     // Create the masses and add them to the vector
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 15; i++)
     {
         masses.push_back(new Mass());
     }
