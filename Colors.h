@@ -2,7 +2,7 @@
 #include <d3d9.h>
 
 /*
- * \brief A class to be use for color macros
+ * \brief header file used for color macros
  */
 
 #define WHITE(alpha)         D3DCOLOR_ARGB(alpha, 255, 255, 255)

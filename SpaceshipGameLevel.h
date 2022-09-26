@@ -35,6 +35,8 @@ private:
     LPDIRECT3DTEXTURE9 massTexture;
     GameSound* backgroundMusic;
 
+    void PointUpdate();
+    void PointCheck();
 
 public:
     SpaceshipGameLevel(AudioManager* audioManager, LPDIRECT3DDEVICE9 d3DDevice, StateMachine* stateMachine,
@@ -42,8 +44,7 @@ public:
                        int windowWidth, int windowHeight);
     ~SpaceshipGameLevel() override;
     void InitLevel();
-    void PointUpdate();
-    void PointCheck();
+
     
     void RenderMovable(LPD3DXSPRITE graphicsBrush) override;
     void RenderStatic(LPD3DXSPRITE textBrush) override;

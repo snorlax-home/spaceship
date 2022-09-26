@@ -91,7 +91,6 @@ void PlaySounds()
 void CleanUp()
 {
     delete stateMachine;
-    // delete levelManager;
     cursorManager->CleanUp();
     directInputManager->CleanUp();
     direct3DManager->CleanUp();
